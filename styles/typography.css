@@ -1,0 +1,67 @@
+/* ==========================================================================
+   YOGA Rituals · Escala tipográfica
+   ==========================================================================
+
+   Cinco pasos, que es el techo que se ha fijado para toda la web. Todo lo
+   visible se resuelve con dos o tres de ellos: uno muy grande (--step-head
+   o --step-display) y uno pequeño (--step-body). Los intermedios existen
+   para las citas y los subtítulos, no para llenar.
+
+   Fluida con clamp(): ningún salto de tamaño entre móvil y escritorio.
+
+   Las familias se cargan con next/font en app/layout.tsx:
+     --font-display  → Literata   (titulares)
+     --font-text     → Source Sans 3 (texto e interfaz)
+   ========================================================================== */
+
+:root {
+  /* --- Pasos ------------------------------------------------------------- */
+  --step-small:   clamp(0.8125rem, 0.7900rem + 0.10vw, 0.8750rem); /* 13 → 14 px */
+  --step-body:    clamp(1.1250rem, 1.0500rem + 0.30vw, 1.3125rem); /* 18 → 21 px */
+  --step-lead:    clamp(1.2500rem, 1.1000rem + 0.70vw, 1.6250rem); /* 20 → 26 px */
+  --step-head:    clamp(2.0000rem, 1.3000rem + 3.20vw, 4.0000rem); /* 32 → 64 px */
+  --step-display: clamp(2.5000rem, 1.2000rem + 5.20vw, 5.2500rem); /* 40 → 84 px */
+
+  /* --- Ritmo vertical entre secciones ------------------------------------ */
+  --section-gap: clamp(5rem, 3rem + 9vw, 13.75rem); /* 80 → 220 px */
+
+  /* --- Interlínea y tracking --------------------------------------------- */
+  --leading-tight: 1.05;
+  --leading-body:  1.6;
+  --tracking-display: -0.02em;
+
+  /* --- Medida de lectura -------------------------------------------------- */
+  --measure: 46ch; /* la columna de lectura de la dirección no pasa de 46ch */
+}
+
+/* --- Clases de utilidad --------------------------------------------------
+   El tamaño se aplica con estas clases y nunca con valores sueltos: así la
+   escala está en un solo sitio y no se cuelan tamaños intermedios.        */
+
+.paso-display {
+  font-size: var(--step-display);
+}
+
+.paso-titular {
+  font-size: var(--step-head);
+}
+
+.paso-entrada {
+  font-size: var(--step-lead);
+}
+
+.paso-base {
+  font-size: var(--step-body);
+}
+
+.paso-pequeno {
+  font-size: var(--step-small);
+}
+
+/* Antetítulo: versalitas discretas, siempre en tinta suave. */
+.etiqueta {
+  font-size: var(--step-small);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}

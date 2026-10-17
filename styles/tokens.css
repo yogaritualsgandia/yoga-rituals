@@ -1,0 +1,154 @@
+/* ==========================================================================
+   YOGA Rituals · Tokens
+   ==========================================================================
+
+   Paleta REAL del estudio. Los valores están calculados, no estimados: los
+   hex salen de la paleta de marca y el logo, y los dos tonos derivados
+   («tinta suave» y «turquesa de acción») existen porque los originales NO
+   llegan a AA. Las cuentas están en scripts/marca.mjs — se pueden repetir
+   con `node scripts/marca.mjs`.
+
+     crema      #F5F1EA   suelo
+     blanco     #FFFFFF   superficie
+     tinta      #333333   texto          11.22:1 sobre crema  ✓
+     gris       #7A7A7A   secundario      3.81:1 sobre crema  ✗ NO PASA AA
+     salvia     #8FAF9D   campo          2.12:1 → solo como fondo
+     terracota  #D9A17B   campo          2.00:1 → solo como fondo
+     turquesa   #1E91BA   logo           3.21:1 → solo grande o decorativo
+
+   Dos decisiones derivadas, y por qué:
+
+   1. La tinta suave es #6B625A (5.30:1), no el gris de la paleta. El #7A7A7A
+      no llega a 4.5:1 y no puede llevar texto normal. Se conserva el matiz
+      cálido en lugar de un gris neutro.
+
+   2. El acento de acción es #14708F: el turquesa del logo oscurecido hasta
+      pasar AA con texto blanco encima (5.61:1). El turquesa vivo del logo se
+      guarda en --brand-vivid para lo grande y lo decorativo (el objeto 3D),
+      donde 3:1 es suficiente.
+
+   El terracota queda disponible pero SIN uso asignado: es el color que,
+   combinado con la crema, convierte la web en el cliché que Susana pidió
+   evitar. Pendiente de su decisión.
+   ========================================================================== */
+
+:root {
+  /* --- Marca, en crudo -------------------------------------------------- */
+  --crema:      oklch(95.93% 0.0103 81.80);
+  --blanco:     oklch(100% 0 0);
+  --tinta:      oklch(32.11% 0 89.88);
+  --salvia:     oklch(72.48% 0.0436 160.46);
+  --terracota:  oklch(75.29% 0.0843 55.21);
+  --turquesa:   oklch(61.52% 0.1129 228.31); /* logo, vivo */
+  --turquesa-medio: oklch(72.63% 0.0910 224.14);
+  --tinta-suave: oklch(50.21% 0.0170 64.09); /* #6B625A, derivado */
+  --turquesa-accion: oklch(50.98% 0.0927 227.02); /* #14708F, derivado */
+
+  /* --- Semánticos · claro (por defecto) --------------------------------- */
+  --ground:    var(--crema);
+  --surface:   var(--blanco);
+  --surface-2: oklch(92.6% 0.0125 82.50);
+  --field:     var(--salvia);
+  /* El terracota de la marca, aclarado hasta ser fondo: #F0E2D7.
+     No se usa el terracota puro porque ocupa demasiado, y porque con la crema
+     forma la pareja que evitamos. Aquí hace un trabajo concreto: separar las
+     propuestas concretas de las clases del día a día, en la portada.
+     Medido con `node scripts/marca.mjs`: tinta 9.97:1, tinta suave 4.71:1. */
+  --field-warm: oklch(92.10% 0.0213 60.73);
+
+  --ink:       var(--tinta);
+  --ink-soft:  var(--tinta-suave);
+
+  --brand:      var(--turquesa-accion);
+  --brand-hover: oklch(45.0% 0.0900 227);
+  --brand-vivid: var(--turquesa);
+  --brand-ink:  var(--blanco);
+
+  --line:  oklch(32.11% 0 89.88 / 14%);
+  --focus: var(--turquesa-accion);
+
+  /* --- Geometría --------------------------------------------------------- */
+  /* Un solo radio en toda la web. */
+  --radius: 1.25rem;
+
+  /* --- Movimiento -------------------------------------------------------- */
+  --dur-fast:   180ms;
+  --dur-base:   300ms;
+  --dur-slow:   600ms;
+  --dur-breath: 5600ms; /* ciclo completo de respiración del objeto 3D */
+  --ease-out:   cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* --- Semánticos · oscuro (opcional y suave) ------------------------------ */
+.dark {
+  --ground:    oklch(22.0% 0.0100 75);
+  --surface:   oklch(26.0% 0.0120 75);
+  --surface-2: oklch(30.0% 0.0130 75);
+  --field:     var(--salvia);
+  /* El mismo campo cálido, en oscuro: #3A322B. Aquí la tinta es la crema, así
+     que el fondo tiene que ser más claro que el suelo, no más oscuro. */
+  --field-warm: oklch(32.34% 0.0167 63.38);
+
+  --ink:       var(--crema);
+  --ink-soft:  oklch(76.0% 0.0120 78);
+
+  /* Sobre fondo oscuro el turquesa tiene que aclararse, no oscurecerse. */
+  --brand:      var(--turquesa-medio);
+  --brand-hover: var(--turquesa);
+  --brand-vivid: var(--turquesa-medio);
+  --brand-ink:  oklch(22.0% 0.0100 75);
+
+  --line:  oklch(95.93% 0.0103 81.80 / 16%);
+  --focus: var(--turquesa-medio);
+}
+
+/* --- Puente a las variables de shadcn/ui ---------------------------------
+   shadcn trae su paleta gris por defecto (oklch(x 0 0)). Aquí se sustituye
+   por la nuestra para que cualquier componente herede la marca sin tocarlo.
+   Ojo: `--accent` en shadcn es una superficie de hover, no el acento de
+   marca; ese vive en `--brand`.                                            */
+
+:root,
+.dark {
+  --background: var(--ground);
+  --foreground: var(--ink);
+
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-ink);
+
+  --secondary: var(--surface-2);
+  --secondary-foreground: var(--ink);
+
+  --muted: var(--surface-2);
+  --muted-foreground: var(--ink-soft);
+
+  --accent: var(--surface-2);
+  --accent-foreground: var(--ink);
+
+  --destructive: oklch(45.0% 0.1500 27);
+
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--focus);
+
+  --sidebar: var(--surface);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-ink);
+  --sidebar-accent: var(--surface-2);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--focus);
+
+  --chart-1: var(--turquesa);
+  --chart-2: var(--salvia);
+  --chart-3: var(--turquesa-medio);
+  --chart-4: var(--terracota);
+  --chart-5: var(--tinta-suave);
+}
