@@ -2,7 +2,7 @@ import AxeBuilder from "@axe-core/playwright"
 import { expect, test, type Page } from "@playwright/test"
 
 import { REDIRECCIONES_ANTIGUAS } from "../next.config"
-import { abrirMenu } from "./apoyo"
+import { abrirMenu, esperarAlMovimiento } from "./apoyo"
 
 /** Rutas que tiene que haber en pie al final de la Fase 2. */
 const RUTAS = [
@@ -56,6 +56,11 @@ async function irA(page: Page, ruta: string) {
         requestAnimationFrame(() => requestAnimationFrame(() => listo())),
       ),
   )
+
+  /* Y se espera a que pare lo que se mueve. Medir a media entrada da
+     resultados que no son los de la web: un contraste que todavía no es el
+     suyo, una altura que todavía no es la suya. */
+  await esperarAlMovimiento(page)
 }
 
 /* ── Que exista todo, y que exista bien ─────────────────────────────────── */

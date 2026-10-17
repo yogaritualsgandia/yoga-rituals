@@ -62,6 +62,12 @@
   --brand:      var(--turquesa-accion);
   --brand-hover: oklch(45.0% 0.0900 227);
   --brand-vivid: var(--turquesa);
+  /* El mismo turquesa vivo, escrito en hex.
+     No es una segunda paleta: es la única forma que tiene el lienzo 3D de
+     leerlo. three.js no entiende `oklch()`, solo hex, rgb y nombres, así que
+     el objeto que respira lee este valor y no el de arriba. Si algún día
+     cambia la paleta, hay que cambiar los dos, y este es el que se olvida. */
+  --brand-vivid-hex: #1e91ba;
   --brand-ink:  var(--blanco);
 
   --line:  oklch(32.11% 0 89.88 / 14%);
@@ -97,6 +103,9 @@
   --brand:      var(--turquesa-medio);
   --brand-hover: var(--turquesa);
   --brand-vivid: var(--turquesa-medio);
+  /* El turquesa aclarado, en hex, para el lienzo 3D. Ver la nota del modo
+     claro: es el mismo color escrito de la única forma que three.js lee. */
+  --brand-vivid-hex: #61b3d1;
   --brand-ink:  oklch(22.0% 0.0100 75);
 
   --line:  oklch(95.93% 0.0103 81.80 / 16%);

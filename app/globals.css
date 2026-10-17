@@ -4,6 +4,7 @@
 
 @import "../styles/tokens.css";
 @import "../styles/typography.css";
+@import "../styles/movimiento.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -163,14 +164,21 @@
 
 /* Salvaguarda global: si alguien pide menos movimiento, se apaga todo lo
    que se mueva por transición o animación. El 3D y el scroll narrativo se
-   apagan además en su propio código, no solo aquí. */
+   apagan además en su propio código, no solo aquí.
+
+   Los retrasos también se ponen a cero: si no, la entrada de un titular seguía
+   esperando su turno —hasta medio segundo, palabra a palabra— para luego
+   aparecer de golpe. Quien pide menos movimiento no pide menos contenido, pero
+   tampoco pide ver desaparecer un texto y volver a salir. */
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
     *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
+        animation-delay: 0ms !important;
         transition-duration: 0.01ms !important;
+        transition-delay: 0ms !important;
         scroll-behavior: auto !important;
     }
 }

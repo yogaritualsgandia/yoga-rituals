@@ -5,9 +5,12 @@ import "./globals.css"
 import { AccionFija } from "@/components/layout/accion-fija"
 import { Cabecera } from "@/components/layout/cabecera"
 import { Pie } from "@/components/layout/pie"
+import { ProveedorMovimiento } from "@/components/movimiento/proveedor-movimiento"
+import { TransicionPagina } from "@/components/movimiento/transicion-pagina"
 import { ThemeProvider } from "@/components/theme-provider"
 import { site } from "@/content/site"
 import { datosEstructuradosComoTexto } from "@/lib/datos-estructurados"
+import { GUION_MOVIMIENTO } from "@/lib/movimiento"
 import { cn } from "@/lib/utils"
 
 /**
@@ -87,29 +90,43 @@ export default function RootLayout({
       className={cn("antialiased", literata.variable, sourceSans.variable)}
     >
       <body className="flex min-h-dvh flex-col">
+        {/* El primero de todo, y a propósito.
+            Dice si el movimiento está permitido poniendo un atributo en el
+            <html>, y tiene que hacerlo antes de que se pinte el primer
+            elemento: las entradas de más abajo parten escondidas, y el CSS
+            solo las esconde si ve ese atributo. Puesto desde aquí no hay
+            ningún instante en que se vean de más, y si el paquete de
+            JavaScript no llegara, el atributo no estaría y no se escondería
+            nada. El porqué completo, en `GUION_MOVIMIENTO`. */}
+        <script dangerouslySetInnerHTML={{ __html: GUION_MOVIMIENTO }} />
+
         <ThemeProvider>
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: datosEstructuradosComoTexto() }}
-          />
+          <ProveedorMovimiento>
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: datosEstructuradosComoTexto(),
+              }}
+            />
 
-          <a href="#contenido" className="salto-contenido">
-            Saltar al contenido
-          </a>
+            <a href="#contenido" className="salto-contenido">
+              Saltar al contenido
+            </a>
 
-          <Cabecera />
+            <Cabecera />
 
-          <main id="contenido" className="flex-1">
-            {children}
-          </main>
+            <main id="contenido" className="flex-1">
+              <TransicionPagina>{children}</TransicionPagina>
+            </main>
 
-          <Pie />
+            <Pie />
 
-          {/* El hueco que ocupa la barra fija de móvil, para que no tape el
-              final del pie. */}
-          <div aria-hidden="true" className="h-24 lg:hidden" />
+            {/* El hueco que ocupa la barra fija de móvil, para que no tape el
+                final del pie. */}
+            <div aria-hidden="true" className="h-24 lg:hidden" />
 
-          <AccionFija />
+            <AccionFija />
+          </ProveedorMovimiento>
         </ThemeProvider>
       </body>
     </html>

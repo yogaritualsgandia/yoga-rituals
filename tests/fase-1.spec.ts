@@ -1,5 +1,7 @@
-import { test, expect } from "@playwright/test"
 import AxeBuilder from "@axe-core/playwright"
+import { test, expect } from "@playwright/test"
+
+import { esperarAlMovimiento } from "./apoyo"
 
 /**
  * Puerta de la Fase 1 — base del proyecto.
@@ -31,6 +33,12 @@ test.describe("Fase 1 · base", () => {
   test("no hay violaciones graves de accesibilidad", async ({ page }) => {
     await page.goto("/")
     await page.waitForLoadState("load")
+
+    /* Antes de medir, se espera a que la entrada haya terminado. Mientras
+       corre, los textos están a media opacidad, y axe mide lo que ve: un
+       contraste que no es el de la web y que desaparece solo un segundo
+       después. Medir ahí era medir el fotograma, no la página. */
+    await esperarAlMovimiento(page)
 
     const analisis = await new AxeBuilder({ page }).analyze()
     const graves = analisis.violations.filter(

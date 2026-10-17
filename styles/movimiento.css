@@ -1,0 +1,185 @@
+/* ==========================================================================
+   YOGA Rituals · Movimiento
+   ==========================================================================
+
+   Aquí vive todo lo que se mueve. Está aparte de globals.css porque es lo
+   único de la web que cambia de estado (entra, sale, se para), y mezclado con
+   el color y la rejilla se perdía.
+
+   Cuatro ideas gobiernan el archivo:
+
+   1. NADA SE MUEVE SI NO SE HA PEDIDO. El estado de partida de las entradas
+      no se aplica por defecto: se aplica solo si el documento lleva
+      `data-movimiento="listo"`, que escribe un guion de tres líneas dentro del
+      <body> antes de que se pinte nada, y solo si el navegador no ha pedido
+      menos movimiento. Sin ese atributo no hay estado de partida y todo se ve
+      desde el primer momento. Si se hiciera al revés —partir escondido y
+      enseñar con JavaScript—, quien navegue sin JavaScript, o con las
+      animaciones apagadas, se encontraría la página en blanco y no habría
+      nada que la rescatara.
+
+   2. LO QUE YA SE VE NO ESPERA A NADIE. El primer titular no se anima con
+      JavaScript: se anima con una animación de CSS que arranca con el
+      documento. Así entra igual de bien con la conexión más lenta, y no hay
+      ningún instante en el que la parte de arriba esté en blanco esperando a
+      un archivo. Lo de más abajo sí espera, porque nadie puede verlo antes de
+      llegar.
+
+   3. SOLO SE MUEVE LO QUE EL NAVEGADOR PUEDE MOVER BARATO: opacidad y
+      transform. Nada de ancho, alto ni márgenes, que obligan a recalcular la
+      página entera sesenta veces por segundo.
+
+   4. Y SI ALGUIEN PIDE QUE PARE, PARA. No se acorta: se para. El círculo se
+      queda a medio respirar, que es exactamente lo que se ha pedido.
+   ========================================================================== */
+
+/* --- Lo que necesita Lenis -----------------------------------------------
+   Son las cinco reglas de su propia hoja de estilos. Van escritas aquí en
+   lugar de importarlas del paquete para que nada se rompa si algún día
+   cambian de sitio. */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* --- Entradas ------------------------------------------------------------
+   Dos maneras, y la diferencia no es de estilo sino de dónde está el
+   elemento.
+
+   `entrada` es para lo que ya se ve al abrir la página: una animación de CSS
+   con retardo, que arranca sola. No depende de ningún archivo.
+
+   `bloque` es para lo de más abajo: se parte escondido y se enseña al llegar.
+
+   En las dos, si el elemento lleva palabras sueltas dentro, se mueven las
+   palabras una detrás de otra y el elemento se queda quieto. El `:has()` es
+   lo que pregunta si las lleva.
+
+   Se hace por palabras y no por líneas porque las líneas hay que medirlas, y
+   esa medida se queda vieja en cuanto cambia el ancho de la ventana o termina
+   de cargar la tipografía. Las palabras ocupan lo que ocupan y siempre están
+   donde tienen que estar. */
+
+@keyframes entrar {
+  from {
+    opacity: 0;
+    transform: translateY(0.75em);
+  }
+}
+
+[data-movimiento="listo"] [data-revelar="entrada"]:not(:has(.palabra)) {
+  animation: entrar var(--dur-slow) var(--ease-out) backwards;
+  animation-delay: calc(var(--i, 0) * 80ms);
+}
+
+[data-movimiento="listo"] [data-revelar="entrada"] .palabra {
+  animation: entrar var(--dur-slow) var(--ease-out) backwards;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+
+[data-movimiento="listo"] [data-revelar="bloque"]:not(:has(.palabra)) {
+  opacity: 0;
+  transform: translateY(1.125rem);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out);
+}
+
+[data-movimiento="listo"]
+  [data-revelar="bloque"]:not(:has(.palabra))[data-revelado] {
+  opacity: 1;
+  transform: none;
+}
+
+[data-movimiento="listo"] [data-revelar="bloque"] .palabra {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.5em);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 45ms);
+}
+
+[data-movimiento="listo"] [data-revelar="bloque"][data-revelado] .palabra {
+  opacity: 1;
+  transform: none;
+}
+
+/* Las palabras con animación de CSS no pueden ser `inline`: un `transform` no
+   se aplica a un elemento en línea. `inline-block` no cambia dónde rompe la
+   línea —rompe entre palabras, igual que antes— y solo deja de partir una
+   palabra por la mitad, que en castellano no pasa nunca. */
+[data-revelar] .palabra {
+  display: inline-block;
+}
+
+/* --- El círculo que respira, cuando no hay objeto ------------------------
+   Es el sustituto del lienzo 3D, y no es un cartel que diga «aquí no hay 3D»:
+   es lo mismo, más barato. Respira de verdad, con la misma curva.
+
+   Sus diez segundos y su reparto —cuatro al inspirar, seis al espirar— son
+   los que traen puestos los deslizadores. Sin JavaScript no hay deslizadores,
+   así que no hay nada que pueda contradecirla. */
+
+@keyframes respirar {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.16);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.circulo-respira {
+  animation: respirar 10s var(--ease-inout) infinite;
+}
+
+/* --- El paso de una página a otra ----------------------------------------
+   Un desvanecido corto, y nada más: no hay cortina que baje, ni una pantalla
+   intermedia que espere. Cambiar de página ya es rápido; esto solo evita el
+   corte seco.
+
+   Se anima la opacidad del bloque entero, que la tarjeta gráfica resuelve sin
+   volver a calcular la página. */
+
+@keyframes entrar-pagina {
+  from {
+    opacity: 0;
+  }
+}
+
+[data-movimiento="listo"] .transicion-pagina {
+  animation: entrar-pagina var(--dur-base) var(--ease-out) backwards;
+}
+
+/* --- Pausa pedida a mano -------------------------------------------------
+   Detiene lo que se mueve, no lo que funciona. La web sigue igual: se puede
+   leer, navegar y reservar; simplemente deja de moverse. */
+
+html[data-pausado="si"] *,
+html[data-pausado="si"] *::before,
+html[data-pausado="si"] *::after {
+  animation-play-state: paused !important;
+  transition-duration: 0.01ms !important;
+}

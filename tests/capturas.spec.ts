@@ -10,7 +10,15 @@ import { abrirMenu, prepararPagina } from "./apoyo"
  * (375, 768, 1440 y 1920) más la versión de movimiento reducido.
  *
  * Se guardan en capturas/fase-2/<proyecto>/, que está en .gitignore.
+ *
+ * Y llevan su propio tiempo de espera, más largo que el de las pruebas que
+ * comprueban cosas. Esta recorre siete páginas enteras dos veces —una para que
+ * carguen las imágenes y otra para el pie— y en un móvil eso son más de
+ * sesenta segundos de trabajo honesto; con el limite general se quedaba a
+ * medias no por un fallo, sino por lenta. Es una captura, no una alarma.
  */
+
+test.describe.configure({ timeout: 240_000 })
 
 const PAGINAS = [
   ["inicio", "/"],

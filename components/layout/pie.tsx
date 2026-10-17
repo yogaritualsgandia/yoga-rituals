@@ -9,6 +9,8 @@ import {
   whatsappUrl,
 } from "@/content/site"
 
+import { BotonPausa } from "@/components/movimiento/boton-pausa"
+
 import { BotonTema } from "./boton-tema"
 import { Contenedor } from "./contenedor"
 import { EnlaceNav } from "./enlace-nav"
@@ -118,9 +120,12 @@ export function Pie() {
               </li>
             </ul>
 
-            {/* El modo oscuro se enciende desde aquí, a mano. */}
-            <div className="mt-6 border-t border-line pt-5">
+            {/* Los dos mandos de la casa: el tema y el movimiento. Van juntos
+                porque son las dos únicas cosas que alguien puede querer
+                cambiar de cómo se ve la web. */}
+            <div className="mt-6 flex flex-wrap items-center gap-x-7 gap-y-1 border-t border-line pt-5">
               <BotonTema />
+              <BotonPausa />
             </div>
           </div>
         </div>

@@ -32,10 +32,24 @@ test.describe("Detalles en escritorio", () => {
       animations: "disabled",
     })
 
-    await page.locator("main section").nth(2).screenshot({
-      path: "capturas/fase-2/detalles/practicas.png",
-      animations: "disabled",
-    })
+    /* Se busca cada bloque por su texto y no por su posición: en cuanto se
+       añade una sección en medio —y en la fase 3 se añadió—, los números
+       bailan y las capturas pasan a enseñar otra cosa sin avisar. Pasó. */
+    await page
+      .locator("main section")
+      .filter({ hasText: "Marca tu ritmo" })
+      .screenshot({
+        path: "capturas/fase-2/detalles/ritmo.png",
+        animations: "disabled",
+      })
+
+    await page
+      .locator("main section")
+      .filter({ hasText: "Lo que puedes practicar aquí" })
+      .screenshot({
+        path: "capturas/fase-2/detalles/practicas.png",
+        animations: "disabled",
+      })
 
     // El pie entero es muy alto: se recorta la parte de dentro, que es la que
     // lleva la marca, la dirección y los enlaces.

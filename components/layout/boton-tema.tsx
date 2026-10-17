@@ -2,7 +2,8 @@
 
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
-import { useSyncExternalStore } from "react"
+
+import { useMontado } from "@/hooks/use-montado"
 
 /**
  * Botón de modo oscuro.
@@ -11,24 +12,10 @@ import { useSyncExternalStore } from "react"
  * oscuro»), no el estado en el que está. Así, quien lo lee con un lector de
  * pantalla sabe qué obtiene al pulsarlo.
  *
- * El tema real solo se conoce en el cliente. En lugar de un `useState` que se
- * enciende desde un efecto —el patrón que React desaconseja, porque provoca un
- * segundo renderizado en cascada—, se pregunta al propio React si ya está en
- * el cliente con useSyncExternalStore: en el servidor devuelve `false`, en el
- * navegador `true`, y no hay salto al hidratar.
+ * El tema real solo se conoce en el cliente, así que se pregunta con
+ * `useMontado()` y hasta entonces se deja un hueco del mismo alto: no salta
+ * nada al hidratar.
  */
-
-const noHayNadaQueEscuchar = () => () => {}
-const enElCliente = () => true
-const enElServidor = () => false
-
-function useMontado() {
-  return useSyncExternalStore(
-    noHayNadaQueEscuchar,
-    enElCliente,
-    enElServidor,
-  )
-}
 
 export function BotonTema() {
   const { resolvedTheme, setTheme } = useTheme()
