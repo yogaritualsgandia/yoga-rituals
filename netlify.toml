@@ -1,59 +1,6 @@
-# =============================================================================
-#  YOGA Rituals · despliegue en Netlify
-# =============================================================================
-#
-#  Este archivo es corto a propósito. Netlify reconoce Next.js solo y aplica su
-#  adaptador (OpenNext) sin que haya que declarar nada: desde Next 16 su
-#  documentación habla de «configuración cero» y el adaptador se actualiza
-#  por su cuenta. Por eso NO hay aquí un [[plugins]] con
-#  @netlify/plugin-nextjs: declararlo a mano fija una versión y renuncia a
-#  esas actualizaciones.
-#
-#  Si algún día el despliegue falla empaquetando, ese es el primer botón que
-#  tocar: instalar @netlify/plugin-nextjs y declararlo aquí. Está documentado
-#  en su web, no hace falta adivinarlo.
-#
-#  Lo que sí queda escrito, y por qué:
-#
-#  · NODE_VERSION. Se fija a la misma versión con la que se construye en
-#    local (node -v → v24). Netlify usa la 24 por defecto en los sitios
-#    nuevos, así que hoy esto es sobre todo una promesa por escrito: si
-#    cambian su valor por defecto, aquí no se mueve nada por sorpresa.
-#
-#  · Cabeceras de seguridad. Next.js no las pone. Son gratis y evitan que el
-#    navegador haga cosas raras con el sitio.
-#
-#  · NO hay Content-Security-Policy. Una CSP de verdad necesita nonces por
-#    petición y tocar cómo Next sirve sus scripts; una mal puesta rompe el
-#    sitio de formas difíciles de ver. Es un trabajo aparte, y prefiero
-#    dejarlo fuera antes que poner una de mentira que no proteja de nada.
-
 [build]
   command = "npm run build"
   publish = ".next"
 
 [build.environment]
   NODE_VERSION = "24"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    X-Frame-Options = "DENY"
-    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
-
-# Las imágenes y el material de marca. Siete días, no un año: si Susana manda
-# una foto nueva o el logo en SVG, se sustituyen los archivos y el cambio tiene
-# que verse. Con `immutable` el navegador se habría quedado con el viejo hasta
-# 2027, y eso es de las cosas que no se descubren hasta que alguien dice «a mí
-# me sigue saliendo el logo antiguo».
-[[headers]]
-  for = "/marca/*"
-  [headers.values]
-    Cache-Control = "public, max-age=604800"
-
-[[headers]]
-  for = "/fotos-ejemplo/*"
-  [headers.values]
-    Cache-Control = "public, max-age=604800"
