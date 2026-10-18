@@ -1,0 +1,14 @@
+/actividades               /clases               301
+/actividades/              /clases/              301
+/tarifas                   /precios              301
+/tarifas/                  /precios/             301
+/minfulness                /mindfulness          301
+/minfulness/               /mindfulness/         301
+/contacto-imagenes         /                     301
+/contacto-imagenes/        /                     301
+/contacto                  /                     301
+/contacto/                 /                     301
+/talleres-en-centros-educativos   /talleres-centros-educativos   301
+/talleres-en-centros-educativos/  /talleres-centros-educativos/  301
+/proximamente              /                     301
+/proximamente/             /                     301
