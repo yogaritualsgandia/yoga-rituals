@@ -19,6 +19,10 @@ import { cn } from "@/lib/utils"
  * En móvil no se enciende. Ahí el desplazamiento ya es bastante ajetreado de
  * por sí, y añadirle una capa que se mueve a otra velocidad marea más de lo que
  * aporta.
+ *
+ * Y si alguien para el movimiento, esto también para: la capa vuelve a su sitio
+ * y se queda ahí mientras dure la pausa. El suavizado de la rueda se apaga a la
+ * vez, en el proveedor.
  */
 export function Paralaje({
   children,
@@ -32,12 +36,12 @@ export function Paralaje({
 }) {
   const marco = useRef<HTMLDivElement>(null)
   const capa = useRef<HTMLDivElement>(null)
-  const { conMovimiento } = useMovimiento()
+  const { conMovimiento, pausado } = useMovimiento()
 
   useEffect(() => {
     const elMarco = marco.current
     const elCapa = capa.current
-    if (!elMarco || !elCapa || !conMovimiento) return
+    if (!elMarco || !elCapa || !conMovimiento || pausado) return
     if (!window.matchMedia("(min-width: 1024px)").matches) return
 
     let vivo = true
@@ -74,8 +78,14 @@ export function Paralaje({
     return () => {
       vivo = false
       matar()
+
+      /* La capa vuelve a su sitio. Al matar la animación, GSAP deja la última
+         transformación escrita, que es la del último fotograma que se vio: si
+         se acaba de parar el movimiento, la foto se quedaría desplazada doce
+         píxeles y ampliada un 6 %, quieta y torcida. */
+      elCapa.style.transform = ""
     }
-  }, [conMovimiento, recorrido])
+  }, [conMovimiento, pausado, recorrido])
 
   return (
     <div ref={marco} className={cn("relative overflow-hidden", className)}>

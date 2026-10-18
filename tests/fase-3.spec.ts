@@ -15,8 +15,11 @@ import { esperarAlMovimiento, prepararPagina } from "./apoyo"
  *     enciende: si con el interruptor apagado no hay nada escondido, es que el
  *     CSS no esconde nada por su cuenta.
  *
- *  2. QUE SE PUEDA PARAR. El botón del pie tiene que pararlo de verdad, y no
- *     tiene que existir cuando no hay nada que parar.
+ *  2. QUE SE PUEDA PARAR, Y QUE PARAR NO ROMPA NADA. El botón del pie tiene
+ *     que pararlo de verdad, y no tiene que existir cuando no hay nada que
+ *     parar. Con la pausa puesta la web tiene que seguir leyéndose y viéndose:
+ *     los dos fallos que ha tenido esta parte —la página clavada y la página en
+ *     blanco— se colaron por dar la pausa por hecha.
  *
  *  3. QUE EL OBJETO DIGA ALGO. No es decoración: dice el ritmo que hay
  *     marcado, y eso se puede leer pero también se puede oír.
@@ -178,6 +181,75 @@ test.describe("Las entradas", () => {
       "none",
     )
   })
+
+  test("si el foco llega a algo escondido, se enseña", async ({
+    page,
+  }, testInfo) => {
+    test.skip(
+      testInfo.project.name !== SOLO_ESCRITORIO,
+      "el caso es el mismo en todos los anchos",
+    )
+
+    await irA(page, "/")
+
+    /* La línea donde se enseña un bloque está al 88 % de la pantalla, y el
+       navegador, cuando se llega con el tabulador a algo de más abajo, no sube
+       el elemento hasta ahí: lo asoma justo por el borde. El foco se quedaba
+       sobre algo invisible.
+
+       El foco se pone aquí con `preventScroll`, o sea sin desplazar nada: así
+       el disparador no se entera y el bloque solo puede verse por la regla de
+       `:focus-within`. Si esto se pone en rojo, la salida de emergencia del CSS
+       ha dejado de funcionar y hay que arreglarla, porque el fallo es
+       invisible: pasa con el teclado. */
+    const resultado = await page.evaluate(() => {
+      const dentro =
+        "a[href], button, input, select, textarea, [tabindex]:not([tabindex='-1'])"
+
+      const bloques = Array.from(
+        document.querySelectorAll<HTMLElement>(
+          '[data-revelar="bloque"]:not([data-revelado])',
+        ),
+      ).filter((bloque) => bloque.querySelector(dentro))
+
+      const pruebas = bloques.map((bloque) => {
+        const foco = bloque.querySelector<HTMLElement>(dentro)!
+
+        foco.focus({ preventScroll: true })
+
+        const prueba = {
+          seLeDioElFoco: document.activeElement === foco,
+          opacidadDelBloque: Number(getComputedStyle(bloque).opacity),
+          /* Si esto fuera `true`, lo estaría enseñando el disparador y la
+             prueba no diría nada de la regla de CSS. */
+          loEnsenoElDisparador: bloque.hasAttribute("data-revelado"),
+        }
+
+        foco.blur()
+
+        return prueba
+      })
+
+      return { cuantos: pruebas.length, pruebas }
+    })
+
+    expect(
+      resultado.cuantos,
+      "la página tiene que tener bloques escondidos con algo dentro",
+    ).toBeGreaterThan(0)
+
+    for (const prueba of resultado.pruebas) {
+      expect(prueba.seLeDioElFoco, "el foco entra").toBe(true)
+      expect(
+        prueba.loEnsenoElDisparador,
+        "el disparador no se ha enterado",
+      ).toBe(false)
+      expect(
+        prueba.opacidadDelBloque,
+        "un bloque con el foco dentro no puede quedarse invisible",
+      ).toBe(1)
+    }
+  })
 })
 
 /* ── Parar ──────────────────────────────────────────────────────────────── */
@@ -217,6 +289,73 @@ test.describe("Parar el movimiento", () => {
     await expect(
       page.getByRole("button", { name: "Parar el movimiento" }),
     ).toHaveCount(0)
+  })
+
+  test("parado, la página se sigue leyendo y sigue apareciendo", async ({
+    page,
+  }, testInfo) => {
+    test.skip(
+      testInfo.project.name !== SOLO_ESCRITORIO,
+      "la rueda es cosa de escritorio",
+    )
+
+    await irA(page, "/")
+
+    const parar = page.getByRole("button", { name: "Parar el movimiento" })
+    await parar.scrollIntoViewIfNeeded()
+    await parar.click()
+
+    /* Parar el movimiento no puede parar la lectura, y no sale gratis: parando
+       la instancia de Lenis, la rueda se quedaba sin hacer nada con ella y la
+       página se clavaba. Lo que se hace es dejarle la rueda al navegador.
+       Comprobado en el navegador antes de arreglarlo, y aquí queda fijo. */
+    const antes = await page.evaluate(() => Math.round(window.scrollY))
+    await page.mouse.move(700, 400)
+    await page.mouse.wheel(0, -600)
+
+    await expect
+      .poll(() => page.evaluate(() => Math.round(window.scrollY)))
+      .toBeLessThan(antes - 100)
+
+    /* Y bajando hasta el final, lo de abajo se sigue enseñando: parado no
+       quiere decir escondido. */
+    await page.evaluate(() =>
+      window.scrollTo(0, document.documentElement.scrollHeight),
+    )
+
+    await expect(page.locator('[data-revelar="bloque"]').last()).toHaveCSS(
+      "opacity",
+      "1",
+    )
+  })
+
+  test("parado, la página nueva se ve entera", async ({ page }, testInfo) => {
+    test.skip(
+      testInfo.project.name !== SOLO_ESCRITORIO,
+      "el caso es el mismo en todos los anchos",
+    )
+
+    await irA(page, "/")
+
+    const parar = page.getByRole("button", { name: "Parar el movimiento" })
+    await parar.scrollIntoViewIfNeeded()
+    await parar.click()
+
+    /* Las entradas llevan relleno hacia atrás, así que congelarlas —que es lo
+       primero que se hizo— las dejaba en su primer fotograma, o sea en opacidad
+       cero. Parado el movimiento y cambiando de página, la página nueva entraba
+       en blanco y el titular no se veía. Se reproducía en el navegador; esto es
+       lo que lo mantiene arreglado. */
+    await page
+      .locator("header")
+      .getByRole("link", { name: "Clases", exact: true })
+      .click()
+    await expect(page).toHaveURL(/\/clases$/)
+
+    await expect(page.locator(".transicion-pagina")).toHaveCSS("opacity", "1")
+    await expect(page.locator("h1")).toHaveCSS("opacity", "1")
+    await expect(page.locator("h1 .palabra").first()).toBeVisible()
+    await expect(page.locator("h1 .palabra").first()).toHaveCSS("opacity", "1")
   })
 })
 

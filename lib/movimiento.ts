@@ -1,28 +1,21 @@
 /**
- * El movimiento, en un solo sitio.
+ * El movimiento.
  *
- * Los números viven también en styles/tokens.css, porque la mitad del
- * movimiento lo hacen las transiciones de CSS. Aquí están en segundos, que es
- * como los quiere GSAP. Si se cambia uno, se cambian los dos: son el mismo
- * valor escrito para dos sitios distintos, no dos valores.
+ * Aquí no están los números, y es a propósito. Están donde se usan: las
+ * duraciones y las curvas en `styles/tokens.css` (`--dur-*`, `--ease-*`), los
+ * retardos de las entradas en `styles/movimiento.css`, y los tiempos de la
+ * respiración en `lib/respiracion.ts`.
+ *
+ * Hubo aquí una tabla con todos ellos en segundos, «el movimiento en un solo
+ * sitio», y era peor que no tenerla: no la leía nadie —el movimiento lo hacen
+ * las transiciones de CSS y las animaciones por su cuenta—, decía ser la
+ * fuente de la verdad y había dejado de serlo (la duración base eran 320 ms
+ * cuando la de verdad siempre han sido 300). Se borró.
+ *
+ * Lo que sí vive aquí es lo que hay que decidir en JavaScript antes de que se
+ * pinte nada: si el movimiento está permitido, y si el aparato puede con el
+ * objeto.
  */
-
-export const MOVIMIENTO = {
-  /** Duración, en segundos. */
-  rapida: 0.18,
-  base: 0.32,
-  lenta: 0.6,
-
-  /** Curvas. En CSS son `--ease-out` y `--ease-inout`. */
-  salida: "power2.out",
-  suave: "power1.inOut",
-
-  /** Lo que se separan las palabras de un titular al entrar. */
-  palabra: 0.045,
-
-  /** Hasta dónde sube un bloque antes de quedarse en su sitio, en píxeles. */
-  subida: 18,
-} as const
 
 /**
  * El guion que se ejecuta antes de que se pinte nada.

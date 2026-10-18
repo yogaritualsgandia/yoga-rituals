@@ -91,6 +91,17 @@ type MotorScroll = {
   killAll: () => void
 }
 
+/**
+ * La parte de Lenis que hace falta para parar sin romper nada.
+ *
+ * El tipo del paquete solo declara como modificables unas pocas opciones
+ * —duración, curva, prevención—, pero en tiempo de ejecución el objeto las
+ * lleva todas, y `smoothWheel` se lee de ahí en cada rueda
+ * (`node_modules/lenis/dist/lenis.mjs`). El `as` de más abajo es solo el
+ * precio de que el tipo no lo diga.
+ */
+type OpcionesDeLenis = { options: { smoothWheel?: boolean } }
+
 export function ProveedorMovimiento({ children }: { children: ReactNode }) {
   const ruta = usePathname()
 
@@ -252,11 +263,19 @@ export function ProveedorMovimiento({ children }: { children: ReactNode }) {
 
     if (pausado) {
       raiz.dataset.pausado = "si"
-      lenis.current?.stop()
     } else {
       delete raiz.dataset.pausado
-      lenis.current?.start()
     }
+
+    /* Se apaga el suavizado en vez de parar la instancia. `stop()` parece lo
+       lógico, y es lo que se puso primero, pero Lenis se queda la rueda y no
+       hace nada con ella: la página se clavaba y no había forma de bajar salvo
+       por la barra. Se comprobó en el navegador. Con el suavizado apagado,
+       Lenis deja pasar la rueda al navegador tal cual: se deja de suavizar
+       —que es lo que se ha pedido, porque suavizar es moverse— sin dejar de
+       poder leer. */
+    const suave = lenis.current as unknown as OpcionesDeLenis | null
+    if (suave) suave.options.smoothWheel = !pausado
   }, [pausado, listo])
 
   const valor = useMemo(

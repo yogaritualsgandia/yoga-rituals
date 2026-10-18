@@ -29,8 +29,10 @@
       transform. Nada de ancho, alto ni márgenes, que obligan a recalcular la
       página entera sesenta veces por segundo.
 
-   4. Y SI ALGUIEN PIDE QUE PARE, PARA. No se acorta: se para. El círculo se
-      queda a medio respirar, que es exactamente lo que se ha pedido.
+   4. Y SI ALGUIEN PIDE QUE PARE, PARA. No se acorta: se para. Todo llega a su
+      sitio en el acto —el círculo también, que se queda quieto— y a partir de
+      ahí nada se mueve. El porqué de que sea instantáneo y no una congelación
+      está abajo, en la pausa.
    ========================================================================== */
 
 /* --- Lo que necesita Lenis -----------------------------------------------
@@ -131,6 +133,34 @@ html.lenis body {
   display: inline-block;
 }
 
+/* --- La salida de emergencia de lo escondido -----------------------------
+   Un bloque de más abajo se enseña cuando su borde de arriba cruza el 88 % de
+   la pantalla. El navegador, cuando se llega con el tabulador a algo que está
+   fuera, no sube el elemento hasta ahí: lo asoma justo por el borde de abajo,
+   que está por debajo de esa línea. Resultado: el foco sobre un elemento
+   invisible, que es peor que no esconder nada.
+
+   Con `:focus-within` se enseña en cuanto algo de dentro tiene el foco. Es una
+   regla de CSS y no una llamada desde JavaScript a propósito: así vale también
+   para quien navegue sin el paquete, y no hay ninguna forma de llegar al foco
+   sin que esto se dispare. */
+[data-movimiento="listo"]
+  [data-revelar="bloque"]:not(:has(.palabra)):focus-within {
+  opacity: 1;
+  transform: none;
+  /* Sin desvanecido. Esto no es una entrada, es un rescate: quien llega aquí
+     con el teclado tiene que ver en el acto dónde está, no ver cómo aparece. */
+  transition: none;
+}
+
+[data-movimiento="listo"]
+  [data-revelar="bloque"]:has(.palabra):focus-within
+  .palabra {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
 /* --- El círculo que respira, cuando no hay objeto ------------------------
    Es el sustituto del lienzo 3D, y no es un cartel que diga «aquí no hay 3D»:
    es lo mismo, más barato. Respira de verdad, con la misma curva.
@@ -175,11 +205,28 @@ html.lenis body {
 
 /* --- Pausa pedida a mano -------------------------------------------------
    Detiene lo que se mueve, no lo que funciona. La web sigue igual: se puede
-   leer, navegar y reservar; simplemente deja de moverse. */
+   leer, navegar y reservar; simplemente deja de moverse.
+
+   Lo natural sería congelar —`animation-play-state: paused`—, pero congelar
+   deja a medias lo que empezaba justo en ese momento, y eso tiene una
+   consecuencia que no se ve hasta que pasa: las entradas llevan relleno hacia
+   atrás, así que un elemento congelado en su primer fotograma se queda en
+   opacidad cero. Parado el movimiento y cambiando de página, la página nueva
+   entraba en blanco, con el titular invisible. Se demostró en el navegador
+   antes de tocar nada.
+
+   Así que en vez de congelarlo se hace instantáneo: mismo tratamiento que el
+   guardián de «menos movimiento», un solo concepto para las dos cosas. Todo
+   llega a su sitio en el acto y no se mueve nada. El precio es que al volver
+   a arrancar, las entradas que aún se estaban viendo se repiten una vez, que
+   es justo lo que se ha pedido al pulsar «Reanudar». */
 
 html[data-pausado="si"] *,
 html[data-pausado="si"] *::before,
 html[data-pausado="si"] *::after {
-  animation-play-state: paused !important;
+  animation-duration: 0.01ms !important;
+  animation-delay: 0ms !important;
+  animation-iteration-count: 1 !important;
   transition-duration: 0.01ms !important;
+  transition-delay: 0ms !important;
 }

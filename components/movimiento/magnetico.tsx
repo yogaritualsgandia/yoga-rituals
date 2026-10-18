@@ -17,8 +17,10 @@ import { useMovimiento } from "@/components/movimiento/proveedor-movimiento"
  * saltos. El bucle se para solo cuando llega, y vuelve a arrancar al siguiente
  * movimiento; no se queda girando en vacío.
  *
- * No se enciende en pantallas táctiles —ahí no hay puntero que atraiga nada— ni
- * con «menos movimiento» puesto.
+ * No se enciende en pantallas táctiles —ahí no hay puntero que atraiga nada—,
+ * ni con «menos movimiento» puesto, ni con el movimiento parado a mano: ocho
+ * píxeles de más siguen siendo movimiento. El botón conserva su sombra y su
+ * cambio de color al pasar por encima, así que sigue respondiendo.
  */
 export function Magnetico({
   children,
@@ -28,11 +30,11 @@ export function Magnetico({
   fuerza?: number
 }) {
   const caja = useRef<HTMLDivElement>(null)
-  const { conMovimiento } = useMovimiento()
+  const { conMovimiento, pausado } = useMovimiento()
 
   useEffect(() => {
     const elemento = caja.current
-    if (!elemento || !conMovimiento) return
+    if (!elemento || !conMovimiento || pausado) return
     if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return
 
     let bucle: number | null = null
@@ -91,7 +93,7 @@ export function Magnetico({
       if (bucle !== null) cancelAnimationFrame(bucle)
       elemento.style.transform = ""
     }
-  }, [conMovimiento, fuerza])
+  }, [conMovimiento, pausado, fuerza])
 
   return (
     <div ref={caja} className="inline-flex">
