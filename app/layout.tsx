@@ -2,8 +2,11 @@ import type { Metadata } from "next"
 import { Literata, Source_Sans_3 } from "next/font/google"
 
 import "./globals.css"
+import { AvisoCookies } from "@/components/consentimiento/aviso-cookies"
+import { ProveedorConsentimiento } from "@/components/consentimiento/proveedor-consentimiento"
 import { AccionFija } from "@/components/layout/accion-fija"
 import { Cabecera } from "@/components/layout/cabecera"
+import { FondoAmbiente } from "@/components/layout/fondo-ambiente"
 import { Pie } from "@/components/layout/pie"
 import { ProveedorMovimiento } from "@/components/movimiento/proveedor-movimiento"
 import { TransicionPagina } from "@/components/movimiento/transicion-pagina"
@@ -101,32 +104,45 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: GUION_MOVIMIENTO }} />
 
         <ThemeProvider>
-          <ProveedorMovimiento>
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: datosEstructuradosComoTexto(),
-              }}
-            />
+          <ProveedorConsentimiento>
+            <ProveedorMovimiento>
+              {/* El fondo de toda la web. Va detrás de todo —`z-index: -1`— y no
+                entra ni en el orden de lectura ni en el del teclado. */}
+              <FondoAmbiente />
 
-            <a href="#contenido" className="salto-contenido">
-              Saltar al contenido
-            </a>
+              <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                  __html: datosEstructuradosComoTexto(),
+                }}
+              />
 
-            <Cabecera />
+              <a href="#contenido" className="salto-contenido">
+                Saltar al contenido
+              </a>
 
-            <main id="contenido" className="flex-1">
-              <TransicionPagina>{children}</TransicionPagina>
-            </main>
+              <Cabecera />
 
-            <Pie />
+              <main id="contenido" className="flex-1">
+                <TransicionPagina>{children}</TransicionPagina>
+              </main>
 
-            {/* El hueco que ocupa la barra fija de móvil, para que no tape el
+              <Pie />
+
+              {/* El hueco que ocupa la barra fija de móvil, para que no tape el
                 final del pie. */}
-            <div aria-hidden="true" className="h-24 lg:hidden" />
+              <div aria-hidden="true" className="h-24 lg:hidden" />
 
-            <AccionFija />
-          </ProveedorMovimiento>
+              <AccionFija />
+
+              {/* Lo último del documento, y a propósito: el cartel de cookies no
+                entra en el orden de lectura por delante del contenido —quien
+                navegue con lector de pantalla llega antes a la web que al
+                aviso— y, si aparece, está donde no tapa nada. Se pinta solo si
+                hay analítica configurada y todavía no se ha contestado. */}
+              <AvisoCookies />
+            </ProveedorMovimiento>
+          </ProveedorConsentimiento>
         </ThemeProvider>
       </body>
     </html>

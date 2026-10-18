@@ -23,7 +23,11 @@
   --step-display: clamp(2.5000rem, 1.2000rem + 5.20vw, 5.2500rem); /* 40 → 84 px */
 
   /* --- Ritmo vertical entre secciones ------------------------------------ */
-  --section-gap: clamp(5rem, 3rem + 9vw, 13.75rem); /* 80 → 220 px */
+  /* Antes llegaba a 220 px en pantallas grandes, y entre un bloque corto y el
+     siguiente eso se lee como un hueco, no como una pausa: en Yoga Nidra, el
+     bloque de datos y el titular de abajo quedaban a un palmo largo. 176 px de
+     tope sigue dejando respirar y ya no parte la página en dos. */
+  --section-gap: clamp(5rem, 2.75rem + 7vw, 11rem); /* 80 → 176 px */
 
   /* --- Interlínea y tracking --------------------------------------------- */
   --leading-tight: 1.05;

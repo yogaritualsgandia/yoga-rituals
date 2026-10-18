@@ -1,16 +1,15 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 
+import { BotonReserva } from "@/components/layout/boton-reserva"
 import { Contenedor } from "@/components/layout/contenedor"
 import { Pagina } from "@/components/layout/pagina"
 import { Button } from "@/components/ui/button"
 import {
   duracionEnPalabras,
-  franjasSemanales,
   horario,
   horarioLibre,
 } from "@/content/horario"
-import { accionPrincipal } from "@/content/site"
 
 export const metadata: Metadata = {
   title: "Horarios",
@@ -93,11 +92,6 @@ export default function PaginaHorarios() {
               ))}
             </tbody>
           </table>
-
-          <p className="paso-pequeno mt-8 text-ink-soft">
-            {franjasSemanales} franjas a la semana. No hay que apuntarse a
-            ninguna: eliges cada día.
-          </p>
         </Contenedor>
       </section>
 
@@ -116,13 +110,9 @@ export default function PaginaHorarios() {
           </dl>
 
           <div className="mt-14 flex flex-wrap gap-3">
-            <Button asChild size="lg">
-              <Link href={accionPrincipal.href}>
-                {accionPrincipal.etiqueta}
-              </Link>
-            </Button>
+            <BotonReserva />
             <Button asChild variant="outline" size="lg">
-              <Link href="/tarifas">Ver las tarifas</Link>
+              <Link href="/precios">Ver los precios</Link>
             </Button>
           </div>
         </Contenedor>

@@ -129,8 +129,95 @@ html.lenis body {
    se aplica a un elemento en línea. `inline-block` no cambia dónde rompe la
    línea —rompe entre palabras, igual que antes— y solo deja de partir una
    palabra por la mitad, que en castellano no pasa nunca. */
-[data-revelar] .palabra {
+[data-revelar]:not([data-revelar="escrito"]) .palabra {
   display: inline-block;
+}
+
+/* --- El acordeón de las dudas --------------------------------------------
+   Al abrir una duda pasan dos cosas a la vez, y van juntas a propósito.
+
+   La primera es el panel, que se despliega. Se anima la altura porque no hay
+   otra forma de desplegar algo —un `transform` no puede estirar una caja y
+   empujar lo de abajo—, y aquí se puede pagar: es una sección que se abre a
+   mano, de una en una, y mientras se abre no hay nada más moviéndose.
+
+   La segunda es el texto, que se escribe letra a letra. Cada letra entra en su
+   momento, con un retardo proporcional a su sitio, y el retardo lo calcula el
+   componente a partir del texto: un paso fijo por letra, con un tope de tiempo
+   total, así que una respuesta corta se escribe despacio y una larga más
+   deprisa, pero ninguna tarda una eternidad.
+
+   Y las dos van a la vez porque van lineales y duran lo mismo: el panel
+   recibe en `--escritura` lo que tarda el texto en escribirse, y crece de
+   cero a su altura en ese tiempo. Como las líneas llevan más o menos las
+   mismas letras, crecer en línea recta es crecer al ritmo al que se van
+   llenando: el borde de abajo baja a la vez que baja la línea. Por eso aquí
+   no se usa la `ease-out` de la casa, que arrancaría rápido y frenaría al
+   final —el panel se adelantaría al texto y se vería crecer sobre hueco—:
+   esto no es una entrada, es una escritura, y una escritura va a velocidad
+   constante.
+
+   Se anima SOLO la opacidad, y es una decisión, no una limitación. El panel
+   recorta por arriba y por abajo mientras se despliega, así que una letra que
+   entrara desplazada hacia abajo asomaría cortada por el borde. Y como no se
+   mueve, no hace falta `inline-block`: las letras se quedan en línea, que es
+   como las lee un lector de pantalla, del tirón y sin pausa entre palabra y
+   palabra. Por eso esto no lleva `aria-label` como el titular: no hay nada que
+   arreglar. Lo único que sí hay que decirle al navegador es que no parta una
+   palabra por la mitad, porque entre letra y letra siempre se puede romper una
+   línea; de eso se encarga el `nowrap` de la palabra.
+
+   Todo va atado a `[data-state="open"]` a propósito. Radix deja el panel
+   cerrado en el documento en `display: none`, y con esto la animación no
+   depende de que el navegador reinicie lo que estaba escondido: nace en el
+   momento en que la duda se abre, y como deja de existir al cerrarla, al
+   volver a abrirla se escribe otra vez. */
+
+@keyframes desplegar-panel {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes plegar-panel {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+@keyframes escribir-letra {
+  from {
+    opacity: 0;
+  }
+}
+
+[data-movimiento="listo"] [data-slot="accordion-content"][data-state="open"] {
+  animation: desplegar-panel var(--escritura, var(--dur-escribir)) linear;
+}
+
+[data-movimiento="listo"] [data-slot="accordion-content"][data-state="closed"] {
+  animation: plegar-panel var(--dur-fast) var(--ease-out);
+}
+
+/* La palabra no se parte por la mitad aunque esté escrita letra a letra: sin
+   esto, cada letra sería un sitio por donde romper la línea. */
+[data-revelar="escrito"] .palabra {
+  display: inline;
+  white-space: nowrap;
+}
+
+[data-movimiento="listo"]
+  [data-slot="accordion-content"][data-state="open"]
+  [data-revelar="escrito"]
+  .letra {
+  animation: escribir-letra var(--dur-letra, 90ms) var(--ease-out) backwards;
+  animation-delay: calc(var(--i, 0) * var(--paso, 20ms));
 }
 
 /* --- La salida de emergencia de lo escondido -----------------------------
@@ -186,21 +273,36 @@ html.lenis body {
 }
 
 /* --- El paso de una página a otra ----------------------------------------
-   Un desvanecido corto, y nada más: no hay cortina que baje, ni una pantalla
-   intermedia que espere. Cambiar de página ya es rápido; esto solo evita el
-   corte seco.
+   Lo que entra sube un poco mientras aparece, y por eso no se ve como un corte
+   seco sino como una llegada: al pulsar en la barra de arriba, la página nueva
+   se coloca en su sitio en lugar de aparecer de golpe.
 
-   Se anima la opacidad del bloque entero, que la tarjeta gráfica resuelve sin
-   volver a calcular la página. */
+   Sube veinticuatro píxeles, que es poco para lo que se mueve: aquí la
+   distancia no se mide por lo grande que es el elemento, se mide por lo lejos
+   que está de su sitio, y está a un dedo. Más distancia sería un salto.
+
+   Se mueven solo la opacidad y un `transform`, que son las dos cosas que la
+   tarjeta gráfica resuelve sin volver a calcular la página. Y la animación la
+   pone el CSS detrás del mismo interruptor que todo lo demás: con menos
+   movimiento pedido, la página está en su sitio desde el primer fotograma, sin
+   subir, sin desvanecerse y sin nada que pueda dejarla en blanco.
+
+   El fotograma final no dice `transform`, y eso es a propósito: al no
+   declararlo, la página se queda sin transformación ninguna cuando la
+   animación termina. Una transformación —aunque sea de cero píxeles— deja de
+   ser «ninguna» para el navegador y convierte al bloque en el marco de
+   referencia de cualquier cosa fija que lleve dentro. Aquí no hay ninguna, pero
+   no hay motivo para dejarla puesta. */
 
 @keyframes entrar-pagina {
   from {
     opacity: 0;
+    transform: translateY(1.5rem);
   }
 }
 
 [data-movimiento="listo"] .transicion-pagina {
-  animation: entrar-pagina var(--dur-base) var(--ease-out) backwards;
+  animation: entrar-pagina var(--dur-pagina) var(--ease-out) backwards;
 }
 
 /* --- Pausa pedida a mano -------------------------------------------------

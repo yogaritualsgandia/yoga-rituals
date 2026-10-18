@@ -41,6 +41,8 @@ type Estado = {
   alternar: () => void
   /** Este navegador admite movimiento: no ha pedido menos. */
   conMovimiento: boolean
+  /** Sube la página al principio, con el suavizado de la casa. */
+  subirArriba: () => void
 }
 
 const Contexto = createContext<Estado | null>(null)
@@ -258,6 +260,26 @@ export function ProveedorMovimiento({ children }: { children: ReactNode }) {
 
   const alternar = useCallback(() => setPausado((valor) => !valor), [])
 
+  /* Volver arriba se pide desde la barra de arriba, pulsando la sección en la
+     que ya estás: ahí el enlace no lleva a ningún sitio y lo que se espera es
+     subir. Se sube con Lenis, que es quien tiene el desplazamiento suavizado;
+     hacerlo con `window.scrollTo` a secas daría un salto seco justo donde se ha
+     pedido suavidad, y con el fondo de la página a la vista.
+
+     Y si no hay Lenis —todavía no ha llegado, o quien mira ha pedido menos
+     movimiento— el salto instantáneo es lo correcto: no se ha pedido suavidad,
+     se ha pedido llegar. */
+  const subirArriba = useCallback(() => {
+    const suave = lenis.current
+
+    if (suave && !pausado) {
+      suave.scrollTo(0)
+      return
+    }
+
+    window.scrollTo(0, 0)
+  }, [pausado])
+
   useEffect(() => {
     const raiz = document.documentElement
 
@@ -279,8 +301,8 @@ export function ProveedorMovimiento({ children }: { children: ReactNode }) {
   }, [pausado, listo])
 
   const valor = useMemo(
-    () => ({ pausado, alternar, conMovimiento }),
-    [pausado, alternar, conMovimiento],
+    () => ({ pausado, alternar, conMovimiento, subirArriba }),
+    [pausado, alternar, conMovimiento, subirArriba],
   )
 
   return <Contexto.Provider value={valor}>{children}</Contexto.Provider>

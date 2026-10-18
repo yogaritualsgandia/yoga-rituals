@@ -46,75 +46,6 @@ async function irA(page: Page, ruta: string) {
   await esperarAlMovimiento(page)
 }
 
-/** El bloque de «Marca tu ritmo», que es donde está todo esto. */
-function seccionDelRitmo(page: Page) {
-  return page.locator("section", {
-    has: page.getByRole("heading", { name: "Marca tu ritmo" }),
-  })
-}
-
-/* ── El objeto y sus mandos ─────────────────────────────────────────────── */
-
-test.describe("El objeto que respira", () => {
-  test("la sección está, con su titular y su escena", async ({ page }) => {
-    await irA(page, "/")
-
-    const seccion = seccionDelRitmo(page)
-
-    await expect(seccion).toHaveCount(1)
-    await expect(seccion.locator('[role="img"]')).toHaveCount(1)
-  })
-
-  test("la escena dice el ritmo que hay marcado", async ({ page }) => {
-    await irA(page, "/")
-
-    await expect(seccionDelRitmo(page).locator('[role="img"]')).toHaveAttribute(
-      "aria-label",
-      /4 segundos al inspirar y 6 al espirar/,
-    )
-  })
-
-  test("el ritmo se puede marcar con el teclado, y se anuncia", async ({
-    page,
-  }) => {
-    await irA(page, "/")
-
-    const inspirar = page.getByRole("slider", { name: "Inspirar, en segundos" })
-    const espirar = page.getByRole("slider", { name: "Espirar, en segundos" })
-
-    await expect(inspirar).toHaveAttribute("aria-valuenow", "4")
-    await expect(espirar).toHaveAttribute("aria-valuenow", "6")
-
-    /* Con las flechas, que es como se maneja un deslizador sin ratón. Radix ya
-       lo trae hecho; lo que se comprueba es que sigue ahí después de haberle
-       puesto nuestro aspecto por encima. */
-    await inspirar.press("ArrowRight")
-    await expect(inspirar).toHaveAttribute("aria-valuenow", "5")
-    await expect(page.getByText("Una respiración cada 11 segundos")).toBeVisible()
-
-    // Y que la escena se entera: es lo que la hace algo más que un adorno.
-    await expect(seccionDelRitmo(page).locator('[role="img"]')).toHaveAttribute(
-      "aria-label",
-      /5 segundos al inspirar/,
-    )
-
-    await espirar.press("ArrowLeft")
-    await expect(espirar).toHaveAttribute("aria-valuenow", "5")
-    await expect(page.getByText("Una respiración cada 10 segundos")).toBeVisible()
-  })
-
-  test("el ritmo es legible sin tocar los mandos", async ({ page }) => {
-    await irA(page, "/")
-
-    /* Los mandos son un extra, no la única forma de leer la sección: si no
-       estuvieran —sin JavaScript no estarían— el texto sigue diciendo el
-       ritmo con palabras. */
-    await expect(seccionDelRitmo(page)).toContainText(
-      /cuatro segundos al inspirar y seis al espirar/,
-    )
-  })
-})
-
 /* ── Las entradas ───────────────────────────────────────────────────────── */
 
 test.describe("Las entradas", () => {
@@ -403,9 +334,9 @@ test.describe("El desplazamiento", () => {
       window.scrollTo(0, document.documentElement.scrollHeight),
     )
 
-    await page.locator("footer").getByRole("link", { name: "Tarifas" }).click()
+    await page.locator("footer").getByRole("link", { name: "Aviso legal" }).click()
 
-    await expect(page).toHaveURL(/\/tarifas$/)
+    await expect(page).toHaveURL(/\/aviso-legal$/)
     await expect
       .poll(() => page.evaluate(() => Math.round(window.scrollY)))
       .toBe(0)

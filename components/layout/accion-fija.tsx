@@ -1,11 +1,11 @@
 "use client"
 
-import { MessageCircle } from "lucide-react"
-import Link from "next/link"
+import { Phone } from "lucide-react"
 import { useEffect, useState } from "react"
 
+import { BotonReserva } from "@/components/layout/boton-reserva"
 import { Button } from "@/components/ui/button"
-import { accionPrincipal, whatsappUrl } from "@/content/site"
+import { site } from "@/content/site"
 import { cn } from "@/lib/utils"
 
 /**
@@ -50,19 +50,17 @@ export function AccionFija() {
       )}
     >
       <div className="contenedor flex items-center gap-2">
-        <Button asChild size="lg" className="min-w-0 flex-1">
-          <Link href={accionPrincipal.href}>{accionPrincipal.etiqueta}</Link>
-        </Button>
+        <BotonReserva className="min-w-0 flex-1" />
 
+        {/* El segundo botón era WhatsApp y ahora es el teléfono: la reserva ya
+            va por WhatsApp, así que repetirlo aquí sería tener dos veces lo
+            mismo en la misma barra. Quien no quiera escribir, llama. */}
         <Button asChild variant="outline" size="icon">
-          <a
-            href={whatsappUrl()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="shrink-0"
-          >
-            <MessageCircle aria-hidden="true" />
-            <span className="sr-only">Escríbenos por WhatsApp</span>
+          <a href={`tel:${site.contacto.telefono}`} className="shrink-0">
+            <Phone aria-hidden="true" />
+            <span className="sr-only">
+              Llamar al estudio, {site.contacto.telefonoVisible}
+            </span>
           </a>
         </Button>
       </div>

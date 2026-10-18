@@ -13,7 +13,6 @@
 
 export const sobreMi = {
   nombre: "Susana Estruch Espinós",
-  cargo: "Directora de YOGA Rituals",
   entradilla:
     "Empecé con yoga por el dolor de espalda de una escoliosis. Sigo aquí.",
 } as const

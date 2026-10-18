@@ -24,9 +24,9 @@ import type { NextConfig } from "next"
  * dirección nueva. El 301 sí. Es la diferencia entre mudarse y desaparecer.
  *
  * Las direcciones que la web nueva conserva tal cual —/horarios/,
- * /primera-vez/, /retiros/, /yoga-oncologico/, /breathwork/, /yoga-nidra/— no
- * están aquí. Solo les cambia la barra final, y de eso ya se encarga Next.js
- * solo.
+ * /primera-vez/, /retiros/, /yoga-oncologico/, /breathwork/, /yoga-nidra/,
+ * /precios/— no están aquí. Solo les cambia la barra final, y de eso ya se
+ * encarga Next.js solo.
  *
  * Lo que NO se puede hacer desde aquí
  * Que `www.yogarituals.es` lleve a `yogarituals.es` es cosa del alojamiento,
@@ -40,16 +40,26 @@ export const REDIRECCIONES_ANTIGUAS = [
   // lo ocupa ahora «Clases».
   { desde: "/actividades", hacia: "/clases" },
 
-  // «Precios» es «Tarifas»: el mismo contenido, en castellano.
-  { desde: "/precios", hacia: "/tarifas" },
+  // «Precios» es «Tarifas»: el mismo contenido, en castellano. La página se
+  // llama «Precios» desde el principio, y la dirección antigua /precios/ de la
+  // web vieja apunta ahora a un sitio que existe de verdad.
+  { desde: "/tarifas", hacia: "/precios" },
 
   // Ojo: en la web vieja estaba escrito «minfulness», sin la primera d. Se
   // respeta tal cual, porque así es como lo ha tenido publicado durante años y
   // así es como lo tiene indexado Google.
   { desde: "/minfulness", hacia: "/mindfulness" },
 
-  // «Contacto imágenes» era la página de contacto.
-  { desde: "/contacto-imagenes", hacia: "/contacto" },
+  // «Contacto imágenes» era la página de contacto de la web vieja, y aquí no
+  // hay una que la sustituya: la dirección, el teléfono y el correo están en el
+  // pie de todas las páginas, y la clase de prueba se reserva por WhatsApp. La
+  // dirección antigua va a la portada, que es donde está todo eso.
+  { desde: "/contacto-imagenes", hacia: "/" },
+
+  // La página de contacto existió un tiempo y se ha quitado: se llegaba a ella
+  // solo desde el pie, y decía «Contacto y reserva» cuando la reserva se hace
+  // por WhatsApp. Si algún día se recupera, se quita esta línea.
+  { desde: "/contacto", hacia: "/" },
 
   // Los talleres pierden el «en».
   {

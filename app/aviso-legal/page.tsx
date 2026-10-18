@@ -1,22 +1,23 @@
 import type { Metadata } from "next"
 
-import { EnPreparacion } from "@/components/layout/en-preparacion"
-import { Pagina } from "@/components/layout/pagina"
+import { PaginaLegal } from "@/components/layout/pagina-legal"
+import { documentosLegales } from "@/content/legal"
+
+const documento = documentosLegales.avisoLegal
 
 export const metadata: Metadata = {
-  title: "Aviso legal",
-  description:
-    "Aviso legal de YOGA Rituals: información del titular de yogarituals.es, el sitio del estudio de yoga en Gandia (Valencia).",
-  alternates: { canonical: "/aviso-legal" },
+  title: documento.titulo,
+  description: documento.descripcion,
+  alternates: { canonical: documento.ruta },
 }
-export default function PaginaAvisoLegal() {
-  return (
-    <Pagina
-      etiqueta="Legal"
-      titulo="Aviso legal"
 
-    >
-      <EnPreparacion pendiente="Falta el texto legal, que tiene que redactar o revisar quien lleve la parte legal. Aquí no se copia una plantilla de internet." />
-    </Pagina>
-  )
+/**
+ * Aviso legal.
+ *
+ * Es el sitio donde la ley pide que se diga quién está detrás de la web
+ * (artículo 10 de la LSSI). El texto está en `content/legal.ts`, con los otros
+ * dos documentos legales, y lo pinta `PaginaLegal`.
+ */
+export default function PaginaAvisoLegal() {
+  return <PaginaLegal documento={documento} />
 }

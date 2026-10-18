@@ -37,15 +37,15 @@ test.describe("Detalles en escritorio", () => {
        bailan y las capturas pasan a enseñar otra cosa sin avisar. Pasó. */
     await page
       .locator("main section")
-      .filter({ hasText: "Marca tu ritmo" })
+      .filter({ hasText: "Fuera de la sala" })
       .screenshot({
-        path: "capturas/fase-2/detalles/ritmo.png",
+        path: "capturas/fase-2/detalles/fuera-de-la-sala.png",
         animations: "disabled",
       })
 
     await page
       .locator("main section")
-      .filter({ hasText: "Lo que puedes practicar aquí" })
+      .filter({ hasText: "Lo que puedes practicar" })
       .screenshot({
         path: "capturas/fase-2/detalles/practicas.png",
         animations: "disabled",
@@ -81,7 +81,7 @@ test.describe("Detalles en escritorio", () => {
 
     await page
       .locator("main section")
-      .filter({ hasText: "Lo que ya está respondido" })
+      .filter({ hasText: "Tengo una lesión" })
       .screenshot({
         path: "capturas/fase-2/detalles/oncologico-respuesta.png",
         animations: "disabled",

@@ -5,6 +5,8 @@
 @import "../styles/tokens.css";
 @import "../styles/typography.css";
 @import "../styles/movimiento.css";
+@import "../styles/ambiente.css";
+@import "../styles/consentimiento.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -52,7 +54,6 @@
     --color-surface: var(--surface);
     --color-surface-2: var(--surface-2);
     --color-field: var(--field);
-    --color-field-warm: var(--field-warm);
     --color-ink: var(--ink);
     --color-ink-soft: var(--ink-soft);
     --color-brand: var(--brand);
@@ -61,6 +62,7 @@
     --color-brand-ink: var(--brand-ink);
     --color-focus: var(--focus);
     --color-line: var(--line);
+    --color-estrella: var(--estrella);
 
     --radius-sm: calc(var(--radius) * 0.6);
     --radius-md: calc(var(--radius) * 0.8);

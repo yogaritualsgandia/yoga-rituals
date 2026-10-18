@@ -89,7 +89,13 @@ export function Paralaje({
 
   return (
     <div ref={marco} className={cn("relative overflow-hidden", className)}>
-      <div ref={capa} className="size-full">
+      {/* La capa lleva `relative` por una razón que no se ve: la foto de dentro
+          lleva `fill`, que la coloca en absoluto respecto al ancestro más
+          cercano que esté posicionado. Sin esto el ancestro es el marco, y
+          entonces la foto se sale de la capa que se mueve y el paralaje deja de
+          notarse. Además Next avisa por consola de que el padre de una imagen
+          `fill` no está posicionado, y tiene razón. */}
+      <div ref={capa} className="relative size-full">
         {children}
       </div>
     </div>

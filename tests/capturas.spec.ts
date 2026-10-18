@@ -23,7 +23,9 @@ test.describe.configure({ timeout: 240_000 })
 const PAGINAS = [
   ["inicio", "/"],
   ["horarios", "/horarios"],
-  ["tarifas", "/tarifas"],
+  ["precios", "/precios"],
+  ["mindfulness", "/mindfulness"],
+  ["sobre-mi", "/sobre-mi"],
   ["clases", "/clases"],
   ["primera-vez", "/primera-vez"],
   ["retiros", "/retiros"],

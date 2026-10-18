@@ -1,21 +1,130 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 
-import { EnPreparacion } from "@/components/layout/en-preparacion"
+import { Contenedor } from "@/components/layout/contenedor"
 import { Pagina } from "@/components/layout/pagina"
+import { Button } from "@/components/ui/button"
+import { mindfulness } from "@/content/mindfulness"
+import { accionPrincipal, whatsappUrl } from "@/content/site"
 
 export const metadata: Metadata = {
   title: "Mindfulness",
-  description: "Mindfulness en Gandia con Susana Estruch, monitora de Mindfulness MBTB.",
+  description:
+    "Sesión de Mindfulness en la Biblioteca Benipeixcar-Raval de Gandia: todos los miércoles a las 10:30, una hora, desde hace más de 7 años. Con Susana Estruch, monitora de Mindfulness MBTB.",
   alternates: { canonical: "/mindfulness" },
 }
+
+/**
+ * Mindfulness.
+ *
+ * La página se ordena como se pregunta: dónde es y a qué hora —los cuatro
+ * datos, arriba y en fichas, porque es lo único que se viene a buscar—, si hay
+ * sitio ahora mismo, qué pasa dentro de la hora que dura, y qué más hay del
+ * mismo tema en el estudio.
+ *
+ * El aviso de las plazas va pegado a los datos y no en un bloque aparte: es la
+ * letra pequeña del dato «Reservas», y separarlo sería hacer que se leyera
+ * tarde, justo cuando ya ha decidido venir.
+ */
 export default function PaginaMindfulness() {
   return (
     <Pagina
-      etiqueta="Actividades"
+      etiqueta="Propuestas concretas"
       titulo="Mindfulness"
-      entradilla="Parar la cabeza y volver a lo que está pasando ahora mismo."
+      entradilla={mindfulness.entradilla}
     >
-      <EnPreparacion pendiente="Falta el texto de la actividad y el formato en que se ofrece (sesiones abiertas, cursos, talleres)." />
+      {/* ── Los cuatro datos, y el estado de las plazas ──────────────────── */}
+      <section className="seccion pt-0">
+        <Contenedor>
+          <dl className="grid grid-cols-1 gap-8 border-t border-line pt-8 sm:grid-cols-2 lg:grid-cols-4">
+            {mindfulness.datos.map((dato) => (
+              <div key={dato.etiqueta}>
+                <dt className="etiqueta">{dato.etiqueta}</dt>
+                <dd className="font-heading mt-2 text-xl">{dato.valor}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <p className="paso-base medida mt-10 border-l-2 border-brand/40 bg-surface-2/60 py-4 pl-5 text-ink-soft">
+            <strong className="font-medium text-ink">
+              {mindfulness.aviso.ahora}
+            </strong>{" "}
+            {mindfulness.aviso.resto}
+          </p>
+        </Contenedor>
+      </section>
+
+      {/* ── Qué esperar ──────────────────────────────────────────────────── */}
+      <section className="seccion pt-0">
+        <Contenedor>
+          <h2 className="font-heading text-2xl">Qué esperar</h2>
+
+          <div className="medida mt-5 flex flex-col gap-4">
+            {mindfulness.queEsperar.map((parrafo) => (
+              <p key={parrafo} className="paso-base text-ink-soft">
+                {parrafo}
+              </p>
+            ))}
+          </div>
+        </Contenedor>
+      </section>
+
+      {/* ── El taller de respiración que viene ───────────────────────────── */}
+      <section className="seccion pt-0">
+        <Contenedor>
+          <div className="rounded-lg border border-line p-6 md:flex md:items-center md:justify-between md:gap-10 md:p-8">
+            <div>
+              <p className="etiqueta">{mindfulness.proximoTaller.titular}</p>
+              <p className="font-heading mt-2 text-xl">
+                {mindfulness.proximoTaller.cuando}
+              </p>
+              <p className="paso-pequeno mt-1 text-ink-soft">
+                {mindfulness.proximoTaller.donde}
+              </p>
+            </div>
+
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="mt-6 shrink-0 md:mt-0"
+            >
+              <Link href="/breathwork">Ver el taller</Link>
+            </Button>
+          </div>
+        </Contenedor>
+      </section>
+
+      {/* ── Preguntar ────────────────────────────────────────────────────── */}
+      <section className="seccion pt-0">
+        <Contenedor>
+          <h2 className="paso-titular max-w-[22ch]">
+            {mindfulness.cierre.titular}
+          </h2>
+          <p className="paso-entrada medida mt-6 text-ink-soft">
+            {mindfulness.cierre.texto}
+          </p>
+
+          <div className="mt-10 flex flex-wrap gap-3">
+            <Button asChild size="lg">
+              <a
+                href={whatsappUrl(
+                  "Hola Susana, quiero venir a la sesión de mindfulness.",
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Preguntar por la sesión
+              </a>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <Link href={accionPrincipal.href}>
+                {accionPrincipal.etiqueta}
+              </Link>
+            </Button>
+          </div>
+        </Contenedor>
+      </section>
     </Pagina>
   )
 }

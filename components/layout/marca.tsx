@@ -1,7 +1,10 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
 
 import { site } from "@/content/site"
+import { useEnlacePropio } from "@/hooks/use-enlace-propio"
 import { cn } from "@/lib/utils"
 
 /**
@@ -31,11 +34,18 @@ import { cn } from "@/lib/utils"
  *  El texto alternativo va vacío a propósito, y en las dos imágenes: están
  *  dentro de un enlace que ya tiene su propio nombre accesible, así que
  *  describirlas otra vez solo haría que se anunciara dos veces.
+ *
+ *  El logo es un enlace a la portada, y en la portada ya estás: ahí pulsarlo
+ *  sube la página al principio, que es lo que se espera de él. Lo hace el mismo
+ *  `useEnlacePropio` que la barra de arriba.
  */
 export function Marca({ className }: { className?: string }) {
+  const { alPulsar } = useEnlacePropio()
+
   return (
     <Link
       href="/"
+      onClick={(evento) => alPulsar("/", evento)}
       aria-label={`${site.nombre}, ir al inicio`}
       className={cn("inline-flex items-center rounded-sm", className)}
     >

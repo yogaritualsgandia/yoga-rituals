@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 
+import { BotonReserva } from "@/components/layout/boton-reserva"
 import { Contenedor } from "@/components/layout/contenedor"
-import { EnPreparacion } from "@/components/layout/en-preparacion"
 import { Pagina } from "@/components/layout/pagina"
+import { Parrafo, atributoEscritura } from "@/components/movimiento/revelar"
 import {
   Accordion,
   AccordionContent,
@@ -15,11 +15,10 @@ import {
   aTenerEnCuenta,
   cierrePrimeraVez,
   preguntasFrecuentes,
-  preguntasPendientes,
   primeraVez,
   queNecesitas,
 } from "@/content/primeraVez"
-import { accionPrincipal, site, whatsappUrl } from "@/content/site"
+import { whatsappUrl } from "@/content/site"
 
 export const metadata: Metadata = {
   title: "Primera vez",
@@ -37,8 +36,12 @@ export const metadata: Metadata = {
  * pregunta: ¿me hará falta algo?, ¿cómo me tengo que comportar?, ¿y si me
  * pasa esto?
  *
- * Los dos «ganchos» —lo de la flexibilidad y lo de los horarios libres— van
- * arriba y en grande porque son las dos objeciones que frenan el primer paso.
+ * Arriba hubo dos titulares en grande con las dos objeciones que frenan el
+ * primer paso —la flexibilidad y los horarios libres—, y una vez contestadas
+ * por el camino se quitaron: la flexibilidad la responde la primera pregunta
+ * del acordeón y los horarios los cuenta la página de horarios, entera. Dos
+ * respuestas repetidas arriba solo alargaban el camino hasta el primer dato
+ * útil.
  *
  * Nota de diseño: las listas de «qué necesitas» y «a tener en cuenta» son
  * listas de definición con la etiqueta a la izquierda, no tres tarjetas
@@ -51,31 +54,6 @@ export default function PaginaPrimeraVez() {
       titulo="Todo lo que necesitas saber"
       entradilla={primeraVez.entradilla}
     >
-      {/* ── Las dos objeciones que frenan el primer paso ─────────────────── */}
-      <section className="seccion pt-0">
-        <Contenedor>
-          <ul className="grid grid-cols-1 gap-10 md:grid-cols-2">
-            {primeraVez.ganchos.map((gancho) => (
-              <li
-                key={gancho}
-                className="border-t-2 border-brand pt-6 font-heading text-xl text-ink"
-              >
-                {gancho}
-              </li>
-            ))}
-          </ul>
-
-          <p className="mt-10">
-            <Link
-              href="/horarios"
-              className="text-brand underline underline-offset-4 hover:text-brand-hover"
-            >
-              Ver el horario completo
-            </Link>
-          </p>
-        </Contenedor>
-      </section>
-
       {/* ── Qué necesitas ────────────────────────────────────────────────── */}
       <section className="seccion pt-0">
         <Contenedor>
@@ -128,31 +106,6 @@ export default function PaginaPrimeraVez() {
         </Contenedor>
       </section>
 
-      {/* ── El cuestionario ──────────────────────────────────────────────── */}
-      <section className="seccion pt-0">
-        <Contenedor>
-          <div className="max-w-[46rem] rounded-[var(--radius)] bg-surface-2/70 p-8 sm:p-11">
-            <h2 className="font-heading text-2xl">
-              ¿No sabes por dónde empezar?
-            </h2>
-            <p className="medida paso-base mt-5 text-ink-soft">
-              {primeraVez.cuestionarioTexto}
-            </p>
-            <Button asChild size="lg" className="mt-8">
-              {/* El cuestionario vive fuera, en Tally. Se abre en otra
-                  pestaña para no perder lo que estabas leyendo. */}
-              <a
-                href={site.cuestionario}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Rellenar el cuestionario
-              </a>
-            </Button>
-          </div>
-        </Contenedor>
-      </section>
-
       {/* ── Preguntas frecuentes ─────────────────────────────────────────── */}
       <section className="seccion pt-0">
         <Contenedor>
@@ -164,19 +117,23 @@ export default function PaginaPrimeraVez() {
             className="mt-12 max-w-3xl border-t border-line"
           >
             {preguntasFrecuentes.map((pregunta) => (
-              <AccordionItem key={pregunta.pregunta} value={pregunta.pregunta}>
+              <AccordionItem
+                key={pregunta.pregunta}
+                value={pregunta.pregunta}
+                /* El panel dura lo mismo que tarda la respuesta en escribirse.
+                   El número sale del propio texto, así que no hay dos sitios
+                   que puedan dejar de coincidir: los dos lo piden aquí. */
+                style={atributoEscritura(pregunta.respuesta).estilo}
+              >
                 <AccordionTrigger>{pregunta.pregunta}</AccordionTrigger>
-                <AccordionContent>{pregunta.respuesta}</AccordionContent>
+                <AccordionContent>
+                  <Parrafo texto={pregunta.respuesta} />
+                </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
         </Contenedor>
       </section>
-
-      {/* ── Lo que aún no tiene respuesta ────────────────────────────────── */}
-      <EnPreparacion
-        pendiente={`Hay tres dudas que todavía no tienen respuesta, y no me las voy a inventar. Quedan aquí a la vista para que no se pierdan: ${preguntasPendientes.join(" ")}`}
-      />
 
       {/* ── Cierre ───────────────────────────────────────────────────────── */}
       <section className="seccion pt-0">
@@ -193,11 +150,7 @@ export default function PaginaPrimeraVez() {
           </div>
 
           <div className="flex flex-col items-start gap-3 lg:col-span-4 lg:col-start-9 lg:justify-center">
-            <Button asChild size="lg">
-              <Link href={accionPrincipal.href}>
-                {accionPrincipal.etiqueta}
-              </Link>
-            </Button>
+            <BotonReserva />
             <Button asChild variant="outline" size="lg">
               <a
                 href={whatsappUrl()}

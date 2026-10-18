@@ -26,6 +26,10 @@ import { PlusIcon } from "lucide-react"
  *    habría dejado sin foco visible a quien navega con el teclado: las clases
  *    de utilidad ganan a la regla global de `:focus-visible`. Es una línea que
  *    parece de estilo y es de accesibilidad.
+ *
+ *  · Y cómo se abre no se decide aquí: el despliegue del panel y la respuesta
+ *    que se escribe palabra a palabra viven en `styles/movimiento.css`, con el
+ *    resto del movimiento de la web. Aquí solo está la pieza.
  */
 
 function Accordion({
@@ -88,7 +92,13 @@ function AccordionContent({
   return (
     <AccordionPrimitive.Content
       data-slot="accordion-content"
-      className="overflow-hidden data-open:animate-accordion-down data-closed:animate-accordion-up"
+      /* La animación la pone `styles/movimiento.css`, que es donde vive todo lo
+         que se mueve, y no una utilidad suelta aquí: son dos animaciones —el
+         panel y el texto escribiéndose— con curva, duración y freno propios, y
+         el porqué de cada número está escrito al lado. Traía las de
+         `tw-animate-css`, que funcionaban, pero con la `ease-out` de serie y
+         sin contar con el texto. */
+      className="overflow-hidden"
       {...props}
     >
       <div

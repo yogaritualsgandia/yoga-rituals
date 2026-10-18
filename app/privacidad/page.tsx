@@ -1,22 +1,25 @@
 import type { Metadata } from "next"
 
-import { EnPreparacion } from "@/components/layout/en-preparacion"
-import { Pagina } from "@/components/layout/pagina"
+import { PaginaLegal } from "@/components/layout/pagina-legal"
+import { documentosLegales } from "@/content/legal"
+
+const documento = documentosLegales.privacidad
 
 export const metadata: Metadata = {
-  title: "Política de privacidad",
-  description:
-    "Política de privacidad de YOGA Rituals: qué datos se recogen a través del formulario de reserva, para qué se usan y cómo ejercer tus derechos.",
-  alternates: { canonical: "/privacidad" },
+  title: documento.titulo,
+  description: documento.descripcion,
+  alternates: { canonical: documento.ruta },
 }
-export default function PaginaPrivacidad() {
-  return (
-    <Pagina
-      etiqueta="Legal"
-      titulo="Política de privacidad"
 
-    >
-      <EnPreparacion pendiente="Falta el texto legal, incluido lo que se hace con los datos del formulario de reserva." />
-    </Pagina>
-  )
+/**
+ * Privacidad.
+ *
+ * Escrita sobre lo que hace esta web y no sobre lo que suelen decir las
+ * plantillas: aquí no hay formularios, ni cuentas, ni medición de visitas. Lo
+ * que hay que contar es lo que llega por WhatsApp, por correo y por teléfono, y
+ * lo que se hace con los datos de salud que alguien cuenta para que le adapten
+ * la práctica. El texto está en `content/legal.ts`.
+ */
+export default function PaginaPrivacidad() {
+  return <PaginaLegal documento={documento} />
 }

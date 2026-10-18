@@ -1,111 +1,146 @@
-import { ArrowRight, MessageCircle } from "lucide-react"
+import { ArrowRight, Star } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
-import { MarcaTuRitmo } from "@/components/home/marca-tu-ritmo"
+import { BotonReserva } from "@/components/layout/boton-reserva"
 import { Contenedor } from "@/components/layout/contenedor"
-import { Magnetico } from "@/components/movimiento/magnetico"
+import { Contador } from "@/components/movimiento/contador"
 import { Paralaje } from "@/components/movimiento/paralaje"
 import { Revelar, Titular } from "@/components/movimiento/revelar"
 import { Button } from "@/components/ui/button"
-import { gruposPracticas, practicas, talleresColegios } from "@/content/clases"
 import {
-  duracionEnPalabras,
-  duraciones,
-  franjasSemanales,
-  horarioLibre,
-} from "@/content/horario"
+  bloquesDePracticas,
+  practicasEnElEstudio,
+  practicasFueraDeLaSala,
+  talleresColegios,
+} from "@/content/clases"
+import { horarioLibre } from "@/content/horario"
 import { avisoFotosProvisionales, fotos } from "@/content/medios"
-import { cn } from "@/lib/utils"
-import { accionPrincipal, whatsappUrl } from "@/content/site"
+import { site, mapaUrl } from "@/content/site"
+import { testimonios } from "@/content/testimonios"
 
 /**
  * Portada.
  *
- * Fase 3: el texto y la estructura son los de la fase anterior; lo que se ha
- * añadido es el movimiento. Dos maneras de entrar, según dónde esté la pieza:
- * `entrada` para lo que ya se ve al abrir, que se anima con CSS y no espera a
- * ningún archivo, y `bloque` para lo de más abajo, que se enseña al llegar.
- * El porqué de cada una está en styles/movimiento.css.
+ * Tres cosas que se han decidido aquí y no en otro sitio:
+ *
+ *  1. LA PÁGINA ES UN ÍNDICE, NO UN ESCAPARATE. Lo que hace es contestar tres
+ *     preguntas por orden: cómo funciona el horario, qué se puede practicar y
+ *     por dónde se empieza. Cada bloque es una respuesta, y por eso ninguno
+ *     repite a otro.
+ *
+ *  2. LAS CLASES VAN EN UNA LISTA NUMERADA Y CORRIDA, no en tarjetas de tres
+ *     en tres. Una lista con su número, su nombre en letra grande y una línea
+ *     debajo se lee de un vistazo y no finge que cada práctica es un producto.
+ *     Las tarjetas iguales de tres en tres son el aspecto de una plantilla.
+ *
+ *  3. «FUERA DE LA SALA» SÍ LLEVA CAMPO DE COLOR, y las clases no. Es lo único
+ *     cálido de la portada y hace un trabajo: separar lo que pasa dentro de lo
+ *     que pasa fuera. El color de la acción —el turquesa— no se toca.
+ *
+ * El movimiento va en dos velocidades, y el porqué está en styles/movimiento.css:
+ * `entrada` para lo que ya se ve al abrir (CSS, no espera a ningún archivo) y
+ * `bloque` para lo de más abajo (se enseña al llegar).
  */
 export default function Inicio() {
   return (
     <>
       {/* ── Entrada ─────────────────────────────────────────────────────── */}
-      <section className="seccion pt-[clamp(2.5rem,7vw,6rem)]">
-        <Contenedor className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-6">
-            <Revelar
-              as="p"
-              cuando="entrada"
-              retardo={0}
-              className="etiqueta"
-            >
-              Estudio de yoga en Gandia, desde 2017
-            </Revelar>
+      <section className="pt-[clamp(2.5rem,7vw,6rem)] pb-[clamp(3rem,6vw,5rem)]">
+        <Contenedor>
+          {/* La línea de cabecera: a la izquierda, de qué va esto; a la
+              derecha, dónde está. Es la cabecera de un periódico, y hace que
+              la dirección esté en la primera pantalla sin un mapa. */}
+          <Revelar
+            cuando="entrada"
+            retardo={0}
+            className="flex items-baseline justify-between gap-6 border-b border-line pb-4"
+          >
+            <p className="etiqueta">Estudio de yoga en Gandia, desde 2017</p>
+            {/* La dirección se puede pulsar, y no se anuncia como se anuncian
+                los botones: sin subrayado, sin icono y sin color hasta que
+                pasas por encima. Está aquí por si alguien la lee y quiere saber
+                por dónde se entra al portal; el que la lea de paso no tiene que
+                enterarse de que es un enlace. En el pie está igual, y allí es
+                donde se busca de verdad. */}
+            <p className="paso-pequeno hidden sm:block">
+              <a
+                href={mapaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-ink-soft transition-colors duration-[var(--dur-base)] hover:text-brand"
+              >
+                {site.direccion.calle} · {site.direccion.codigoPostal}{" "}
+                {site.direccion.ciudad}
+              </a>
+            </p>
+          </Revelar>
 
-            <Titular
-              as="h1"
-              cuando="entrada"
-              retardo={1}
-              className="paso-display mt-6"
-              texto="Tu práctica de yoga, a tu propio ritmo"
-            />
+          <div className="mt-10 grid grid-cols-1 gap-12 lg:mt-14 lg:grid-cols-12 lg:gap-10">
+            <div className="lg:col-span-7">
+              <Titular
+                as="h1"
+                cuando="entrada"
+                retardo={1}
+                className="paso-display max-w-[15ch]"
+                texto="Yoga a tu propio ritmo"
+              />
 
-            <Revelar
-              as="p"
-              cuando="entrada"
-              retardo={7}
-              className="paso-entrada medida mt-7 text-ink-soft"
-            >
-              Clases de 35, 60 y 75 minutos. Vienes el día que puedes, sin
-              reservar y sin avisar a nadie.
-            </Revelar>
+              <Revelar
+                as="p"
+                cuando="entrada"
+                retardo={8}
+                className="paso-entrada medida mt-9 text-ink-soft"
+              >
+                Clases de 75, 60 y 35 minutos. Vienes el día que puedes, sin
+                reservar y sin avisar a nadie.
+              </Revelar>
 
-            <Revelar
-              cuando="entrada"
-              retardo={8}
-              className="mt-10 flex flex-wrap items-center gap-3"
-            >
-              <Magnetico>
-                <Button asChild size="lg">
-                  <Link href={accionPrincipal.href}>
-                    {accionPrincipal.etiqueta}
-                  </Link>
+              <Revelar
+                cuando="entrada"
+                retardo={9}
+                className="mt-11 flex flex-wrap items-center gap-4"
+              >
+                <BotonReserva />
+                <Button asChild variant="outline" size="lg">
+                  <Link href="/horarios">Ver los horarios</Link>
                 </Button>
-              </Magnetico>
-              <Button asChild variant="outline" size="lg">
-                <Link href="/horarios">Ver los horarios</Link>
-              </Button>
-            </Revelar>
+              </Revelar>
 
-            <Revelar
-              as="p"
-              cuando="entrada"
-              retardo={9}
-              className="paso-pequeno mt-6 text-ink-soft"
-            >
-              La primera clase es gratuita, esa sí con reserva. A partir de ahí,
-              vienes cuando te encaje.
-            </Revelar>
-          </div>
+              <Revelar
+                as="p"
+                cuando="entrada"
+                retardo={10}
+                className="paso-pequeno mt-7 text-ink-soft"
+              >
+                La clase de prueba es gratuita, y es lo único que hay que
+                reservar. A partir de ahí, vienes cuando te encaje.
+              </Revelar>
+            </div>
 
-          <div className="lg:col-span-6">
-            <figure>
-              <Paralaje className="aspect-4/5 rounded-lg">
-                <Image
-                  src={fotos.flexionSentado.src}
-                  alt={fotos.flexionSentado.alt}
-                  fill
-                  priority
-                  sizes="(min-width: 1024px) 45vw, 92vw"
-                  className="object-cover"
-                />
-              </Paralaje>
-              <figcaption className="etiqueta mt-3 block">
-                {avisoFotosProvisionales}
-              </figcaption>
-            </figure>
+            {/* La foto baja veinte píxeles respecto al titular a propósito: al
+                quedar más alta la columna de la derecha, la línea de la
+                cabecera y el titular forman una sola mancha de texto y la
+                página deja de estar partida por la mitad. Veinte y no más:
+                con el hueco entero, la foto se salía por abajo de la pantalla
+                y asomaba cortada. */}
+            <div className="lg:col-span-5 lg:pt-5">
+              <figure>
+                <Paralaje className="aspect-4/5 rounded-lg">
+                  <Image
+                    src={fotos.flexionSentado.src}
+                    alt={fotos.flexionSentado.alt}
+                    fill
+                    priority
+                    sizes="(min-width: 1024px) 40vw, 92vw"
+                    className="object-cover"
+                  />
+                </Paralaje>
+                <figcaption className="etiqueta mt-3 block">
+                  {avisoFotosProvisionales}
+                </figcaption>
+              </figure>
+            </div>
           </div>
         </Contenedor>
       </section>
@@ -126,19 +161,15 @@ export default function Inicio() {
             >
               {horarioLibre.entradilla}
             </Revelar>
-            <Revelar
-              as="p"
-              retardo={3}
-              className="paso-pequeno mt-8 text-ink-soft"
-            >
-              {franjasSemanales} franjas a la semana, de{" "}
-              {duraciones.map(duracionEnPalabras).join(", ")}.
-            </Revelar>
           </div>
 
-          <dl className="flex flex-col gap-8 lg:col-span-6 lg:col-start-7">
+          <dl className="flex flex-col lg:col-span-6 lg:col-start-7">
             {horarioLibre.escenarios.map((escenario, i) => (
-              <Revelar key={escenario.situacion} retardo={i + 1}>
+              <Revelar
+                key={escenario.situacion}
+                retardo={i + 1}
+                className="border-t border-line py-7 first:border-t-0 first:pt-0"
+              >
                 <dt className="font-heading text-xl">{escenario.situacion}</dt>
                 <dd className="medida mt-2 text-ink-soft">
                   {escenario.respuesta}
@@ -149,133 +180,123 @@ export default function Inicio() {
         </Contenedor>
       </section>
 
-      {/* ── Marca tu ritmo ──────────────────────────────────────────────────
-          El alto de la página para respirar. Va aquí, entre lo práctico
-          (horarios) y la oferta (las clases), porque es el sitio donde no
-          estorba: ya se sabe cuándo se puede venir y todavía no se ha visto
-          qué hay. */}
-      <MarcaTuRitmo />
-
-      {/* ── Qué se puede practicar ──────────────────────────────────────── */}
+      {/* ── Lo que se puede practicar ───────────────────────────────────────
+          Las seis del estudio, juntas y numeradas. Aquí estuvieron separadas
+          en dos bloques —«en una sesión normal» y «propuestas concretas»— y
+          estaba mal: son todas sesiones normales, con su horario y su precio.
+          El segundo bloque, el de fuera de la sala, va debajo aparte. */}
       <section className="seccion">
-        <Contenedor>
-          <Titular
-            texto="Lo que puedes practicar aquí"
-            className="paso-titular max-w-[24ch]"
-          />
-        </Contenedor>
-
-        {/* Los tres grupos van fuera del contenedor, y cada uno pone el suyo
-            por dentro, por un motivo: uno lleva campo cálido y el campo tiene
-            que llegar de lado a lado. Metido dentro del contenedor, el relleno
-            lateral del campo desplazaba el titular de ese grupo respecto a los
-            otros dos, y eso se ve. Así el texto de los tres sigue clavado al
-            resto de la página.
-
-            El campo es una banda de lado a lado, como la de «Tú diseñas tu
-            semana», no un panel con esquinas redondeadas: la web ya usa bandas
-            para separar capítulos, y una banda no tiene que pelear con el
-            ancho del contenedor. */}
-        <div className="mt-16 flex flex-col gap-16">
-          {gruposPracticas.map((grupo) => (
-            <div
-              key={grupo.clave}
-              className={cn(grupo.campoCalido && "bg-field-warm py-12")}
+        <Contenedor className="grid grid-cols-1 gap-14 lg:grid-cols-12 lg:gap-10">
+          <div className="lg:col-span-4">
+            <Titular
+              texto="Lo que puedes practicar"
+              className="paso-titular"
+              retardo={0}
+            />
+            <Revelar
+              as="p"
+              retardo={2}
+              className="paso-base medida mt-7 text-ink-soft"
             >
-              <Contenedor>
-                <div
-                  className={cn(
-                    "grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-10",
-                    /* Donde hay campo, el campo ya separa y la línea de arriba
-                       sobra. */
-                    !grupo.campoCalido && "border-t border-line pt-8",
-                  )}
-                >
-                  <div className="lg:col-span-4">
-                    <Titular
-                      as="h3"
-                      texto={grupo.titulo}
-                      className="font-heading text-2xl"
-                      retardo={0}
+              {bloquesDePracticas.estudio}
+            </Revelar>
+          </div>
+
+          <ol className="lg:col-span-7 lg:col-start-6">
+            {practicasEnElEstudio.map((practica, i) => (
+              <Revelar
+                as="li"
+                key={practica.slug}
+                retardo={Math.min(i, 4)}
+                className="border-b border-line first:border-t first:border-line"
+              >
+                {practica.conPaginaPropia ? (
+                  <Link
+                    href={`/${practica.slug}`}
+                    className="group/fila flex items-start gap-4 py-6"
+                  >
+                    <Celda practica={practica} numero={i} />
+                    <ArrowRight
+                      aria-hidden="true"
+                      className="mt-1.5 size-4 shrink-0 text-ink-soft transition-transform duration-[var(--dur-base)] ease-out-soft group-hover/fila:translate-x-1 group-hover/fila:text-brand"
                     />
-                    <Revelar
-                      as="p"
-                      retardo={2}
-                      className="medida mt-3 text-base text-ink-soft"
-                    >
-                      {grupo.descripcion}
-                    </Revelar>
+                  </Link>
+                ) : (
+                  <div className="flex items-start gap-4 py-6">
+                    <Celda practica={practica} numero={i} />
                   </div>
+                )}
+              </Revelar>
+            ))}
+          </ol>
+        </Contenedor>
+      </section>
 
-                  {/* Cuando la práctica tiene página, la fila entera es el
-                      enlace: la descripción forma parte de lo que se pincha.
+      {/* ── Fuera de la sala ────────────────────────────────────────────────
+          Esta banda llevaba el único color cálido de la portada —un melocotón
+          suave—, y hacía un trabajo: separar lo que pasa dentro de lo que pasa
+          fuera. Se ha quedado con el mismo fondo que la banda de arriba. Dos
+          tonos cálidos distintos con una sección en medio no se leían como dos
+          ideas, se leían como un descuido; con uno solo, la portada alterna
+          crema y banda, y se ve que alterna. */}
+      <section className="seccion bg-surface-2/60">
+        <Contenedor className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-10">
+          <div className="lg:col-span-4">
+            <Titular
+              as="h2"
+              texto="Fuera de la sala"
+              className="paso-titular"
+              retardo={0}
+            />
+            <Revelar
+              as="p"
+              retardo={2}
+              className="paso-base medida mt-7 text-ink-soft"
+            >
+              {bloquesDePracticas.fuera}
+            </Revelar>
+          </div>
 
-                      Y por eso las que sí la tienen llevan una flecha. Hatha y
-                      Vinyasa todavía no tienen página y se quedan como texto
-                      plano; si los dos casos se vieran igual, quien mira no
-                      sabría qué se puede pulsar. El color por sí solo tampoco
-                      vale: un enlace tiene que distinguirse sin depender de
-                      que se distingan los colores.
-
-                      El `[&>li:first-child>*]:pt-0` alinea el primer nombre
-                      con el titular del grupo. */}
-                  <ul className="lg:col-span-6 lg:col-start-6 [&>li:first-child>*]:pt-0">
-                    {practicas
-                      .filter((practica) => practica.grupo === grupo.clave)
-                      .map((practica, i) => (
-                        <Revelar
-                          as="li"
-                          key={practica.slug}
-                          retardo={i + 1}
-                          className="border-b border-line last:border-b-0"
-                        >
-                          {practica.conPaginaPropia ? (
-                            <Link
-                              href={`/${practica.slug}`}
-                              className="group/fila flex items-start justify-between gap-6 py-5"
-                            >
-                              <span>
-                                <span className="font-heading text-xl text-ink group-hover/fila:text-brand">
-                                  {practica.nombre}
-                                </span>
-                                <span className="paso-pequeno medida mt-1.5 block text-ink-soft">
-                                  {practica.entradilla}
-                                </span>
-                              </span>
-                              <ArrowRight
-                                aria-hidden="true"
-                                className="mt-2 size-4 shrink-0 text-ink-soft transition-transform duration-[var(--dur-base)] ease-out-soft group-hover/fila:translate-x-1 group-hover/fila:text-brand"
-                              />
-                            </Link>
-                          ) : (
-                            <div className="py-5">
-                              <p className="font-heading text-xl">
-                                {practica.nombre}
-                              </p>
-                              <p className="paso-pequeno medida mt-1.5 text-ink-soft">
-                                {practica.entradilla}
-                              </p>
-                            </div>
-                          )}
-                        </Revelar>
-                      ))}
-                  </ul>
-                </div>
-              </Contenedor>
-            </div>
-          ))}
-        </div>
+          <ul className="lg:col-span-7 lg:col-start-6">
+            {practicasFueraDeLaSala.map((practica, i) => (
+              <Revelar
+                as="li"
+                key={practica.slug}
+                retardo={i + 1}
+                className="border-t border-line/60 first:border-t-0"
+              >
+                <Link
+                  href={`/${practica.slug}`}
+                  className="group/fuera flex items-start gap-4 py-7"
+                >
+                  <Celda practica={practica} numero={i} />
+                  <ArrowRight
+                    aria-hidden="true"
+                    className="mt-1.5 size-4 shrink-0 text-ink-soft transition-transform duration-[var(--dur-base)] ease-out-soft group-hover/fuera:translate-x-1 group-hover/fuera:text-brand"
+                  />
+                </Link>
+              </Revelar>
+            ))}
+          </ul>
+        </Contenedor>
       </section>
 
       {/* ── Prueba real: los talleres en colegios ───────────────────────── */}
-      <section className="seccion bg-surface-2/60">
+      <section className="seccion">
         <Contenedor className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-5">
-            <Revelar as="p" retardo={0} className="etiqueta">
-              Desde 2017
-            </Revelar>
             <Titular
-              texto={`${talleresColegios.talleresRealizadosTexto} talleres en centros educativos`}
+              texto={`${talleresColegios.talleresRealizadosTitular} en centros educativos`}
+              /* La cifra no se escribe aquí: cuenta. La palabra que se
+                 sustituye tiene que coincidir literalmente con la que hay en el
+                 titular del contenido —«500»—; si algún día dejan de ser 500,
+                 se cambian las dos y ya está. */
+              reemplazo={{
+                palabra: String(talleresColegios.talleresRealizados),
+                por: (
+                  <Contador valor={talleresColegios.talleresRealizados} />
+                ),
+              }}
               className="paso-titular mt-5"
               retardo={0}
             />
@@ -285,21 +306,8 @@ export default function Inicio() {
               className="paso-base medida mt-7 text-ink-soft"
             >
               Llevar la calma a un aula es más difícil que llevarla a una sala
-              de yoga, y es lo que llevamos haciendo desde que abrimos. El
-              taller más pedido es «{talleresColegios.ejemplo}».
+              de yoga, y es lo que llevamos haciendo desde que abrimos.
             </Revelar>
-            <ul className="mt-8 flex flex-col gap-2">
-              {talleresColegios.otros.map((otro, i) => (
-                <Revelar
-                  as="li"
-                  key={otro}
-                  retardo={i + 4}
-                  className="text-ink-soft"
-                >
-                  {otro}
-                </Revelar>
-              ))}
-            </ul>
           </div>
 
           <div className="lg:col-span-6 lg:col-start-7">
@@ -318,6 +326,79 @@ export default function Inicio() {
               </figcaption>
             </figure>
           </div>
+        </Contenedor>
+      </section>
+
+      {/* ── Lo que dicen quienes vienen ─────────────────────────────────────
+          Las tres opiniones van enteras, sin recortar y sin corregir: son
+          suyas. Y van tal cual aunque no midan lo mismo, que es lo que hace
+          que una rejilla de reseñas se estropee: la primera tiene cuatro veces
+          más texto que la tercera. Por eso cada una vive en su columna, con su
+          línea arriba y su nombre abajo pegados a los bordes, midan lo que
+          midan.
+
+          Va aquí, entre los talleres y el cierre, y no antes: primero está lo
+          que hace el estudio —las clases, los horarios, los talleres en los
+          colegios— y después lo que dicen quienes ya vinieron. Al revés,
+          empezaría pidiendo confianza antes de contar nada. */}
+      <section className="seccion bg-surface-2/60">
+        <Contenedor>
+          <Titular
+            texto="Lo que dicen quienes vienen"
+            className="paso-titular"
+            retardo={0}
+          />
+
+          <ul className="mt-14 grid grid-cols-1 gap-x-12 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+            {testimonios.map((testimonio, i) => (
+              <Revelar
+                as="li"
+                key={testimonio.autor}
+                retardo={Math.min(i, 4)}
+                className="flex flex-col border-t border-line pt-7"
+              >
+                <div className="flex items-center gap-1" aria-hidden="true">
+                  {Array.from({ length: testimonio.estrellas }).map(
+                    (_, estrella) => (
+                      <Star
+                        key={estrella}
+                        className="size-3.5 fill-current text-estrella"
+                      />
+                    ),
+                  )}
+                </div>
+                <span className="sr-only">
+                  {testimonio.estrellas} de 5 estrellas.
+                </span>
+
+                <blockquote className="paso-pequeno mt-5 text-ink-soft">
+                  {testimonio.texto}
+                </blockquote>
+
+                {/* El nombre se va abajo del todo de la columna, así que las
+                    tres firmas quedan a la misma altura aunque los textos no
+                    midan lo mismo.
+
+                    Y es un enlace, porque quien lee una opinión de cinco
+                    estrellas quiere poder comprobarla. Lleva a la ficha de
+                    Google del estudio, que es donde están publicadas las tres:
+                    sin subrayado y sin icono, con el subrayado solo al pasar por
+                    encima, para que la rejilla siga siendo texto y no un
+                    formulario. */}
+                <p className="etiqueta mt-auto pt-8">
+                  <a
+                    href={testimonio.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold underline-offset-4 hover:text-brand hover:underline"
+                  >
+                    {testimonio.autor}
+                    <span className="sr-only"> en Google</span>
+                  </a>
+                </p>
+              </Revelar>
+            ))}
+          </ul>
         </Contenedor>
       </section>
 
@@ -341,32 +422,48 @@ export default function Inicio() {
           </div>
 
           <div className="flex flex-col items-start gap-4 lg:col-span-4 lg:col-start-9 lg:justify-center">
-            <Revelar
-              retardo={3}
-              className="flex w-full flex-col items-start gap-4"
-            >
-              <Magnetico>
-                <Button asChild size="lg" className="w-full sm:w-auto">
-                  <Link href={accionPrincipal.href}>
-                    {accionPrincipal.etiqueta}
-                    <ArrowRight aria-hidden="true" />
-                  </Link>
-                </Button>
-              </Magnetico>
-
-              <a
-                href={whatsappUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center gap-2.5 text-ink-soft hover:text-ink"
-              >
-                <MessageCircle aria-hidden="true" className="size-4" />
-                O escríbeme por WhatsApp
-              </a>
+            <Revelar retardo={3} className="w-full">
+              <BotonReserva className="w-full sm:w-auto">
+                Reserva tu clase de prueba
+                <ArrowRight aria-hidden="true" />
+              </BotonReserva>
             </Revelar>
           </div>
         </Contenedor>
       </section>
+    </>
+  )
+}
+
+/**
+ * Una fila del índice: el número, el nombre y la entradilla.
+ *
+ * El número es la pieza que hace que los dos bloques —el de dentro y el de
+ * fuera— se lean como una lista y no como dos listas sueltas: los dos empiezan
+ * por el uno y los dos van en pequeño y en versalitas, para que ordenen sin
+ * llamar. La flecha, cuando la hay, la pone quien envuelve la fila: aquí no se
+ * sabe si la fila es un enlace.
+ */
+function Celda({
+  practica,
+  numero,
+}: {
+  practica: { nombre: string; entradilla: string }
+  numero: number
+}) {
+  return (
+    <>
+      <span className="etiqueta w-9 shrink-0 pt-1 tabular-nums">
+        {String(numero + 1).padStart(2, "0")}
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="font-heading text-xl text-ink group-hover/fila:text-brand group-hover/fuera:text-brand">
+          {practica.nombre}
+        </span>
+        <span className="paso-pequeno medida mt-1.5 block text-ink-soft">
+          {practica.entradilla}
+        </span>
+      </span>
     </>
   )
 }

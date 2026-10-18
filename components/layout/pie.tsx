@@ -1,38 +1,36 @@
 import { Mail, MapPin, Phone } from "lucide-react"
 import Link from "next/link"
 
-import {
-  atribucion,
-  navegacionLegal,
-  navegacionPie,
-  site,
-  whatsappUrl,
-} from "@/content/site"
+import { mapaUrl, navegacionLegal, site, whatsappUrl } from "@/content/site"
 
 import { BotonPausa } from "@/components/movimiento/boton-pausa"
 
 import { BotonTema } from "./boton-tema"
 import { Contenedor } from "./contenedor"
-import { EnlaceNav } from "./enlace-nav"
 import { Marca } from "./marca"
 
 /**
  * Pie.
  *
- * En tres franjas, de arriba abajo: quién es y cómo se le contacta, por dónde
- * se navega, y lo legal. Así el bloque de contacto —que es lo que de verdad
- * viene a buscar quien llega al pie— no compite con trece enlaces.
+ * En dos franjas: quién es y cómo se le contacta, y lo legal. Tuvo una tercera
+ * en medio —el mapa del sitio, en tres columnas— y se ha quitado entera: era un
+ * índice de trece enlaces que repetía lo que ya estaba en la cabecera y en la
+ * portada, y convertía el pie en la parte más densa de la web.
+ *
+ * De aquel bloque quedó un rato un enlace a la página de contacto, y también se
+ * ha ido. Sobraba por dos motivos: el contacto entero está aquí al lado —la
+ * dirección, el teléfono y el correo se pulsan— y la reserva no se hace en
+ * ninguna página, se hace por WhatsApp, que es lo que hay justo a la derecha.
+ * Un enlace que dice «Contacto y reserva» y lleva a un sitio donde no se
+ * reserva es peor que no tenerlo.
  *
  * Aquí vive el SEO local: la dirección completa como texto, en un <address>
  * de verdad, con el nombre del estudio y la ciudad. Es lo que leen Google y
  * quien busca «yoga en Gandia».
- *
- * Y aquí vive la atribución de Skiper UI, que es obligatoria al usar su
- * versión gratuita. No se quita.
  */
 export function Pie() {
   const anio = new Date().getFullYear()
-  const { calle, codigoPostal, ciudad, provincia } = site.direccion
+  const { calle, piso, codigoPostal, ciudad, provincia } = site.direccion
 
   return (
     <footer className="border-t border-line bg-surface-2/50">
@@ -49,41 +47,53 @@ export function Pie() {
             </p>
           </div>
 
-          <address className="flex flex-col gap-3 not-italic md:col-span-4 lg:col-span-4 lg:col-start-6">
-            <span className="flex items-start gap-2.5">
-              <MapPin
-                aria-hidden="true"
-                className="mt-1 size-4 shrink-0 text-ink-soft"
-              />
-              <span>
-                {calle}
-                <br />
-                {codigoPostal} {ciudad} ({provincia})
-              </span>
-            </span>
+          <div className="flex flex-col gap-3 md:col-span-4 lg:col-span-4 lg:col-start-6">
+            <address className="flex flex-col gap-3 not-italic">
+              {/* La dirección es un enlace al mapa, y ese es el arreglo más útil
+                  que se le podía hacer a este bloque: quien la lee la está
+                  leyendo para venir, y hasta ahora tenía que copiarla en otra
+                  pestaña para saber por dónde se entra. Junto con el teléfono y
+                  el correo, las tres cosas se pulsan. */}
+              <a
+                href={mapaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex min-h-11 items-start gap-2.5 hover:text-brand"
+              >
+                <MapPin
+                  aria-hidden="true"
+                  className="mt-1 size-4 shrink-0 text-ink-soft"
+                />
+                <span>
+                  {calle}, {piso}
+                  <br />
+                  {codigoPostal} {ciudad} ({provincia})
+                </span>
+              </a>
 
-            <a
-              href={`tel:${site.contacto.telefono}`}
-              className="inline-flex items-center gap-2.5 min-h-11 hover:text-brand"
-            >
-              <Phone
-                aria-hidden="true"
-                className="size-4 shrink-0 text-ink-soft"
-              />
-              {site.contacto.telefonoVisible}
-            </a>
+              <a
+                href={`tel:${site.contacto.telefono}`}
+                className="inline-flex items-center gap-2.5 min-h-11 hover:text-brand"
+              >
+                <Phone
+                  aria-hidden="true"
+                  className="size-4 shrink-0 text-ink-soft"
+                />
+                {site.contacto.telefonoVisible}
+              </a>
 
-            <a
-              href={`mailto:${site.contacto.email}`}
-              className="inline-flex items-center gap-2.5 min-h-11 hover:text-brand"
-            >
-              <Mail
-                aria-hidden="true"
-                className="size-4 shrink-0 text-ink-soft"
-              />
-              {site.contacto.email}
-            </a>
-          </address>
+              <a
+                href={`mailto:${site.contacto.email}`}
+                className="inline-flex items-center gap-2.5 min-h-11 hover:text-brand"
+              >
+                <Mail
+                  aria-hidden="true"
+                  className="size-4 shrink-0 text-ink-soft"
+                />
+                {site.contacto.email}
+              </a>
+            </address>
+          </div>
 
           <div className="md:col-span-3 lg:col-start-10">
             <h2 className="etiqueta">Sígueme</h2>
@@ -96,16 +106,6 @@ export function Pie() {
                   className="inline-flex min-h-11 items-center hover:text-brand"
                 >
                   @{site.redes.instagram.usuario}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={site.redes.facebook.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex min-h-11 items-center hover:text-brand"
-                >
-                  Facebook
                 </a>
               </li>
               <li>
@@ -130,29 +130,6 @@ export function Pie() {
           </div>
         </div>
 
-        <nav
-          aria-label="Navegación del pie"
-          className="mt-14 grid grid-cols-1 gap-10 border-t border-line pt-12 sm:grid-cols-3"
-        >
-          {navegacionPie.map((grupo) => (
-            <div key={grupo.titulo}>
-              <h2 className="etiqueta">{grupo.titulo}</h2>
-              <ul className="mt-4 flex flex-col gap-1">
-                {grupo.enlaces.map((enlace) => (
-                  <li key={enlace.href} className="flex">
-                    <EnlaceNav
-                      href={enlace.href}
-                      className="inline-flex min-h-11 items-center"
-                    >
-                      {enlace.etiqueta}
-                    </EnlaceNav>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </nav>
-
         <div className="mt-14 flex flex-col gap-4 border-t border-line pt-7 text-sm text-ink-soft lg:flex-row lg:items-center lg:justify-between">
           <p>
             © {site.apertura.getFullYear()}–{anio} {site.nombre}. Gandia.
@@ -166,16 +143,6 @@ export function Pie() {
                 </Link>
               </li>
             ))}
-            <li>
-              <a
-                href={atribucion.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-ink"
-              >
-                {atribucion.texto}
-              </a>
-            </li>
           </ul>
         </div>
       </Contenedor>

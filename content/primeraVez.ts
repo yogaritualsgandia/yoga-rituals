@@ -10,18 +10,12 @@
 export const primeraVez = {
   titulo: "Primera vez",
   entradilla: "Todo lo que necesitas saber para dar el primer paso.",
-  ganchos: [
-    "No te preocupes: no hace falta ser flexible para empezar.",
-    "Nuestros horarios son libres. No necesitas avisar ni reservar para asistir a la sesión.",
-  ],
-  cuestionarioTexto:
-    "¿No sabes qué tipo de yoga es ideal para ti? Completa este breve cuestionario de bienestar. Nos permitirá conocerte mejor y recomendarte el ritual que más se adapte a tus necesidades y objetivos hoy mismo.",
 } as const
 
 export const queNecesitas = {
   titulo: "¿Qué necesitas?",
   entradilla:
-    "Queremos que tu única preocupación sea encontrar un hueco en tu agenda.",
+    "Queremos que tu única preocupación sea encontrar un hueco en la agenda.",
   puntos: [
     {
       etiqueta: "Ropa",
@@ -90,19 +84,6 @@ export const preguntasFrecuentes: Pregunta[] = [
       "Sí, pero siempre bajo supervisión médica, y avísanos antes de empezar. Adaptaremos las posturas para que tu práctica sea segura y terapéutica.",
   },
 ]
-
-/**
- * Lo que sigue sin respuesta.
- *
- * Eran tres. Dos ya están contestadas con lo que hay publicado: qué llevar la
- * primera vez está en «¿Qué necesitas?», aquí arriba, y cómo se paga la cuota
- * está en la página de tarifas. La tercera no está en ningún sitio, y sigue
- * aquí a la vista en lugar de inventada: la dirección está en una calle céntrica
- * de Gandia y de aparcar no puedo decir nada que no sepa.
- */
-export const preguntasPendientes = [
-  "[PENDIENTE: ¿se puede aparcar cerca del estudio?]",
-] as const
 
 export const cierrePrimeraVez = {
   titular: "Estamos aquí para acompañarte",

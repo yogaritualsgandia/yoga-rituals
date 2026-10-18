@@ -1,10 +1,10 @@
 /**
- * Tarifas reales del estudio (datos facilitados por Susana, septiembre 2026).
- * Se pintan siempre como texto real, nunca como tabla-imagen.
+ * Los precios reales del estudio (datos facilitados por Susana, septiembre
+ * 2026). Se pintan siempre como texto real, nunca como tabla-imagen.
  */
 
 export type Plan = {
-  /** Nombre corto: es lo que se lee en la tabla grande de tarifas. */
+  /** Nombre corto: es lo que se lee en la tabla grande de precios. */
   nombre: string
   clasesPorSemana: number
   /** Por quién es este plan, en una frase llana. */
@@ -61,7 +61,7 @@ export const pruebaGratuita = {
  * Cómo se paga, en sus palabras.
  *
  * Esto lo copio de la web actual, donde sí está puesto. Aquí no estaba: la
- * página de tarifas no decía ni cuándo se paga ni con qué, y era una de las
+ * página de precios no decía ni cuándo se paga ni con qué, y era una de las
  * preguntas que quedaban sin respuesta. Quien va a pagar 85 € al mes quiere
  * saberlo antes de escribir, no después.
  */

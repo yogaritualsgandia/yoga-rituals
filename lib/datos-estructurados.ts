@@ -14,7 +14,7 @@
 
 import { horario } from "@/content/horario"
 import { site } from "@/content/site"
-import { bonos, planes } from "@/content/tarifas"
+import { bonos, planes } from "@/content/precios"
 
 /** ISO → nombre de día que espera schema.org. */
 const DIA_SCHEMA: Record<number, string> = {
@@ -82,7 +82,9 @@ export function datosEstructurados() {
       { "@type": "City", name: "Gandia" },
       { "@type": "AdministrativeArea", name: "La Safor" },
     ],
-    sameAs: [site.redes.instagram.url, site.redes.facebook.url],
+    /* Solo Instagram: Facebook se quitó de los datos de marca y de aquí, para
+       que el buscador no siga una ficha que ya no se atiende. */
+    sameAs: [site.redes.instagram.url],
     openingHoursSpecification: horario.flatMap((dia) =>
       dia.franjas.map((franja) => ({
         "@type": "OpeningHoursSpecification" as const,

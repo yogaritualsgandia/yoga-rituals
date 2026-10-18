@@ -41,20 +41,28 @@
   --terracota:  oklch(75.29% 0.0843 55.21);
   --turquesa:   oklch(61.52% 0.1129 228.31); /* logo, vivo */
   --turquesa-medio: oklch(72.63% 0.0910 224.14);
-  --tinta-suave: oklch(50.21% 0.0170 64.09); /* #6B625A, derivado */
+  /* La tinta secundaria va un punto más oscura que el gris de marca (#6B625A),
+     y no por gusto: las manchas del fondo pasan por debajo del texto, y sobre
+     el centro de la mancha turquesa el gris de marca se quedaba en 4.27:1, por
+     debajo de AA. Este sale a 4.84:1 en el peor caso y a 6.01:1 sobre la crema.
+     Lo mide `node scripts/marca.mjs`, en la sección «Fondo». */
+  --tinta-suave: oklch(47.27% 0.0163 67.42); /* #625A52, derivado */
   --turquesa-accion: oklch(50.98% 0.0927 227.02); /* #14708F, derivado */
+
+  /* La estrella de las reseñas.
+     Es el único color cálido saturado que hay en la web, y se permite porque no
+     decora: dice una valoración, y una estrella turquesa no dice nada. Sobre la
+     banda donde vive se queda en 1.92:1, y es inevitable: el amarillo de verdad
+     nunca llega a 3:1 sobre un fondo claro —el de Google se queda en 1.9:1—.
+     Aquí el color no lleva la información; la lleva el texto que lo acompaña,
+     que va para lectores de pantalla. */
+  --estrella: oklch(74.71% 0.1416 82.23); /* #D9A32B */
 
   /* --- Semánticos · claro (por defecto) --------------------------------- */
   --ground:    var(--crema);
   --surface:   var(--blanco);
   --surface-2: oklch(92.6% 0.0125 82.50);
   --field:     var(--salvia);
-  /* El terracota de la marca, aclarado hasta ser fondo: #F0E2D7.
-     No se usa el terracota puro porque ocupa demasiado, y porque con la crema
-     forma la pareja que evitamos. Aquí hace un trabajo concreto: separar las
-     propuestas concretas de las clases del día a día, en la portada.
-     Medido con `node scripts/marca.mjs`: tinta 9.97:1, tinta suave 4.71:1. */
-  --field-warm: oklch(92.10% 0.0213 60.73);
 
   --ink:       var(--tinta);
   --ink-soft:  var(--tinta-suave);
@@ -82,6 +90,16 @@
   --dur-base:   300ms;
   --dur-slow:   600ms;
   --dur-breath: 5600ms; /* ciclo completo de respiración del objeto 3D */
+  /* Lo que tarda una respuesta del acordeón en escribirse, letra a letra. No
+     es una duración de interfaz —esas no pasan de 300 ms— sino una lectura:
+     dura lo que tarda alguien en escribirla. El acordeón la ajusta al texto, y
+     esto es el tope para lo que no lo haya ajustado. */
+  --dur-escribir: 2400ms;
+  /* Lo que tarda una página en entrar. Es más largo que los 300 ms de una
+     transición de interfaz, y tiene motivo: no entra un botón, entra una
+     página entera, y el movimiento es un desplazamiento corto. A la velocidad
+     de un botón, desplazarse se ve como un tirón. */
+  --dur-pagina: 440ms;
   --ease-out:   cubic-bezier(0.22, 1, 0.36, 1);
   --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
 }
@@ -92,9 +110,6 @@
   --surface:   oklch(26.0% 0.0120 75);
   --surface-2: oklch(30.0% 0.0130 75);
   --field:     var(--salvia);
-  /* El mismo campo cálido, en oscuro: #3A322B. Aquí la tinta es la crema, así
-     que el fondo tiene que ser más claro que el suelo, no más oscuro. */
-  --field-warm: oklch(32.34% 0.0167 63.38);
 
   --ink:       var(--crema);
   --ink-soft:  oklch(76.0% 0.0120 78);
@@ -110,6 +125,10 @@
 
   --line:  oklch(95.93% 0.0103 81.80 / 16%);
   --focus: var(--turquesa-medio);
+
+  /* Sobre el suelo oscuro el mismo oro se queda sin luz y parece barro. Se
+     aclara dos pasos: #E8B84B, que pasa a 8.04:1. */
+  --estrella: oklch(80.62% 0.1358 84.74); /* #E8B84B */
 }
 
 /* --- Puente a las variables de shadcn/ui ---------------------------------

@@ -1,9 +1,10 @@
 "use client"
 
-import { Menu, MessageCircle, X } from "lucide-react"
+import { Menu, Phone, X } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 
+import { BotonReserva } from "@/components/layout/boton-reserva"
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
@@ -12,13 +13,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import {
-  accionPrincipal,
-  navegacionCompleta,
-  navegacionPrincipal,
-  site,
-  whatsappUrl,
-} from "@/content/site"
+import { navegacionPrincipal, site } from "@/content/site"
+import { useEnlacePropio } from "@/hooks/use-enlace-propio"
 
 /**
  * Menú de móvil y tablet.
@@ -29,16 +25,22 @@ import {
  * anuncia un diálogo con su nombre.
  *
  * Como todo shadcn, se ha reestilizado entero: nada del gris por defecto.
+ *
+ * DENTRO SOLO HAY SEIS COSAS Y UN BOTÓN, y es una decisión que se tomó después
+ * de verlo lleno. Hubo aquí un bloque «También» con las ocho páginas de dentro
+ * —Mindfulness, Yoga Nidra, Breathwork, Yoga Oncológico, Retiros, Talleres— y
+ * un enlace de texto a WhatsApp al final. En un móvil eso era una lista de
+ * catorce renglones para llegar a lo mismo que se llega por el pie, y el
+ * WhatsApp aparecía dos veces en el mismo panel: una en el botón de reserva y
+ * otra escrita debajo.
+ *
+ * Quien quiere el yoga nidra lo tiene en la portada, en «Lo que puedes
+ * practicar», que es una lista mejor que esta: está explicada. Y el pie tiene
+ * las tres columnas completas, agrupadas por lo que se viene a buscar.
  */
 export function MenuMovil({ className }: { className?: string }) {
   const [abierto, setAbierto] = useState(false)
-
-  const secundarios = navegacionCompleta.filter(
-    (item) =>
-      item.href !== "/" &&
-      item.href !== "/contacto" &&
-      !navegacionPrincipal.some((principal) => principal.href === item.href),
-  )
+  const { alPulsar } = useEnlacePropio()
 
   return (
     <Sheet open={abierto} onOpenChange={setAbierto}>
@@ -75,23 +77,13 @@ export function MenuMovil({ className }: { className?: string }) {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  onClick={() => setAbierto(false)}
+                  onClick={(evento) => {
+                    setAbierto(false)
+                    /* Si el enlace es el de la página en la que ya estás, no
+                       hay a dónde ir: cierra el menú y sube arriba. */
+                    alPulsar(item.href, evento)
+                  }}
                   className="flex min-h-12 items-center font-heading text-2xl text-ink"
-                >
-                  {item.etiqueta}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          <p className="etiqueta mt-6 mb-1">También</p>
-          <ul className="flex flex-col">
-            {secundarios.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={() => setAbierto(false)}
-                  className="flex min-h-12 items-center text-ink-soft"
                 >
                   {item.etiqueta}
                 </Link>
@@ -102,37 +94,20 @@ export function MenuMovil({ className }: { className?: string }) {
 
         <div className="border-t border-line px-5 py-4">
           <div className="flex items-center gap-2">
-            <Button asChild size="lg" className="min-w-0 flex-1">
-              <Link
-                href={accionPrincipal.href}
-                onClick={() => setAbierto(false)}
-              >
-                {accionPrincipal.etiqueta}
-              </Link>
-            </Button>
+            <BotonReserva
+              className="min-w-0 flex-1"
+              onClick={() => setAbierto(false)}
+            />
 
             <Button asChild variant="outline" size="icon">
-              <a
-                href={whatsappUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <MessageCircle aria-hidden="true" />
-                <span className="sr-only">Escríbenos por WhatsApp</span>
+              <a href={`tel:${site.contacto.telefono}`}>
+                <Phone aria-hidden="true" />
+                <span className="sr-only">
+                  Llamar al estudio, {site.contacto.telefonoVisible}
+                </span>
               </a>
             </Button>
           </div>
-
-          {/* Solo el teléfono. Antes estaban también el correo y la dirección,
-              y con ellos el panel no cabía en un móvil de 812 px sin cortar
-              el último enlace. Quien quiera el correo lo tiene en el pie y en
-              la página de contacto. */}
-          <a
-            href={`tel:${site.contacto.telefono}`}
-            className="mt-1 flex min-h-11 items-center text-sm text-ink-soft"
-          >
-            {site.contacto.telefonoVisible}
-          </a>
         </div>
       </SheetContent>
     </Sheet>

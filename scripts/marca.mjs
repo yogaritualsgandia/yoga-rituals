@@ -80,6 +80,10 @@ if (process.argv[1]?.endsWith("marca.mjs")) {
 
   const texto = "#333333"
   const suelo = "#F5F1EA"
+  /* El texto secundario, el que va en gris. Está aquí y no dentro de la
+     comprobación del fondo porque es el token que más veces se toca: si cambia
+     en styles/tokens.css, se cambia también aquí y se vuelve a mirar. */
+  const tintaSuave = "#625A52"
 
   console.log("\nContraste sobre el suelo crema (#F5F1EA)\n" + "─".repeat(58))
   for (const [nombre, hex] of Object.entries(HEX)) {
@@ -112,6 +116,7 @@ if (process.argv[1]?.endsWith("marca.mjs")) {
       "#6E655C",
       "#6B625A",
       "#665D55",
+      "#625A52",
       "#5F574F",
     ],
     "turquesa de acción (texto blanco encima, necesita 4.5)": [
@@ -167,6 +172,46 @@ if (process.argv[1]?.endsWith("marca.mjs")) {
       `${nombre.padEnd(28)} ${fondo}  oklch(${(L * 100).toFixed(2)}% ${C.toFixed(
         4,
       )} ${H.toFixed(2)})  ${c.toFixed(2)}:1  ${veredicto}`,
+    )
+  }
+
+  /* --- El fondo -----------------------------------------------------------
+     Las tres manchas del fondo van por encima del suelo, así que el texto que
+     caiga debajo de una no se lee sobre la crema sino sobre la mezcla. La
+     mancha es un degradado: se apaga hacia fuera, y su punto más cargado es el
+     centro, que es exactamente su alfa. Aquí se mezcla ese centro con la crema
+     y se mide el texto contra el resultado: es el peor caso posible, y si pasa
+     esto pasa todo lo demás.
+
+     Existe porque el fondo se movió más de una vez, y cada vez era tentador
+     subirle el color. Subirlo es siempre lo peor que se puede hacer aquí: la
+     mancha se ve más y el texto se lee menos. Que el número esté escrito evita
+     tener que fiarse de la vista. */
+  const sueloRgb = hexARgb(suelo)
+  const mezclar = (hex, alfa) =>
+    hexARgb(hex)
+      .map((v, i) =>
+        Math.round(alfa * v + (1 - alfa) * sueloRgb[i]),
+      )
+      .map((v) => v.toString(16).padStart(2, "0"))
+      .join("")
+
+  const manchas = {
+    "turquesa (20 %)": ["#1E91BA", 0.2],
+    "salvia (24 %)": ["#8FAF9D", 0.24],
+    "terracota (20 %)": ["#D9A17B", 0.2],
+  }
+
+  console.log("\nFondo · la mancha más cargada, con el texto encima\n" + "─".repeat(70))
+  for (const [nombre, [color, alfa]] of Object.entries(manchas)) {
+    const fondo = `#${mezclar(color, alfa)}`
+    const tinta = contraste("#333333", fondo)
+    const suave = contraste(tintaSuave, fondo)
+    const marca = (c) => (c >= 4.5 ? "✓" : "✗");
+    console.log(
+      `${nombre.padEnd(20)} fondo ${fondo}   tinta ${tinta.toFixed(2)}:1 ${marca(
+        tinta,
+      )}   tinta suave (${tintaSuave}) ${suave.toFixed(2)}:1 ${marca(suave)}`,
     )
   }
 }

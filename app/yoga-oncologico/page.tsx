@@ -2,30 +2,40 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import { Contenedor } from "@/components/layout/contenedor"
-import { EnPreparacion } from "@/components/layout/en-preparacion"
 import { Pagina } from "@/components/layout/pagina"
 import { Button } from "@/components/ui/button"
 import { preguntasFrecuentes } from "@/content/primeraVez"
 import { accionPrincipal, whatsappUrl } from "@/content/site"
+import { yogaOncologico } from "@/content/yogaOncologico"
 
 export const metadata: Metadata = {
   title: "Yoga oncológico",
   description:
-    "Yoga oncológico en YOGA Rituals, Gandia: práctica adaptada para quien está pasando por un proceso oncológico. Escríbenos antes de empezar.",
+    "Yoga oncológico en YOGA Rituals, Gandia: práctica adaptada para quien está pasando por un proceso oncológico, con o sin experiencia previa. Escríbenos antes de empezar.",
   alternates: { canonical: "/yoga-oncologico" },
 }
 
 /**
  * Yoga oncológico.
  *
- * Esta página todavía no tiene texto propio: el nombre es real, sale de la web
- * actual, pero el contenido no lo tengo y no me lo invento. Lo que sí hay es
- * una respuesta que Susana ya tiene publicada sobre practicar con una lesión o
- * una dolencia, que es justo lo que aquí se pregunta primero, y que se lee del
- * mismo sitio de donde sale todo lo demás: content/primeraVez.ts.
+ * Esta página ya tiene su texto —el que está publicado en su web— y por eso ha
+ * dejado de ser una página con un aviso. Se ordena así:
  *
- * La página está en pie, enlazada y es accesible. Lo que falta está a la
- * vista, no escondido.
+ *   1. Qué es, en sus dos frases, sin adornos.
+ *   2. Que formamos parte de la Red Internacional, que es lo que respalda que
+ *      esto se hace con criterio y no de buena fe.
+ *   3. La respuesta que ya estaba publicada sobre practicar con una dolencia,
+ *      que es la primera duda de quien llega aquí.
+ *   4. El horario, que no se puede poner todavía porque hay dos versiones.
+ *
+ * El bloque 3 se queda aunque ahora haya texto propio, y no sobra: la pregunta
+ * por una lesión o una dolencia es anterior a cualquier otra y aquí se contesta
+ * con lo que el estudio tiene publicado, no con una frase escrita para esta
+ * página.
+ *
+ * De dónde sale esa respuesta se cuenta aquí, en el comentario, y no debajo del
+ * bloque: quién la lee no necesita saber que ya estaba escrita en otro sitio, y
+ * decírselo era explicarle la web en lugar de contestarle.
  */
 export default function PaginaYogaOncologico() {
   const sobreLesiones = preguntasFrecuentes.find((pregunta) =>
@@ -36,17 +46,42 @@ export default function PaginaYogaOncologico() {
     <Pagina
       etiqueta="Propuestas concretas"
       titulo="Yoga oncológico"
-      entradilla="Una práctica adaptada para quien está pasando por un proceso oncológico."
+      entradilla={yogaOncologico.entradilla}
     >
-      <EnPreparacion pendiente="Falta el texto de esta página: qué se hace en una sesión, quién puede venir, cada cuánto, cómo se adaptan las posturas y si hace falta traer algo. Lo tiene que contar Susana. Aquí no se escribe nada que no sea verdad, y menos en algo así." />
+      {/* ── Qué es ───────────────────────────────────────────────────────── */}
+      <section className="seccion pt-0">
+        <Contenedor>
+          <div className="medida flex flex-col gap-6">
+            {yogaOncologico.parrafos.map((parrafo) => (
+              <p key={parrafo} className="paso-base text-ink-soft">
+                {parrafo}
+              </p>
+            ))}
+          </div>
 
+          <p className="paso-base medida mt-8 border-t border-line pt-8">
+            {yogaOncologico.red.textoAntes}{" "}
+            <a
+              href={yogaOncologico.red.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-brand underline underline-offset-4 hover:text-brand-hover"
+            >
+              {yogaOncologico.red.enlace}
+            </a>
+            .
+          </p>
+        </Contenedor>
+      </section>
+
+      {/* ── La duda de siempre ───────────────────────────────────────────── */}
       {sobreLesiones ? (
         <section className="seccion pt-0">
           <Contenedor>
-            <h2 className="font-heading text-2xl">
-              Lo que ya está respondido
-            </h2>
-            <dl className="mt-8 max-w-3xl border-t border-line">
+            {/* El bloque va sin titular, y a propósito: la pregunta se presenta
+                sola, y ponerle encima «Lo que ya está respondido» era contar de
+                dónde viene la respuesta en vez de contestarla. */}
+            <dl className="max-w-3xl border-t border-line">
               <div className="border-b border-line py-6">
                 <dt className="font-heading text-lg">
                   {sobreLesiones.pregunta}
@@ -56,25 +91,15 @@ export default function PaginaYogaOncologico() {
                 </dd>
               </div>
             </dl>
-            <p className="paso-pequeno mt-6 text-ink-soft">
-              Es una de las{" "}
-              <Link
-                href="/primera-vez"
-                className="text-brand underline underline-offset-4 hover:text-brand-hover"
-              >
-                preguntas frecuentes del estudio
-              </Link>
-              , no una respuesta escrita para esta página.
-            </p>
           </Contenedor>
         </section>
       ) : null}
 
-      {/* ── Mientras tanto ───────────────────────────────────────────────── */}
+      {/* ── Estamos aquí ─────────────────────────────────────────────────── */}
       <section className="seccion pt-0">
         <Contenedor>
           <h2 className="paso-titular max-w-[22ch]">
-            Si es para ti o para alguien tuyo, escríbenos
+            Estamos aquí para acompañarte
           </h2>
           <p className="paso-entrada medida mt-6 text-ink-soft">
             Cuéntanos tu caso y te decimos con franqueza si esta práctica te
@@ -84,7 +109,9 @@ export default function PaginaYogaOncologico() {
           <div className="mt-10 flex flex-wrap gap-3">
             <Button asChild size="lg">
               <a
-                href={whatsappUrl()}
+                href={whatsappUrl(
+                  "Hola Susana, quiero información sobre el yoga oncológico.",
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
               >

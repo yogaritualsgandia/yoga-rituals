@@ -17,7 +17,7 @@ import { site } from "@/content/site"
  *    para nada.
  *
  *  · `lastModified`. Next lo rellenaría con la fecha del build, así que cada
- *    despliegue le diría a Google que las dieciséis páginas han cambiado,
+ *    despliegue le diría a Google que las diecisiete páginas han cambiado,
  *    aunque solo se haya tocado una. Decir una fecha falsa es peor que no
  *    decir ninguna.
  *
@@ -27,11 +27,12 @@ import { site } from "@/content/site"
 const RUTAS = [
   "/",
   "/clases",
+  "/hatha",
+  "/vinyasa",
   "/horarios",
-  "/tarifas",
+  "/precios",
   "/primera-vez",
   "/sobre-mi",
-  "/contacto",
   "/mindfulness",
   "/yoga-nidra",
   "/breathwork",

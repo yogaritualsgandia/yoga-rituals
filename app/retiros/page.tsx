@@ -2,39 +2,69 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import { Contenedor } from "@/components/layout/contenedor"
-import { EnPreparacion } from "@/components/layout/en-preparacion"
 import { Pagina } from "@/components/layout/pagina"
 import { Button } from "@/components/ui/button"
 import { talleresColegios } from "@/content/clases"
-import { whatsappUrl } from "@/content/site"
+import { retiros } from "@/content/retiros"
+import { accionPrincipal, whatsappUrl } from "@/content/site"
 
 export const metadata: Metadata = {
   title: "Retiros y eventos",
   description:
-    "Retiros y eventos de YOGA Rituals, el estudio de yoga de Gandia: salidas y encuentros que se organizan fuera de la sala, a lo largo del año.",
+    "Retiro de Yoga en Zarra con YOGA Rituals: un fin de semana de yoga, pranayamas, meditación y paseos por el Bosque Encantado, con alojamiento y comidas incluidos.",
   alternates: { canonical: "/retiros" },
 }
 
 /**
  * Retiros y eventos.
  *
- * Sin texto propio todavía. Lo único que hay de verdad es que esta actividad
- * existe —figura en la web actual— y que forma parte de la lista de «otras
- * actividades» que Susana ha hecho: mindfulness en una biblioteca,
- * actividades en un hospital, retiros y eventos. Esa lista sí es real y se
- * muestra como lo que es: el historial, no la oferta del próximo trimestre.
+ * Esta página pasó de no tener nada a tener casi todo: su texto estaba en la web
+ * actual y lo que faltaba era el calendario. Ahora mismo hace dos cosas y las
+ * dos importan: cuenta cómo es el fin de semana —que es lo que decide a quien
+ * está dudando— y pide la fecha, que es lo que falta para poder reservar.
  *
- * Faltan las fechas, los sitios y los precios, que son justo lo que se viene a
- * buscar aquí. No se ponen de ejemplo.
+ * El programa va en una lista con líneas, y no en tarjetas con iconos: son
+ * cuatro cosas que pasan en el mismo fin de semana, en orden, y una lista lo
+ * dice mejor que cuatro cajas sueltas. Además, este es un sitio que no vende
+ * con iconos.
  */
 export default function PaginaRetiros() {
   return (
     <Pagina
       etiqueta="Fuera de la sala"
       titulo="Retiros y eventos"
-      entradilla="Salidas y encuentros que se organizan fuera del estudio."
+      entradilla={retiros.entradilla}
     >
-      <EnPreparacion pendiente="Falta el calendario: qué retiros hay previstos, dónde, cuándo, cuánto duran y cuánto cuestan. Sin fechas reales esta página no puede hacer su trabajo, y unas fechas inventadas serían peor que no tener ninguna." />
+      {/* ── El programa ──────────────────────────────────────────────────── */}
+      <section className="seccion pt-0">
+        <Contenedor>
+          <h2 className="font-heading text-2xl">
+            Lo que vivirás en cada encuentro
+          </h2>
+          <p className="medida paso-base mt-4 text-ink-soft">
+            {retiros.intro}
+          </p>
+
+          <ul className="mt-8 border-t border-line">
+            {retiros.programa.map((parte) => (
+              <li key={parte.titulo} className="border-b border-line py-6">
+                <div className="grid grid-cols-1 gap-2 lg:grid-cols-12 lg:gap-10">
+                  <h3 className="font-heading text-lg lg:col-span-4">
+                    {parte.titulo}
+                  </h3>
+                  <p className="medida paso-base text-ink-soft lg:col-span-7 lg:col-start-6">
+                    {parte.texto}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <p className="medida paso-base mt-8 text-ink-soft">
+            {retiros.completo}
+          </p>
+        </Contenedor>
+      </section>
 
       {/* ── Lo que sí ha pasado ──────────────────────────────────────────── */}
       <section className="seccion pt-0">
@@ -63,29 +93,30 @@ export default function PaginaRetiros() {
         </Contenedor>
       </section>
 
-      {/* ── Mientras tanto ───────────────────────────────────────────────── */}
+      {/* ── Reservar ─────────────────────────────────────────────────────── */}
       <section className="seccion pt-0">
         <Contenedor>
-          <h2 className="font-heading text-2xl">
-            ¿Quieres que te avisemos del próximo?
-          </h2>
-          <p className="medida paso-base mt-4 text-ink-soft">
-            Escríbenos y te lo contamos en cuanto haya fecha.
+          <h2 className="paso-titular max-w-[24ch]">{retiros.cierre}</h2>
+          <p className="paso-entrada medida mt-6 text-ink-soft">
+            Escríbenos y te contamos cuándo es el próximo y qué hay que hacer
+            para guardarte una plaza.
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-10 flex flex-wrap gap-3">
             <Button asChild size="lg">
               <a
-                href={whatsappUrl()}
+                href={whatsappUrl(
+                  "Hola Susana, quiero información sobre el próximo retiro.",
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Escríbenos por WhatsApp
+                Preguntar por el próximo retiro
               </a>
             </Button>
             <Button asChild variant="outline" size="lg">
-              <Link href="/talleres-centros-educativos">
-                Ver los talleres en colegios
+              <Link href={accionPrincipal.href}>
+                {accionPrincipal.etiqueta}
               </Link>
             </Button>
           </div>

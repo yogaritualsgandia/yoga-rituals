@@ -8,6 +8,8 @@ import { abrirMenu, esperarAlMovimiento } from "./apoyo"
 const RUTAS = [
   "/",
   "/clases",
+  "/hatha",
+  "/vinyasa",
   "/mindfulness",
   "/yoga-nidra",
   "/breathwork",
@@ -15,17 +17,40 @@ const RUTAS = [
   "/retiros",
   "/talleres-centros-educativos",
   "/horarios",
-  "/tarifas",
+  "/precios",
   "/primera-vez",
   "/sobre-mi",
-  "/contacto",
   "/aviso-legal",
   "/privacidad",
   "/cookies",
 ]
 
-/** Las que se revisan con axe. El resto dan el mismo pie y la misma cabecera. */
-const RUTAS_CON_AXE = ["/", "/horarios", "/tarifas", "/primera-vez"]
+/**
+ * Las que se revisan con axe.
+ *
+ * Al principio eran cuatro: la portada y las tres que tienen tablas o listas
+ * largas, con la idea de que el resto dan el mismo pie y la misma cabecera. Se
+ * quedó corto: en cuanto cinco de esas «otras» dejaron de ser plantillas y
+ * pasaron a tener texto de verdad, con listas, cifras, citas y fotos, la
+ * accesibilidad dejó de estar cubierta por el pie. Ahora están todas las que
+ * tienen contenido propio.
+ */
+const RUTAS_CON_AXE = [
+  "/",
+  "/horarios",
+  "/precios",
+  "/primera-vez",
+  "/clases",
+  "/hatha",
+  "/vinyasa",
+  "/yoga-nidra",
+  "/breathwork",
+  "/mindfulness",
+  "/yoga-oncologico",
+  "/retiros",
+  "/talleres-centros-educativos",
+  "/sobre-mi",
+]
 
 function recogerErrores(page: Page) {
   const errores: string[] = []
@@ -66,6 +91,15 @@ async function irA(page: Page, ruta: string) {
 /* ── Que exista todo, y que exista bien ─────────────────────────────────── */
 
 test.describe("Todas las rutas", () => {
+  /* Estas tres pruebas recorren las diecisiete páginas una detrás de otra, y
+     cada una espera —a propósito— a que se pinten las tipografías, a un
+     fotograma completo y a que pare la entrada de página. Es trabajo honesto, y
+     por eso son las más lentas de la suite: en el ancho de 1920 llegaban a los
+     sesenta segundos y se quedaban a medias sin que hubiera nada mal. Se les da
+     el doble, que es lo mismo que se hace con las capturas y por el mismo
+     motivo: son un repaso, no una alarma. */
+  test.describe.configure({ timeout: 120_000 })
+
   test("existe y tiene un solo h1", async ({ page }) => {
     const errores = recogerErrores(page)
 
@@ -195,7 +229,7 @@ test.describe("Accesibilidad", () => {
 /* ── Cabecera, pie y acción fija ────────────────────────────────────────── */
 
 test.describe("Estructura", () => {
-  test("la cabecera lleva al inicio y el pie cita a Skiper UI", async ({
+  test("la cabecera lleva al inicio y el pie no cita a nadie", async ({
     page,
   }) => {
     await irA(page, "/")
@@ -204,9 +238,16 @@ test.describe("Estructura", () => {
       page.getByRole("link", { name: "YOGA Rituals, ir al inicio" }).first(),
     ).toBeVisible()
 
-    const atribucion = page.getByRole("link", { name: /Skiper UI/ })
-    await expect(atribucion).toBeVisible()
-    await expect(atribucion).toHaveAttribute("href", /skiper-ui\.com/)
+    /* El pie llevó durante un tiempo un crédito a Skiper UI, porque el
+       subrayado que crece de los enlaces salía de uno de sus componentes
+       gratuitos y su licencia pide citarlos. Ya no sale de ahí: el componente
+       se borró y el subrayado está escrito en casa, así que la obligación
+       tampoco existe y el crédito se ha ido con ella.
+
+       Esta prueba lo vigila a propósito, y en la dirección incómoda, porque es
+       justo la clase de línea que vuelve sola: alguien copia un componente,
+       pega también su comentario de atribución y nadie se entera. */
+    await expect(page.getByRole("link", { name: /Skiper/i })).toHaveCount(0)
   })
 
   test("todos los enlaces internos del pie responden", async ({ page }) => {
@@ -218,7 +259,10 @@ test.describe("Estructura", () => {
         [...new Set(enlaces.map((e) => (e as HTMLAnchorElement).getAttribute("href")!))],
       )
 
-    expect(destinos.length, "el pie tiene que enlazar a algún sitio").toBeGreaterThan(5)
+    // Cuatro: el logotipo y los tres textos legales. El pie tuvo trece
+    // mientras fue un mapa del sitio, y ya no lo es; la página de contacto
+    // también se quitó, porque el contacto vive en el propio pie.
+    expect(destinos.length, "el pie tiene que enlazar a algún sitio").toBeGreaterThan(3)
 
     for (const destino of destinos) {
       const respuesta = await page.request.get(destino)
@@ -275,8 +319,8 @@ test.describe("Contenido real", () => {
     await expect(page.getByRole("table")).toContainText("exprés")
   })
 
-  test("las tarifas están como texto", async ({ page }) => {
-    await irA(page, "/tarifas")
+  test("los precios están como texto", async ({ page }) => {
+    await irA(page, "/precios")
 
     const tabla = page.getByRole("table")
     await expect(tabla).toContainText("40 €")
@@ -300,18 +344,29 @@ test.describe("Móvil", () => {
   test("la barra fija aparece al bajar y lleva a la reserva", async ({ page }) => {
     await irA(page, "/")
 
-    const whatsapp = page.getByRole("link", { name: "Escríbenos por WhatsApp" })
-    await expect(whatsapp).toHaveCount(1)
-    await expect(whatsapp).not.toBeInViewport()
+    const barra = page.locator("[data-accion-fija]")
+    await expect(barra).toBeAttached()
+
+    // Aparece al bajar, no de entrada: tapar la portada con una barra antes de
+    // que nadie haya leído nada es empezar pidiendo. Escondida quiere decir
+    // empujada por debajo del borde de abajo, no «borrada».
+    const alto = await page.evaluate(() => window.innerHeight)
+    expect((await barra.boundingBox())!.y).toBeGreaterThan(alto)
 
     await page.evaluate(() => window.scrollTo(0, 1200))
-    await expect(whatsapp).toBeInViewport()
+    await expect
+      .poll(async () => (await barra.boundingBox())!.y)
+      .toBeLessThan(alto)
 
-    const reserva = page
-      .getByRole("link", { name: "Reserva tu clase de prueba" })
-      .last()
-    await expect(reserva).toBeInViewport()
-    await expect(reserva).toHaveAttribute("href", "/contacto")
+    /* Y lleva a la reserva de verdad: a WhatsApp, en otra pestaña. El segundo
+       botón de la barra es el teléfono, no otro WhatsApp. */
+    const reserva = barra.getByRole("link", { name: "Reserva tu clase de prueba" })
+    await expect(reserva).toHaveAttribute("href", /^https:\/\/wa\.me\/34656187761/)
+    await expect(reserva).toHaveAttribute("target", "_blank")
+
+    await expect(
+      barra.getByRole("link", { name: /Llamar al estudio/ }),
+    ).toHaveAttribute("href", "tel:+34656187761")
   })
 
   test("el menú se abre, atrapa el foco y se cierra con Escape", async ({ page }) => {
@@ -341,7 +396,8 @@ test.describe("Móvil", () => {
 
     const ultimo = page
       .getByRole("dialog")
-      .getByRole("link", { name: "Talleres en centros educativos" })
+      .getByRole("link", { name: "Sobre mí" })
+      .last()
 
     // El panel se desplaza. Lo que no cabe tiene que poder alcanzarse, no
     // quedarse cortado detrás del bloque de la reserva.
@@ -589,5 +645,41 @@ test.describe("Imágenes", () => {
     )
 
     expect(sinAlt).toEqual([])
+  })
+})
+
+/* ── La página que no existe ────────────────────────────────────────────── */
+
+test.describe("Página no encontrada", () => {
+  test("una dirección que no existe da un 404 y se puede volver", async ({
+    page,
+  }) => {
+    const respuesta = await page.goto("/esta-direccion-no-existe", {
+      waitUntil: "domcontentloaded",
+    })
+
+    /* Un 404 de verdad y no un 200 con la cara de un 404: es lo que hace que
+       el buscador saque la dirección de su índice en lugar de guardarla como
+       una página buena. */
+    expect(respuesta?.status()).toBe(404)
+
+    await expect(page.locator("h1")).toHaveText(
+      "No se ha podido encontrar la página.",
+    )
+
+    /* El número grande va marcado como decorativo a propósito: quien oye la
+       página ya sabe qué ha pasado con el titular, y anunciar «cuatrocientos
+       cuatro» detrás solo alarga el anuncio. */
+    await expect(page.locator('p[aria-hidden="true"]')).toHaveText("404")
+
+    /* Y un 404 no se indexa. La página lleva dos etiquetas de robots: la que
+       declara el armazón para todas y la que añade Next para este caso. Se
+       busca la que decide, no la primera: cuando hay dos, el buscador se queda
+       con la más restrictiva, y la restrictiva es esta. */
+    await expect(page.locator('meta[name="robots"][content*="noindex"]')).toHaveCount(1)
+
+    await page.getByRole("link", { name: "Volver al inicio" }).click()
+    await expect(page).toHaveURL("/")
+    await expect(page.locator("h1")).toBeVisible()
   })
 })

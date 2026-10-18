@@ -31,7 +31,17 @@ export const site = {
   aniversarioTexto: "Desde 2017",
 
   direccion: {
-    calle: "C/ Sant Francesc de Borja, 36, 1º",
+    /**
+     * La calle y el número, sin el piso.
+     *
+     * El piso se guarda aparte por un motivo práctico: el enlace a Google Maps
+     * se arma con estos campos, y un «1º» en medio de una dirección no ayuda a
+     * nadie a encontrar la puerta —el portal es lo que se busca—, pero sí puede
+     * confundir al buscador del mapa. En pantalla, en cambio, el piso se dice,
+     * porque quien va a venir quiere saber que hay que subir.
+     */
+    calle: "C/ Sant Francesc de Borja, 36",
+    piso: "1º",
     codigoPostal: "46701",
     ciudad: "Gandia",
     provincia: "Valencia",
@@ -49,16 +59,16 @@ export const site = {
     email: "yogaritualsgandia@gmail.com",
   },
 
+  /**
+   * Solo Instagram. Había también Facebook y se ha quitado: es una página que
+   * Susana no atiende y un enlace a un perfil parado es peor que no tenerlo.
+   */
   redes: {
-    instagram: { usuario: "_yogarituals", url: "https://www.instagram.com/_yogarituals/" },
-    facebook: {
-      usuario: "YOGA Rituals",
-      url: "https://www.facebook.com/p/YOGA-Rituals-100067302412924/",
+    instagram: {
+      usuario: "_yogarituals",
+      url: "https://www.instagram.com/_yogarituals/",
     },
   },
-
-  /** Cuestionario de bienestar real que ya usan, para recomendar práctica. */
-  cuestionario: "https://tally.so/r/XxW5AL",
 
   /** Frase real de la casa, en valenciano. */
   lema: "Tota pedra fa paret",
@@ -68,96 +78,74 @@ export const whatsappUrl = (mensaje = "Hola Susana, quiero información sobre la
   `https://wa.me/${site.contacto.whatsapp}?text=${encodeURIComponent(mensaje)}`
 
 /**
- * Barra de navegación: cinco enlaces y una acción.
+ * Dónde está el estudio, en Google Maps.
+ *
+ * Se arma con la dirección de arriba en vez de escribirse a mano, y eso es lo
+ * importante: no hay dos versiones de la dirección que puedan dejar de
+ * coincidir. El día que el estudio cambie de calle, se cambia en un sitio y el
+ * enlace cambia solo, sin que nadie tenga que acordarse de que este enlace
+ * existe.
+ *
+ * Se busca por texto —el nombre del estudio y la dirección— y no por las
+ * coordenadas, que también están puestas. Con las coordenadas el enlace deja un
+ * punto clavado en el mapa y no hay forma de comprobarlo sin ir; buscando por
+ * texto, Google enseña el local por su nombre, con su ficha, sus fotos y su
+ * horario, que es lo que de verdad quiere ver quien va a venir. Y si la ficha
+ * de Google no existiera, la búsqueda cae igualmente en la dirección correcta.
+ */
+export const mapaUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  `${site.nombre}, ${site.direccion.calle}, ${site.direccion.codigoPostal} ${site.direccion.ciudad}, ${site.direccion.provincia}`,
+)}`
+
+/**
+ * Barra de navegación: seis enlaces y una acción.
+ *
+ * «Inicio» está porque la portada explica qué es esto —quién da las clases,
+ * cómo funciona el horario, por dónde se empieza— y volver a ella tiene que
+ * costar un clic, no dos.
+ *
  * «Primera vez» entra porque quien nunca ha hecho yoga es justo la persona
  * a la que va dirigida la web.
  */
 export const navegacionPrincipal = [
-  { etiqueta: "Clases", href: "/clases" },
-  { etiqueta: "Horarios", href: "/horarios" },
-  { etiqueta: "Tarifas", href: "/tarifas" },
-  { etiqueta: "Primera vez", href: "/primera-vez" },
-  { etiqueta: "Sobre mí", href: "/sobre-mi" },
-] as const
-
-export const accionPrincipal = {
-  etiqueta: "Reserva tu clase de prueba",
-  href: "/contacto",
-} as const
-
-export const navegacionCompleta = [
   { etiqueta: "Inicio", href: "/" },
   { etiqueta: "Clases", href: "/clases" },
   { etiqueta: "Horarios", href: "/horarios" },
-  { etiqueta: "Tarifas", href: "/tarifas" },
+  { etiqueta: "Precios", href: "/precios" },
   { etiqueta: "Primera vez", href: "/primera-vez" },
   { etiqueta: "Sobre mí", href: "/sobre-mi" },
-  { etiqueta: "Mindfulness", href: "/mindfulness" },
-  { etiqueta: "Yoga Nidra", href: "/yoga-nidra" },
-  { etiqueta: "Breathwork", href: "/breathwork" },
-  { etiqueta: "Yoga Oncológico", href: "/yoga-oncologico" },
-  { etiqueta: "Retiros", href: "/retiros" },
-  {
-    etiqueta: "Talleres en centros educativos",
-    href: "/talleres-centros-educativos",
-  },
-  { etiqueta: "Contacto y reserva", href: "/contacto" },
 ] as const
 
 /**
- * La navegación del pie, agrupada.
+ * El mensaje que se escribe solo al abrir WhatsApp.
  *
- * Antes era una lista única de trece enlaces en dos columnas, y al rellenarse
- * por filas quedaba un orden sin sentido («Inicio» al lado de «Clases»,
- * «Retiros» al lado de «Talleres»). Agrupada, cada bloque responde a una
- * pregunta: qué es esto, cómo practico y qué más se puede hacer.
+ * No es un adorno: quien recibe el mensaje sabe de antemano qué se le está
+ * pidiendo, y quien lo manda no tiene que pensar cómo empezar. Es lo que
+ * convierte un botón en una conversación.
  */
-export const navegacionPie = [
-  {
-    titulo: "El estudio",
-    enlaces: [
-      { etiqueta: "Inicio", href: "/" },
-      { etiqueta: "Primera vez", href: "/primera-vez" },
-      { etiqueta: "Sobre mí", href: "/sobre-mi" },
-      { etiqueta: "Contacto y reserva", href: "/contacto" },
-    ],
-  },
-  {
-    titulo: "Practicar",
-    enlaces: [
-      { etiqueta: "Clases", href: "/clases" },
-      { etiqueta: "Horarios", href: "/horarios" },
-      { etiqueta: "Tarifas", href: "/tarifas" },
-    ],
-  },
-  {
-    titulo: "Actividades",
-    enlaces: [
-      { etiqueta: "Mindfulness", href: "/mindfulness" },
-      { etiqueta: "Yoga Nidra", href: "/yoga-nidra" },
-      { etiqueta: "Breathwork", href: "/breathwork" },
-      { etiqueta: "Yoga Oncológico", href: "/yoga-oncologico" },
-      { etiqueta: "Retiros", href: "/retiros" },
-      {
-        etiqueta: "Talleres en centros educativos",
-        href: "/talleres-centros-educativos",
-      },
-    ],
-  },
-] as const
+export const mensajeDeReserva =
+  "Hola Susana, quiero reservar la clase de prueba gratuita."
+
+/**
+ * La acción principal: reservar la clase de prueba.
+ *
+ * Y va directa a WhatsApp, no a un formulario. La clase de prueba es gratis y
+ * hay que encajarla en un horario que lleva Susana, así que esto se resuelve
+ * hablando: qué día, a qué hora, si es la primera vez. Un formulario mete una
+ * espera de un día en medio de una conversación de dos minutos.
+ *
+ * Es la única cosa de la web que se reserva. Las clases normales son con
+ * horario libre: se viene y ya está.
+ */
+export const accionPrincipal = {
+  etiqueta: "Reserva tu clase de prueba",
+  href: whatsappUrl(mensajeDeReserva),
+  /** true = sale de la web. Los enlaces internos no llevan esto. */
+  externo: true,
+} as const
 
 export const navegacionLegal = [
   { etiqueta: "Aviso legal", href: "/aviso-legal" },
   { etiqueta: "Privacidad", href: "/privacidad" },
   { etiqueta: "Cookies", href: "/cookies" },
 ] as const
-
-/**
- * Atribución obligatoria de la versión gratuita de Skiper UI.
- * El componente skiper40 (CssLink) se usa en el menú, el pie y los enlaces
- * de texto, así que esta línea tiene que quedarse en el pie.
- */
-export const atribucion = {
-  texto: "Enlaces animados con Skiper UI",
-  href: "https://skiper-ui.com",
-} as const

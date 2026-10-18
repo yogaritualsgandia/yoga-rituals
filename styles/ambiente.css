@@ -1,0 +1,155 @@
+/* ==========================================================================
+   YOGA Rituals · El fondo
+   ==========================================================================
+
+   Lo que se mueve por detrás de toda la web. No es un adorno: es lo que hace
+   que la web no se vea quieta cuando se queda quieta. Tres manchas de color
+   del estudio, muy diluidas, que se desplazan sin prisa —diecinueve,
+   veintitrés y veintinueve segundos por vuelta— y un grano de papel encima.
+
+   Cuatro decisiones:
+
+   1. VA DETRÁS DE TODO Y NO SE TOCA. `position: fixed`, `z-index: -1` y
+      `pointer-events: none`: está fuera del alcance del ratón y del teclado, y
+      no entra en el orden de lectura. Un fondo que se puede pulsar es un
+      estorbo.
+
+   2. SOLO SE MUEVE CON `transform`. Las manchas son degradados radiales
+      pintados una vez; moverse es deslizar esa capa, que la tarjeta gráfica
+      hace sin volver a pintar nada. Nada de `filter: blur()`, que hay que
+      recalcularlo en cada fotograma, ni de `background-position`, que obliga a
+      repintar la mancha entera.
+
+   3. ES TAN SUAVE QUE NO TOCA EL CONTRASTE. Las manchas van al veinte por
+      ciento como mucho, así que el suelo sigue siendo la crema y la tinta sigue
+      teniendo sus nueve a uno por el peor de los sitios. Un fondo bonito que
+      baja un texto por debajo de AA es un fondo mal hecho, y esto es lo fácil
+      de hacer mal. La cuenta está en `scripts/marca.mjs`.
+
+   4. LAS TRES VAN A TIEMPOS DISTINTOS Y PRIMOS ENTRE SÍ. Si duraran lo mismo,
+      se moverían en compás y se vería el bucle. Así no coinciden nunca.
+   ========================================================================== */
+
+.fondo-ambiente {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.fondo-ambiente__bruma {
+  position: absolute;
+  border-radius: 50%;
+  /* Son tres elementos moviéndose toda la visita: se quedan en su capa. */
+  will-change: transform;
+}
+
+.fondo-ambiente__bruma--turquesa {
+  top: -26vmax;
+  left: -22vmax;
+  width: 58vmax;
+  height: 58vmax;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--brand-vivid) 20%, transparent),
+    transparent
+  );
+  animation: derivar-turquesa 19s var(--ease-inout) infinite;
+}
+
+.fondo-ambiente__bruma--salvia {
+  top: 14vmax;
+  right: -24vmax;
+  width: 52vmax;
+  height: 52vmax;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--salvia) 24%, transparent),
+    transparent
+  );
+  animation: derivar-salvia 23s var(--ease-inout) infinite;
+}
+
+.fondo-ambiente__bruma--terracota {
+  bottom: -26vmax;
+  left: 4vmax;
+  width: 48vmax;
+  height: 48vmax;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--terracota) 20%, transparent),
+    transparent
+  );
+  animation: derivar-terracota 29s var(--ease-inout) infinite;
+}
+
+/* Cada mancha vuelve a su sitio al final, así que congelarla —que es lo que
+   hace la pausa y lo que pide «menos movimiento»— no la deja a medio camino:
+   se queda en su posición buena.
+ *
+ * EL RECORRIDO ES LO QUE HACE QUE SE VEA, no la velocidad. Cada mancha viaja
+ * unos veinte `vmax` en diagonal en media vuelta, o sea que su centro cruza del
+ * borde de la pantalla al interior: el azul de arriba a la izquierda se va al
+ * centro, y eso se ve sin buscarlo. En píxeles son unos treinta por segundo de
+ * media —cincuenta en el tramo más rápido—, que es una nube, no un coche.
+ *
+ * Y las manchas se han encogido mientras crecía el recorrido. Una mancha muy
+ * grande que se mueve poco parece quieta: el ojo mide el movimiento por la
+ * distancia recorrida comparada con el tamaño de lo que se mueve, así que el
+ * camino se ha alargado y el diámetro se ha acortado. Antes eran sesenta y
+ * cuatro `vmax` moviéndose trece, y eso en pantalla era una foto.
+ *
+ * Y EL COLOR NO SE TOCA. Estas manchas van al veinte por ciento, y de ahí no se
+ * sube: el texto gris de la web está calculado para leerse sobre la crema, y
+ * una mancha más cargada le bajaría el contraste por debajo de lo que exige la
+ * norma justo por donde pasa. Ese cálculo está hecho y se puede repetir:
+ * `node scripts/marca.mjs`, sección «Fondo». Para que el fondo se note más, se
+ * mueve más; subirle el color es la única forma de hacerlo mal. */
+@keyframes derivar-turquesa {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(20vmax, 16vmax, 0) scale(1.1);
+  }
+}
+
+@keyframes derivar-salvia {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.08);
+  }
+  50% {
+    transform: translate3d(-20vmax, 14vmax, 0) scale(1);
+  }
+}
+
+@keyframes derivar-terracota {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(18vmax, -16vmax, 0) scale(1.12);
+  }
+}
+
+/* --- El grano -------------------------------------------------------------
+   El papel de la web. Es un ruido de SVG escrito aquí mismo, sin archivo, y no
+   se mueve: se pinta una vez.
+
+   El truco está en el `feComponentTransfer`: el ruido sale con el alfa lleno,
+   o sea una capa gris opaca que apagaría toda la web, y la tabla lo recorta
+   hasta dejarlo en motas sueltas. Y por eso NO lleva `mix-blend-mode`: fundir
+   contra el fondo obliga al navegador a recomponer la pantalla entera en cada
+   fotograma del desplazamiento, y esto se paga en el scroll. Sin fundido, es
+   una capa más y no cuesta nada. */
+.fondo-ambiente__grano {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 0 0 0.35'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}

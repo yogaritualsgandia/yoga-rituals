@@ -74,15 +74,6 @@ export const horario: DiaHorario[] = [
   dia("Domingo", 7, []),
 ]
 
-/** Total de franjas semanales. Dato real, no decorativo. */
-export const franjasSemanales = horario.reduce(
-  (total, d) => total + d.franjas.length,
-  0,
-)
-
-/** Las tres duraciones que existen de verdad: 35, 60 y 75 minutos. */
-export const duraciones = [35, 60, 75] as const
-
 /** «35 min» / «1 h 15 min» — para pintar la duración sin ceros raros. */
 export function duracionEnPalabras(minutos: number): string {
   if (minutos < 60) return `${minutos} min`
@@ -105,7 +96,7 @@ export function duracionEnPalabras(minutos: number): string {
  * ahora consta. Es la pregunta que más frena a quien paga mes a mes.
  */
 export const horarioLibre = {
-  titular: "Tú diseñas tu semana",
+  titular: "Diseñas tu semana",
   entradilla:
     "En YOGA Rituals no hay grupos cerrados ni reservas. El horario de abajo son las horas a las que el estudio está abierto: eliges el día que te encaja y vienes. Sin avisar y sin apuntarte a nada.",
   escenarios: [
@@ -127,7 +118,7 @@ export const horarioLibre = {
     {
       situacion: "Hay días que quiero una clase larga y días que no tengo ni media hora.",
       respuesta:
-        "Las sesiones duran 35, 60 o 75 minutos. Tú decides cada día cuál te encaja.",
+        "Las sesiones duran 35, 60 o 75 minutos. Cada día decides cuál te encaja.",
     },
   ],
 } as const

@@ -68,9 +68,9 @@ curl -sI https://yogarituals.es/actividades/ | head -3
 #   HTTP/2 301
 #   location: /clases
 
-curl -sI https://yogarituals.es/precios/ | head -3
+curl -sI https://yogarituals.es/tarifas/ | head -3
 #   HTTP/2 301
-#   location: /tarifas
+#   location: /precios
 
 curl -sI https://yogarituals.es/minfulness/ | head -3
 #   HTTP/2 301
@@ -85,9 +85,9 @@ curl -sI https://www.yogarituals.es/ | head -3
 curl -sI https://yogarituals.es/esto-no-existe | head -1
 #   HTTP/2 404
 
-# El mapa del sitio está y lleva las dieciséis páginas.
+# El mapa del sitio está y lleva las diecisiete páginas.
 curl -s https://yogarituals.es/sitemap.xml | grep -c "<loc>"
-#   16
+#   17
 
 # Y robots.txt apunta a ese mapa.
 curl -s https://yogarituals.es/robots.txt
@@ -121,11 +121,9 @@ normal que durante unas semanas convivan unas y otras.
 
 ## 5. Lo que todavía no está
 
-No hay que hacer nada con esto ahora; está apuntado para que no se olvide:
+No hay que hacer nada con esto ahora; está apuntado para que no se olvide. La
+lista entera, con todo lo que hay que pedirle a Susana, está en `PENDIENTES.md`.
 
-- **La página de contacto y su formulario.** Existe y está enlazada, pero el
-  formulario aún no está montado. Mientras tanto, la reserva va por WhatsApp,
-  que ya funciona.
 - **Las fotos.** Las seis que hay son de ejemplo y está dicho en la propia web.
   Cuando lleguen las del estudio, se sustituyen en `public/fotos-ejemplo/` sin
   tocar el código, cada una en su sitio.
@@ -134,7 +132,11 @@ No hay que hacer nada con esto ahora; está apuntado para que no se olvide:
   SVG, las dos versiones sobran.
 - **La imagen para compartir.** Es una tarjeta crema con el logotipo. Cuando
   Susana mande una foto, se sustituye `public/compartir.png` y ya está.
-- **Una página 404 propia.** Ahora sale la de Next, correcta pero sosa.
+- **Los textos legales.** `/aviso-legal`, `/privacidad` y `/cookies` existen y
+  están enlazadas desde el pie, pero dentro llevan un aviso de que están en
+  preparación: falta el texto de las tres.
+- **Los enlaces de cada reseña.** Las tres de la portada son reales y llevan a
+  la ficha del estudio en Google; falta el enlace directo a cada una.
 
 ## 6. Cómo se publica a partir de ahora
 
