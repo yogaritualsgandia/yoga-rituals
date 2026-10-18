@@ -15,6 +15,9 @@ export const REDIRECCIONES_ANTIGUAS = [
 
 const nextConfig: NextConfig = {
   output: "export",
+  images: {
+    unoptimized: true,
+  },
 };
 
 export default nextConfig;
