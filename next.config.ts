@@ -13,6 +13,8 @@ export const REDIRECCIONES_ANTIGUAS = [
   { desde: "/proximamente", hacia: "/" },
 ];
 
-const nextConfig: NextConfig = {};
+const nextConfig: NextConfig = {
+  output: "export",
+};
 
 export default nextConfig;
