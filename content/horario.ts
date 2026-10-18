@@ -96,8 +96,13 @@ export function duracionEnPalabras(minutos: number): string {
 
 /**
  * Cómo funciona el horario libre. Todo lo de aquí está sostenido por lo que
- * dice la web actual; nada de promesas que no pueda cumplir (por ejemplo,
- * no se dice que una clase perdida «se recupera»: eso no me consta).
+ * dice la web actual; nada de promesas que no pueda cumplir.
+ *
+ * Lo de recuperar la clase sí lo dice ella, en dos sitios: aquí («esa clase no
+ * la pierdes, puedes recuperarla cualquier otro día del mes») y en precios
+ * («las clases del mes hay que disfrutarlas dentro del mismo mes, ya que no se
+ * acumulan para el siguiente»). Antes no estaba puesto porque no me constaba;
+ * ahora consta. Es la pregunta que más frena a quien paga mes a mes.
  */
 export const horarioLibre = {
   titular: "Tú diseñas tu semana",
@@ -107,7 +112,7 @@ export const horarioLibre = {
     {
       situacion: "Hoy te ha surgido algo y no llegas.",
       respuesta:
-        "No hay ninguna reserva que cancelar, así que no tienes que dar explicaciones a nadie.",
+        "No hay ninguna reserva que cancelar, así que no tienes que dar explicaciones a nadie. Y esa clase no la pierdes: puedes recuperarla cualquier otro día del mes.",
     },
     {
       situacion: "Trabajas a turnos y cada semana es distinta.",

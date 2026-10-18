@@ -56,3 +56,21 @@ export const pruebaGratuita = {
   precio: 0,
   nota: "Gratuita con reserva previa.",
 } as const
+
+/**
+ * Cómo se paga, en sus palabras.
+ *
+ * Esto lo copio de la web actual, donde sí está puesto. Aquí no estaba: la
+ * página de tarifas no decía ni cuándo se paga ni con qué, y era una de las
+ * preguntas que quedaban sin respuesta. Quien va a pagar 85 € al mes quiere
+ * saberlo antes de escribir, no después.
+ */
+export const formasDePago = {
+  titulo: "Cómo se paga",
+  formas: "Efectivo, Bizum o transferencia bancaria.",
+  fecha: "La cuota se abona durante los primeros 5 días de cada mes.",
+  recuperacion:
+    "Nuestros horarios son libres, por lo que tienes total libertad para organizar tus clases. Ten en cuenta que las clases del mes hay que disfrutarlas dentro del mismo mes, ya que no se acumulan para el siguiente.",
+  descuento:
+    "Tienes la posibilidad de beneficiarte de un descuento con la opción del pago trimestral. Esta opción no admite devoluciones, y las mensualidades no se pueden pausar ni aplazar.",
+} as const

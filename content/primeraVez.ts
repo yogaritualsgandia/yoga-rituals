@@ -91,11 +91,17 @@ export const preguntasFrecuentes: Pregunta[] = [
   },
 ]
 
-/** Lo que falta por preguntarle, para no inventarlo. */
+/**
+ * Lo que sigue sin respuesta.
+ *
+ * Eran tres. Dos ya están contestadas con lo que hay publicado: qué llevar la
+ * primera vez está en «¿Qué necesitas?», aquí arriba, y cómo se paga la cuota
+ * está en la página de tarifas. La tercera no está en ningún sitio, y sigue
+ * aquí a la vista en lugar de inventada: la dirección está en una calle céntrica
+ * de Gandia y de aparcar no puedo decir nada que no sepa.
+ */
 export const preguntasPendientes = [
-  "[PENDIENTE: ¿hay que llevar algo más la primera vez?]",
   "[PENDIENTE: ¿se puede aparcar cerca del estudio?]",
-  "[PENDIENTE: ¿cómo se paga la cuota?]",
 ] as const
 
 export const cierrePrimeraVez = {

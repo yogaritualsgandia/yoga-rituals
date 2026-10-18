@@ -1,10 +1,13 @@
 /**
  * Lo que se puede practicar en el estudio.
  *
- * Los NOMBRES son reales: salen de la web actual (actividades) y de lo que me
- * contó Susana (estilos de clase). Las DESCRIPCIONES no las tengo todavía, así
- * que van marcadas en lugar de inventadas. Se escriben con ella o las escribe
- * ella y yo solo las corrijo.
+ * Los NOMBRES y las ENTRADILLAS son reales: salen de la web actual. La
+ * entradilla es una frase suya, entera o cortada donde acaba la frase; cuando
+ * no hay nada escrito, va marcada en lugar de inventada. Se escribe con ella o
+ * lo escribe ella, y yo solo lo corrijo.
+ *
+ * Hatha y Vinyasa siguen sin texto: de la web actual no sale ninguna
+ * descripción de ninguno de los dos estilos.
  *
  * Los tres grupos no son decorativos: responden a tres preguntas distintas
  * que se hace quien llega.
@@ -16,7 +19,7 @@
 export type Practica = {
   slug: string
   nombre: string
-  /** Una línea de presentación. [PENDIENTE] hasta que la escriba Susana. */
+  /** Una línea de presentación, con sus palabras. [PENDIENTE] si no hay. */
   entradilla: string
   grupo: "clases" | "actividades" | "fuera"
   /**
@@ -48,42 +51,48 @@ export const practicas: Practica[] = [
   {
     slug: "yoga-nidra",
     nombre: "Yoga Nidra",
-    entradilla: SIN_TEXTO,
+    entradilla:
+      "Es una técnica de meditación guiada y relajación que se enmarca en lo que podríamos llamar estilos de yoga pasivos. El objetivo es alcanzar una relajación profunda, pero a la vez consciente.",
     grupo: "actividades",
     conPaginaPropia: true,
   },
   {
     slug: "mindfulness",
     nombre: "Mindfulness",
-    entradilla: SIN_TEXTO,
+    entradilla:
+      "Desde hace más de 7 años, todos los miércoles, tenemos nuestra sesión de Mindfulness en la Biblioteca Benipeixcar-Raval de Gandia.",
     grupo: "actividades",
     conPaginaPropia: true,
   },
   {
     slug: "breathwork",
     nombre: "Respiración",
-    entradilla: SIN_TEXTO,
+    entradilla:
+      "La respiración es la herramienta más simple y, al mismo tiempo, la más profunda.",
     grupo: "actividades",
     conPaginaPropia: true,
   },
   {
     slug: "yoga-oncologico",
     nombre: "Yoga oncológico",
-    entradilla: SIN_TEXTO,
+    entradilla:
+      "Un tipo de yoga creado para acompañar a personas con cáncer en las diferentes etapas de la enfermedad.",
     grupo: "actividades",
     conPaginaPropia: true,
   },
   {
     slug: "retiros",
     nombre: "Retiros y eventos",
-    entradilla: SIN_TEXTO,
+    entradilla:
+      "Un fin de semana en el corazón de Zarra, un entorno rodeado de historia, paisajes inspiradores y una energía que invita a la calma.",
     grupo: "fuera",
     conPaginaPropia: true,
   },
   {
     slug: "talleres-centros-educativos",
     nombre: "Talleres en centros educativos",
-    entradilla: SIN_TEXTO,
+    entradilla:
+      "Con más de 500 talleres realizados, llevamos el yoga y el mindfulness a las aulas.",
     grupo: "fuera",
     conPaginaPropia: true,
   },
@@ -127,20 +136,43 @@ export const gruposPracticas = [
 ]
 
 /**
- * Talleres en colegios. Cifras reales que sí me ha dado: más de 500 talleres
- * hechos y «La calma en el examen» como ejemplo.
+ * Talleres en colegios.
+ *
+ * Todo lo que hay aquí es real y está copiado de la web actual: más de 500
+ * talleres, los tres talleres con su duración y su contenido, a quién van
+ * dirigidos y el párrafo con el que se invita a los centros a pedirlos.
  */
 export const talleresColegios = {
   titulo: "Talleres en centros educativos",
   talleresRealizados: 500,
   talleresRealizadosTexto: "más de 500",
   ejemplo: "La calma en el examen",
-  /** [PENDIENTE] El contenido de cada taller: no lo tengo. */
+  /** A quién van dirigidos, con sus palabras. */
+  destinatarios: "Primaria, ESO, Bachillerato y Formación Profesional",
+  /** Los tres talleres, con su duración y su contenido. */
   contenidos: [
-    "[PENDIENTE: contenido del taller de posturas]",
-    "[PENDIENTE: contenido del taller de mindfulness]",
-    "[PENDIENTE: contenido del taller de Yoga Nidra]",
+    {
+      nombre: "Taller de educación postural",
+      duracion: "2 sesiones de 1 hora, teoría y práctica",
+      descripcion:
+        "Ponemos el foco en el cuerpo y la postura: aprender a escucharlo, cuidarlo, practicar los ajustes necesarios para corregirla, y entender cómo nuestras posturas repercuten en nuestro bienestar.",
+    },
+    {
+      nombre: "Taller de Mindfulness",
+      duracion: "2 sesiones de 1 hora, teoría y práctica",
+      descripcion:
+        "Trabajamos la atención en las emociones y los pensamientos, aportando técnicas de conexión con el cuerpo y de gestión emocional que los estudiantes podrán llevar a su día a día.",
+    },
+    {
+      nombre: "Taller de Nidra «Calma en el examen»",
+      duracion: "1 sesión de 1 hora",
+      descripcion:
+        "Una sesión pensada para ayudar a afrontar de forma positiva las inseguridades y bloqueos que puedan surgir en la preparación y realización de los exámenes.",
+    },
   ],
+  /** Lo que se le dice a un centro que quiera pedirlos. */
+  invitacion:
+    "Si eres docente, orientador/a o formas parte del equipo directivo de un centro educativo y te interesa ofrecer alguno de estos talleres a tu alumnado, escríbenos y te contamos todos los detalles.",
   /** Otras actividades, tal como me las contó. */
   otros: [
     "Mindfulness en una biblioteca",
