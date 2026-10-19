@@ -49,3 +49,6 @@ next-env.d.ts
 
 # carpeta de trabajo de la skill de dirección de arte
 /.taste-skill/
+
+# el vigilante del servidor local
+/servidor-local.log

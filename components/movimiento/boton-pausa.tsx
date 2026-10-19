@@ -42,7 +42,20 @@ export function BotonPausa() {
       ) : (
         <Pause aria-hidden="true" className="size-4" />
       )}
-      {pausado ? "Reanudar el movimiento" : "Parar el movimiento"}
+
+      {/* El ancho lo fija la etiqueta más larga —«Reanudar»—, que está puesta
+          pero invisible. Así, al pulsar, el texto cambia sin que el botón
+          cambie de tamaño y sin que el pie se recoloque a su alrededor. La
+          visible y la invisible comparten celda, de modo que el alto también
+          es el mismo. */}
+      <span className="grid">
+        <span aria-hidden="true" className="invisible col-start-1 row-start-1">
+          Reanudar el movimiento
+        </span>
+        <span className="col-start-1 row-start-1">
+          {pausado ? "Reanudar el movimiento" : "Parar el movimiento"}
+        </span>
+      </span>
     </button>
   )
 }

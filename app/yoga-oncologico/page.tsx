@@ -7,13 +7,14 @@ import { Button } from "@/components/ui/button"
 import { preguntasFrecuentes } from "@/content/primeraVez"
 import { accionPrincipal, whatsappUrl } from "@/content/site"
 import { yogaOncologico } from "@/content/yogaOncologico"
+import { metadatosDePagina } from "@/lib/metadatos"
 
-export const metadata: Metadata = {
-  title: "Yoga oncológico",
-  description:
-    "Yoga oncológico en YOGA Rituals, Gandia: práctica adaptada para quien está pasando por un proceso oncológico, con o sin experiencia previa. Escríbenos antes de empezar.",
-  alternates: { canonical: "/yoga-oncologico" },
-}
+export const metadata: Metadata = metadatosDePagina({
+  titulo: "Yoga oncológico",
+  descripcion:
+    "Yoga oncológico en Gandia: práctica adaptada para quien está pasando por un proceso oncológico, con o sin experiencia. Escríbenos antes de empezar.",
+  ruta: "/yoga-oncologico",
+})
 
 /**
  * Yoga oncológico.

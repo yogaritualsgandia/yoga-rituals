@@ -9,13 +9,14 @@ import { Button } from "@/components/ui/button"
 import { breathwork } from "@/content/breathwork"
 import { avisoFotosProvisionales, fotos } from "@/content/medios"
 import { accionPrincipal, whatsappUrl } from "@/content/site"
+import { metadatosDePagina } from "@/lib/metadatos"
 
-export const metadata: Metadata = {
-  title: "Breathwork",
-  description:
-    "Sesiones individuales de breathwork en Gandia, con formación Inbreath: trabajo de respiración consciente para soltar lo que el cuerpo guarda. 90 minutos, sin experiencia previa.",
-  alternates: { canonical: "/breathwork" },
-}
+export const metadata: Metadata = metadatosDePagina({
+  titulo: "Breathwork",
+  descripcion:
+    "Sesiones individuales de breathwork en Gandia: respiración consciente para soltar lo que el cuerpo guarda. 90 minutos, sin experiencia previa.",
+  ruta: "/breathwork",
+})
 
 /**
  * Breathwork.

@@ -7,13 +7,14 @@ import { Button } from "@/components/ui/button"
 import { talleresColegios } from "@/content/clases"
 import { retiros } from "@/content/retiros"
 import { accionPrincipal, whatsappUrl } from "@/content/site"
+import { metadatosDePagina } from "@/lib/metadatos"
 
-export const metadata: Metadata = {
-  title: "Retiros y eventos",
-  description:
-    "Retiro de Yoga en Zarra con YOGA Rituals: un fin de semana de yoga, pranayamas, meditación y paseos por el Bosque Encantado, con alojamiento y comidas incluidos.",
-  alternates: { canonical: "/retiros" },
-}
+export const metadata: Metadata = metadatosDePagina({
+  titulo: "Retiros y eventos",
+  descripcion:
+    "Retiro de Yoga en Zarra con YOGA Rituals: un fin de semana de yoga, pranayama, meditación y paseos por el Bosque Encantado, con alojamiento y comidas.",
+  ruta: "/retiros",
+})
 
 /**
  * Retiros y eventos.

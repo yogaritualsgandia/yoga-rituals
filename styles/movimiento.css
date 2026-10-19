@@ -220,6 +220,25 @@ html.lenis body {
   animation-delay: calc(var(--i, 0) * var(--paso, 20ms));
 }
 
+/* Al cerrar, las letras se van antes que el panel, todas a la vez y sin
+   esperar turno. Cerrar no es escribir al revés: es retirar lo que ya no está.
+   Si las letras se quedaran mientras el panel se pliega, se verían apretarse
+   contra el borde de abajo; y si se fueran una detrás de otra, cerrar tardaría
+   más que abrir, que es exactamente lo contrario de lo que espera quien acaba
+   de pulsar. Setenta milisegundos: se nota que se van, no se hace esperar. */
+@keyframes borrar-letra {
+  to {
+    opacity: 0;
+  }
+}
+
+[data-movimiento="listo"]
+  [data-slot="accordion-content"][data-state="closed"]
+  [data-revelar="escrito"]
+  .letra {
+  animation: borrar-letra 70ms linear both;
+}
+
 /* --- La salida de emergencia de lo escondido -----------------------------
    Un bloque de más abajo se enseña cuando su borde de arriba cruza el 88 % de
    la pantalla. El navegador, cuando se llega con el tabulador a algo que está

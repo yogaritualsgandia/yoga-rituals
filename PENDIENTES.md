@@ -44,20 +44,18 @@ por CSS). Si lo tiene, mándelo.
 
 ## 3. Las reseñas de Google
 
-Las tres reseñas que hay en la portada son reales. Lo que falta es el
-**enlace directo a cada una**: hoy las tres llevan a la ficha del estudio en
-Google, porque desde fuera no hay forma de sacar el enlace de una reseña
-concreta. Se saca así: en Google Maps, abrir la reseña, «Compartir» y copiar el
-enlace. Son tres enlaces y quedan puestos uno a uno.
+Resuelto. En la portada hay cuatro reseñas reales, cada una con el enlace a su
+propia reseña —no a la ficha del estudio—, copiado del diálogo «Compartir
+reseña» de Google Maps. La primera es larga y lleva «Leer más». Si alguna se
+borra en Google, su enlace deja de funcionar: se sustituye por otra y listo.
 
 ## 4. Textos legales
 
-`/aviso-legal`, `/privacidad` y `/cookies` están vacíos, con un aviso de que
-están en preparación. Hacen falta los tres textos (titular, NIF, dirección,
-correo de contacto, y —si algún día se pone analítica— la política de cookies).
-
-Hay una decisión de por medio: **¿se esconden esas tres páginas hasta que estén
-escritas, o se quedan visibles con el aviso?** Ahora están visibles con el aviso.
+Escritos: `/aviso-legal`, `/privacidad` y `/cookies` describen lo que hace la
+web de verdad, incluidos Google Analytics y Microsoft Clarity y el
+consentimiento previo. Solo falta un dato: el **NIF**. En `content/legal.ts`
+aparece entre corchetes como `[NIF de Susana Estruch Espinós]`; cuando llegue,
+se sustituye esa línea y no hay que tocar nada más.
 
 ## 5. Horario y clases
 

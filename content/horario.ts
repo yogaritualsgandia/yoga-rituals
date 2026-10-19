@@ -96,9 +96,16 @@ export function duracionEnPalabras(minutos: number): string {
  * ahora consta. Es la pregunta que más frena a quien paga mes a mes.
  */
 export const horarioLibre = {
-  titular: "Diseñas tu semana",
+  titular: "Tú diseñas tu semana",
   entradilla:
     "En YOGA Rituals no hay grupos cerrados ni reservas. El horario de abajo son las horas a las que el estudio está abierto: eliges el día que te encaja y vienes. Sin avisar y sin apuntarte a nada.",
+  /**
+   * Las sesiones de 35 minutos se anuncian como «exprés» en la tabla y, sin
+   * esta frase, quien las ve no sabe cuánto cuentan. Dos exprés son una clase
+   * normal: es la regla del estudio, no una interpretación.
+   */
+  notaExpres:
+    "Las sesiones de 35 minutos son clases exprés: dos exprés cuentan como una clase normal.",
   escenarios: [
     {
       situacion: "Hoy te ha surgido algo y no llegas.",
@@ -109,11 +116,6 @@ export const horarioLibre = {
       situacion: "Trabajas a turnos y cada semana es distinta.",
       respuesta:
         "Vienes cuando puedes, no cuando te toca. Hay clases de mañana, de mediodía y de tarde.",
-    },
-    {
-      situacion: "Nunca he hecho yoga y no soy flexible.",
-      respuesta:
-        "No hace falta ser flexible para empezar. Es justo al contrario: se empieza y la flexibilidad llega.",
     },
     {
       situacion: "Hay días que quiero una clase larga y días que no tengo ni media hora.",

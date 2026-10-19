@@ -6,13 +6,14 @@ import { Pagina } from "@/components/layout/pagina"
 import { Button } from "@/components/ui/button"
 import { whatsappUrl } from "@/content/site"
 import { yogaNidra } from "@/content/yogaNidra"
+import { metadatosDePagina } from "@/lib/metadatos"
 
-export const metadata: Metadata = {
-  title: "Yoga Nidra",
-  description:
+export const metadata: Metadata = metadatosDePagina({
+  titulo: "Yoga Nidra",
+  descripcion:
     "Yoga Nidra en Gandia: meditación guiada y relajación profunda, tumbado y en Savasana. Sesiones de 90 minutos, sin experiencia previa. YOGA Rituals.",
-  alternates: { canonical: "/yoga-nidra" },
-}
+  ruta: "/yoga-nidra",
+})
 
 /**
  * Yoga Nidra.

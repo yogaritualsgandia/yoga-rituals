@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react"
 import { Contenedor } from "@/components/layout/contenedor"
 import { Button } from "@/components/ui/button"
 import { avisoCookies } from "@/content/consentimiento"
-import { hayAnalitica } from "@/lib/analitica"
+import { hayMedicion } from "@/lib/analitica"
 
 import { useConsentimiento } from "./proveedor-consentimiento"
 
@@ -39,7 +39,7 @@ import { useConsentimiento } from "./proveedor-consentimiento"
 export function AvisoCookies() {
   const { estado, decidir } = useConsentimiento()
 
-  const abierto = hayAnalitica && estado === "pendiente"
+  const abierto = hayMedicion && estado === "pendiente"
 
   const marco = useRef<HTMLDivElement>(null)
 
@@ -89,7 +89,7 @@ export function AvisoCookies() {
       <Contenedor className="pb-4">
         <div
           role="region"
-          aria-label="Aviso sobre las cookies"
+          aria-label="Uso de cookies"
           className="aviso-cookies__caja pointer-events-auto flex flex-col gap-5 rounded-lg border border-line bg-surface p-5 shadow-lg sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:p-6"
         >
           <div className="max-w-[58ch]">

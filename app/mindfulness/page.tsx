@@ -6,13 +6,14 @@ import { Pagina } from "@/components/layout/pagina"
 import { Button } from "@/components/ui/button"
 import { mindfulness } from "@/content/mindfulness"
 import { accionPrincipal, whatsappUrl } from "@/content/site"
+import { metadatosDePagina } from "@/lib/metadatos"
 
-export const metadata: Metadata = {
-  title: "Mindfulness",
-  description:
-    "Sesión de Mindfulness en la Biblioteca Benipeixcar-Raval de Gandia: todos los miércoles a las 10:30, una hora, desde hace más de 7 años. Con Susana Estruch, monitora de Mindfulness MBTB.",
-  alternates: { canonical: "/mindfulness" },
-}
+export const metadata: Metadata = metadatosDePagina({
+  titulo: "Mindfulness",
+  descripcion:
+    "Mindfulness en la Biblioteca Benipeixcar-Raval de Gandia: miércoles a las 10:30, una hora. Con Susana Estruch, monitora de Mindfulness MBTB.",
+  ruta: "/mindfulness",
+})
 
 /**
  * Mindfulness.

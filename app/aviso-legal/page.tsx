@@ -2,14 +2,15 @@ import type { Metadata } from "next"
 
 import { PaginaLegal } from "@/components/layout/pagina-legal"
 import { documentosLegales } from "@/content/legal"
+import { metadatosDePagina } from "@/lib/metadatos"
 
 const documento = documentosLegales.avisoLegal
 
-export const metadata: Metadata = {
-  title: documento.titulo,
-  description: documento.descripcion,
-  alternates: { canonical: documento.ruta },
-}
+export const metadata: Metadata = metadatosDePagina({
+  titulo: documento.titulo,
+  descripcion: documento.descripcion,
+  ruta: documento.ruta,
+})
 
 /**
  * Aviso legal.

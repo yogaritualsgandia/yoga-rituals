@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs"
+import { join } from "node:path"
+
 import AxeBuilder from "@axe-core/playwright"
 import { expect, test, type Page } from "@playwright/test"
 
@@ -566,6 +569,32 @@ test.describe("Buscadores", () => {
       const primero = await request.get(desde, { maxRedirects: 0 })
       expect(primero.status(), `${desde} tendría que ser un 301`).toBe(301)
       expect(primero.headers()["location"] ?? "").toContain(hacia)
+    }
+  })
+
+  /*
+   * La lista y el archivo que de verdad se publica.
+   *
+   * Con `output: "export"` las redirecciones de `next.config.ts` no las aplica
+   * nadie: el servidor de Netlify solo lee `_redirects` de la carpeta que se
+   * publica. Tener la lista en la configuración daba la falsa impresión de que
+   * estaba resuelto, y las direcciones viejas devolvían 404. Ahora la fuente es
+   * `public/_redirects` y esta prueba impide que las dos se separen.
+   */
+  test("la lista de redirecciones y public/_redirects dicen lo mismo", () => {
+    const texto = readFileSync(join(process.cwd(), "public", "_redirects"), "utf8")
+    const lineas = texto
+      .split(/\r?\n/)
+      .map((linea) => linea.trim())
+      .filter((linea) => linea && !linea.startsWith("#"))
+
+    for (const { desde, hacia } of REDIRECCIONES_ANTIGUAS) {
+      const regla = lineas.find((linea) => linea.split(/\s+/)[0] === desde)
+      expect(regla, `${desde} falta en public/_redirects`).toBeTruthy()
+
+      const [, destino, estado] = regla!.split(/\s+/)
+      expect(destino, `${desde} apunta a otro sitio`).toBe(hacia)
+      expect(estado, `${desde} tiene que ser un 301`).toBe("301")
     }
   })
 })

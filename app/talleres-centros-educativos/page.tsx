@@ -3,16 +3,18 @@ import Link from "next/link"
 
 import { Contenedor } from "@/components/layout/contenedor"
 import { Pagina } from "@/components/layout/pagina"
+import { Contador } from "@/components/movimiento/contador"
 import { Button } from "@/components/ui/button"
 import { talleresColegios } from "@/content/clases"
 import { accionPrincipal, site, whatsappUrl } from "@/content/site"
+import { metadatosDePagina } from "@/lib/metadatos"
 
-export const metadata: Metadata = {
-  title: "Talleres en centros educativos",
-  description:
-    "Talleres de educación postural, mindfulness y Yoga Nidra «Calma en el examen» en colegios e institutos de Gandia y La Safor. Más de 500 talleres realizados desde 2017.",
-  alternates: { canonical: "/talleres-centros-educativos" },
-}
+export const metadata: Metadata = metadatosDePagina({
+  titulo: "Talleres en centros educativos",
+  descripcion:
+    "Talleres de educación postural, mindfulness y Yoga Nidra «Calma en el examen» en colegios e institutos de Gandia y La Safor. Más de 500 desde 2017.",
+  ruta: "/talleres-centros-educativos",
+})
 
 /**
  * Talleres en centros educativos.
@@ -46,7 +48,9 @@ export default function PaginaTalleresCentrosEducativos() {
           <div className="lg:col-span-4 lg:col-start-9">
             <p className="etiqueta">En centros educativos, desde 2017</p>
             <p className="font-heading mt-2 text-4xl">
-              {talleresColegios.talleresRealizadosTitular}
+              {talleresColegios.talleresRealizadosPartes.antes}
+              <Contador valor={talleresColegios.talleresRealizados} />
+              {talleresColegios.talleresRealizadosPartes.despues}
             </p>
           </div>
         </Contenedor>

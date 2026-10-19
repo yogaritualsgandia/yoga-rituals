@@ -4,3 +4,40 @@
 
 [build.environment]
   NODE_VERSION = "24"
+
+  # Los identificadores de medición no son secretos: viajan dentro del HTML y
+  # cualquiera los puede leer. Se dejan aquí para que un despliegue no dependa
+  # de que alguien se acuerde de ponerlos en el panel. `NEXT_PUBLIC_` significa
+  # que Next los mete en el paquete al compilar: cambiarlos obliga a republicar.
+  NEXT_PUBLIC_GA_ID = "G-QXR1789H2K"
+  NEXT_PUBLIC_CLARITY_ID = "z05bd7dg6k"
+
+# ── Límite de peticiones ───────────────────────────────────────────────────
+#
+# La web es estática: no hay servidor que tumbar ni base de datos que llenar.
+# Lo que sí puede pasar es que alguien pida páginas en bucle y gaste ancho de
+# banda, y el ancho de banda es lo que se paga. Esto lo corta en el borde de
+# Netlify, antes de que la petición llegue al sitio.
+#
+# Trescientas peticiones por minuto y por dirección IP es holgado para una
+# persona —una visita normal gasta entre treinta y sesenta, contando estilos,
+# guiones, fuentes e imágenes— y estrecho para un rastreador que va a mil. Al
+# pasarse, Netlify responde 429 durante un minuto.
+#
+# No es una barrera contra un ataque distribuido: para eso está la protección
+# DDoS que Netlify ya trae puesta. Esto es para el caso barato y frecuente, que
+# es un solo sitio machacando. Y no sustituye al tope de gasto: en el plan
+# gratuito el sitio se pausa al agotar los créditos y no genera factura.
+# La regla no redirige nada: `to` apunta al mismo sitio que `from`, así que
+# Netlify la usa solo como soporte del límite. Sin `status` y sin `force` a
+# propósito: es la forma que documenta Netlify para proteger el sitio entero, y
+# poner un 200 o un `force` aquí sí convertiría cada petición en una reescritura
+# real de sí misma.
+[[redirects]]
+  from = "/*"
+  to = "/:splat"
+
+  [redirects.rate_limit]
+    window_limit = 300
+    window_size = 60
+    aggregate_by = ["ip", "domain"]

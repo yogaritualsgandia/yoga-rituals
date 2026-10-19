@@ -280,6 +280,27 @@ export function ProveedorMovimiento({ children }: { children: ReactNode }) {
     window.scrollTo(0, 0)
   }, [pausado])
 
+  /* Al cambiar de página se empieza por arriba.
+   *
+   * Next ya lo intenta, pero con Lenis por medio el desplazamiento suavizado se
+   * queda con la posición anterior y una página nueva puede aparecer a media
+   * altura, como si se hubiera heredado el scroll de la anterior. Se pide a
+   * Lenis un salto inmediato —no una animación: nadie ha pedido recorrer esa
+   * distancia— y, si todavía no ha llegado, se usa el del navegador. */
+  const primeraRuta = useRef(true)
+
+  useEffect(() => {
+    if (primeraRuta.current) {
+      primeraRuta.current = false
+      return
+    }
+
+    const suave = lenis.current
+
+    if (suave) suave.scrollTo(0, { immediate: true })
+    window.scrollTo(0, 0)
+  }, [ruta])
+
   useEffect(() => {
     const raiz = document.documentElement
 

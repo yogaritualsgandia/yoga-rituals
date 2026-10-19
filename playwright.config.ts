@@ -66,7 +66,11 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: "npm run build && npm run start -- --port 3100",
+    /* `next start` no existe con `output: "export"`. Este servidor sirve la
+       carpeta `out/` como lo hará Netlify: direcciones limpias, 301 de
+       `public/_redirects`, 404 con su estado y las cabeceras de
+       `public/_headers`. */
+    command: "npm run build && node scripts/servidor-pruebas.mjs",
     url: "http://localhost:3100",
     reuseExistingServer: false,
     timeout: 240_000,

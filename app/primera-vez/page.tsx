@@ -10,6 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { metadatosDePagina } from "@/lib/metadatos"
 import { Button } from "@/components/ui/button"
 import {
   aTenerEnCuenta,
@@ -20,12 +21,12 @@ import {
 } from "@/content/primeraVez"
 import { whatsappUrl } from "@/content/site"
 
-export const metadata: Metadata = {
-  title: "Primera vez",
-  description:
+export const metadata: Metadata = metadatosDePagina({
+  titulo: "Primera vez",
+  descripcion:
     "Vienes por primera vez a YOGA Rituals, en Gandia: qué llevar, cómo empezar sin prisa y las dudas más habituales antes de tu primera clase.",
-  alternates: { canonical: "/primera-vez" },
-}
+  ruta: "/primera-vez",
+})
 
 /**
  * Primera vez.

@@ -4,15 +4,19 @@ import { BotonReserva } from "@/components/layout/boton-reserva"
 import { Contenedor } from "@/components/layout/contenedor"
 import { Pagina } from "@/components/layout/pagina"
 import { bonos, formasDePago, planes, pruebaGratuita } from "@/content/precios"
+import { metadatosDePagina } from "@/lib/metadatos"
 
-export const metadata: Metadata = {
-  title: "Precios",
-  description:
-    "Precios de YOGA Rituals en Gandia: desde 40 € al mes por una clase semanal, con opción trimestral más económica. Bono de 6 clases y clase suelta. Primera clase de prueba gratuita.",
-  alternates: { canonical: "/precios" },
-}
+export const metadata: Metadata = metadatosDePagina({
+  titulo: "Precios",
+  descripcion:
+    "Precios de YOGA Rituals en Gandia: desde 40 € al mes por una clase semanal, con opción trimestral. Bono de 6 clases y clase suelta. Primera clase gratis.",
+  ruta: "/precios",
+})
 
-const euros = (cantidad: number) => `${cantidad} €`
+/* El espacio que separa la cifra del euro es duro (U+00A0) a propósito: con un
+   espacio normal, a 375 px el navegador partía la línea entre «40» y «€» y el
+   símbolo se quedaba solo al principio del renglón. Un precio no se parte. */
+const euros = (cantidad: number) => `${cantidad}\u00A0€`
 
 /**
  * El precio equivalente al mes de cada plan trimestral. No es un cálculo
@@ -63,7 +67,7 @@ export default function PaginaPrecios() {
                   </th>
 
                   <td className="py-6 pr-4">
-                    <span className="font-heading text-2xl tabular-nums">
+                    <span className="font-heading text-2xl tabular-nums whitespace-nowrap">
                       {euros(plan.mensual)}
                     </span>
                     <span className="paso-pequeno mt-1 block text-ink-soft">
@@ -72,7 +76,7 @@ export default function PaginaPrecios() {
                   </td>
 
                   <td className="py-6">
-                    <span className="font-heading text-2xl tabular-nums">
+                    <span className="font-heading text-2xl tabular-nums whitespace-nowrap">
                       {euros(plan.trimestral)}
                     </span>
                     <span className="paso-pequeno mt-1 block text-ink-soft">
@@ -100,7 +104,7 @@ export default function PaginaPrecios() {
                         {bono.nota}
                       </span>
                     </dt>
-                    <dd className="font-heading text-xl tabular-nums">
+                    <dd className="font-heading text-xl tabular-nums whitespace-nowrap">
                       {euros(bono.precio)}
                     </dd>
                   </div>

@@ -25,5 +25,20 @@
 
 export const idAnalitica = process.env.NEXT_PUBLIC_GA_ID ?? ""
 
+/** Microsoft Clarity: mapas de calor y grabaciones de sesión. */
+export const idClaridad = process.env.NEXT_PUBLIC_CLARITY_ID ?? ""
+
 /** ¿Hay analítica configurada? Es la pregunta que hace todo lo demás. */
 export const hayAnalitica = idAnalitica !== ""
+
+/** ¿Hay Clarity configurado? */
+export const hayClaridad = idClaridad !== ""
+
+/**
+ * ¿Se mide algo, sea lo que sea?
+ *
+ * El cartel no pregunta «¿aceptas Google Analytics?»: pregunta si se puede
+ * medir. Si mañana se quita una herramienta y queda la otra, o se añade una
+ * tercera, el cartel sigue saliendo sin tocar nada.
+ */
+export const hayMedicion = hayAnalitica || hayClaridad

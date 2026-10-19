@@ -37,7 +37,7 @@ const sourceSans = Source_Sans_3({
 })
 
 const descripcion =
-  "Estudio de yoga en Gandia, en el centro. Hatha, Vinyasa, Yoga Nidra, mindfulness, respiración y yoga oncológico. Horarios libres: vienes cuando puedes, sin reservar. Primera clase de prueba gratuita."
+  "Yoga en el centro de Gandia: Hatha, Vinyasa, Yoga Nidra, mindfulness y yoga oncológico. Horarios libres, sin reservar. Primera clase de prueba gratis."
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),

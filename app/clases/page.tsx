@@ -13,13 +13,14 @@ import {
   practicasFueraDeLaSala,
   type Practica,
 } from "@/content/clases"
+import { metadatosDePagina } from "@/lib/metadatos"
 
-export const metadata: Metadata = {
-  title: "Clases y sesiones",
-  description:
-    "Todo lo que se puede practicar en YOGA Rituals, Gandia: Hatha, Vinyasa, Yoga Nidra, Mindfulness, Breathwork y Yoga oncológico, más los retiros y los talleres en centros educativos.",
-  alternates: { canonical: "/clases" },
-}
+export const metadata: Metadata = metadatosDePagina({
+  titulo: "Clases y sesiones",
+  descripcion:
+    "Todo lo que se puede practicar en YOGA Rituals, Gandia: Hatha, Vinyasa, Yoga Nidra, Mindfulness, Breathwork y Yoga oncológico, retiros y talleres.",
+  ruta: "/clases",
+})
 
 /**
  * Clases.

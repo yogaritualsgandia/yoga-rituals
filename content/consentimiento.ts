@@ -23,10 +23,10 @@
 
 export const avisoCookies = {
   /** El antetítulo del cartel. Corto: es una etiqueta, no un titular. */
-  etiqueta: "Cookies",
+  etiqueta: "Uso de cookies",
   texto:
-    "Para saber cuánta gente entra y qué páginas se leen usamos Google Analytics. Se enciende solo si le das a aceptar; si rechazas, la web funciona igual y no se mide nada.",
-  enlace: "Qué son estas cookies",
+    "Utilizamos Google Analytics y Microsoft Clarity con el fin de conocer el número de visitantes, las páginas más consultadas y los puntos de la navegación que pueden mejorarse. Estas herramientas solo se activarán si aceptas su uso. En caso de rechazarlas, el sitio web funcionará con normalidad y no se recogerá ningún dato de medición.",
+  enlace: "Más información",
   aceptar: "Aceptar todas",
   rechazar: "Rechazar todas",
 } as const
@@ -42,11 +42,11 @@ export const avisoCookies = {
 export const controlCookies = {
   titulo: "Cambiar lo que has elegido",
   texto:
-    "El botón borra lo que hayas elegido, borra las cookies de Google si están puestas y te vuelve a preguntar.",
+    "El botón borra lo que hayas elegido, borra las cookies de Google y de Microsoft si están puestas y te vuelve a preguntar.",
   boton: "Cambiar mi decisión",
   estados: {
-    si: "Ahora mismo la analítica está encendida: se cuentan las visitas.",
-    no: "Ahora mismo la analítica está apagada: no se cuenta ninguna visita.",
+    si: "Ahora mismo la medición está encendida: se cuentan las visitas y se generan mapas de calor.",
+    no: "Ahora mismo la medición está apagada: no se cuenta ninguna visita.",
     pendiente: "Todavía no has elegido.",
   },
 } as const

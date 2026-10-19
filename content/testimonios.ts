@@ -1,9 +1,15 @@
 /**
  * Lo que dicen quienes ya vinieron.
  *
- * Los tres están copiados de la web actual, con sus nombres y sin recortar. Son
- * suyos y no se tocan: ni los párrafos largos se acortan para que cuadren mejor
- * en la rejilla, ni las faltas de acentos se corrigen.
+ * Son reseñas reales de la ficha de Google del estudio, copiadas tal cual: ni
+ * se acortan por el medio ni se les corrigen los acentos. Cada una enlaza a su
+ * propia reseña —no a la lista—, que es el enlace que se copia desde el diálogo
+ * «Compartir reseña» de Google Maps. Si alguien quiere comprobar que dice eso,
+ * pulsa su nombre y llega exactamente ahí.
+ *
+ * La primera es larga de verdad, así que se enseñan los dos primeros párrafos y
+ * el resto se lee en Google con «Leer más». Es la única que necesita el corte;
+ * las otras tres caben enteras.
  *
  * Van en la portada, entre los talleres y el cierre. Estuvieron en la página de
  * Susana, al lado de su biografía, y ahí no hacían su trabajo: una opinión al
@@ -12,48 +18,51 @@
  * esto ya funciona.
  */
 
-import { mapaUrl } from "./site"
-
 export type Testimonio = {
-  texto: string
+  /** Un párrafo por elemento, como los escribió quien los firmó. */
+  parrafos: string[]
   autor: string
-  /** Las estrellas que ya venían puestas con cada opinión. */
   estrellas: number
-  /**
-   * Dónde está publicada la opinión.
-   *
-   * [PENDIENTE: la dirección de cada reseña, una por una]. Las tres están en la
-   * ficha de Google del estudio, y hoy las tres apuntan ahí: es donde se pueden
-   * leer enteras, con su autor y su estrellas, que es de lo que se trata. Para
-   * llevar a la reseña exacta hace falta el enlace de cada una, y ese no se
-   * puede adivinar: se copia de Google. El día que llegue, se cambia aquí y los
-   * nombres dejan de llevar todos al mismo sitio.
-   */
+  /** La reseña exacta, no la ficha del estudio. */
   url: string
+  /** Cuántos párrafos se ven antes del «Leer más». Si falta, se ven todos. */
+  visibles?: number
 }
-
-const FICHA_DE_GOOGLE = mapaUrl
 
 export const testimonios: Testimonio[] = [
   {
-    texto:
-      "La profesora es muy agradable, hace las clases muy amenas. El lugar es céntrico en Gandía y el ambiente del local es relajante y tranquilo. No pensaba que el yoga fuera tanta gimnasia (pensaba más en posturas y relajación) pero estoy muy contento de los resultados y solo llevo 3 semanas. Tiene muchos horarios sobre todo por las mañanas. Yo contacte con ella por WhatsApp y me solucionó todas las dudas. Para los principiantes tiene infinidad de artículos para tener las posturas más cómodas al principio por lo que no hace falta comprarse nada para empezar. Solo ganas de probar y empezar a ver los resultados. Si te apuntas un trimestre los precios son muy económicos.",
-    autor: "Roberto R.",
+    parrafos: [
+      "Decidí empezar a hacer Yoga con Susana y fue un acierto. Las sensaciones de bienestar, el equilibrio cuerpo/mente son increíbles. Una vez empiezas las clases ves que tu cuerpo está más “ligero”, menos pesado y a partir de ahí notas los resultados en el día a día.",
+      "Las clases se adaptan según las necesidades de cada persona y según su “elasticidad”, además nos sigue paso a paso corrigiendo las posturas en las clases.",
+      "Al final de la clase, la relajación nos lleva a un nivel profundo y agradable.",
+    ],
+    autor: "Sergio Gemelli",
     estrellas: 5,
-    url: FICHA_DE_GOOGLE,
+    url: "https://maps.app.goo.gl/WSxTxZgNGVvRpRae9",
+    visibles: 2,
   },
   {
-    texto:
-      "Aquí se practica un Hatha Yoga completo y equilibrado, pero a la vez exigente y que en ocasiones te hace sudar. Un Yoga sin aparatos ni artilugios que sólo a través de las posturas ejercita todo el cuerpo, mejora la flexibilidad y alivia los dolores de espalda. El beneficio se aprecia al instante. Todo ello con una profesora experimentada y en una sala acogedora. Mejor imposible!",
-    autor: "Barbara K.",
+    parrafos: [
+      "Sin duda las mejores clases de Yoga de Gandia, descubrir las clases de Yoga de Susana ha sido un verdadero regalo. Profesionalidad, dedicación y amor por el yoga, así es Susana. Os invito a probar, os encantará 🙏",
+    ],
+    autor: "Karly Mas",
     estrellas: 5,
-    url: FICHA_DE_GOOGLE,
+    url: "https://maps.app.goo.gl/Bnwp32sLatU5CC5W7",
   },
   {
-    texto:
-      "Es verdaderamente especial; centro 100% recomendable. Un refugio de tranquilidad y bienestar que cuenta con horarios flexibles.",
-    autor: "Anna J.",
+    parrafos: [
+      "Es una excelente profesora, si no entiendes algo te lo explica detalladamente. No hace falta reservar las clases, lo que me ha salvado de días de estrés. Esto no se encuentra en ningún otro sitio, es perfecto lo recomiendo muchísimo!!!",
+    ],
+    autor: "Cento",
     estrellas: 5,
-    url: FICHA_DE_GOOGLE,
+    url: "https://maps.app.goo.gl/UAKXKAYLsaaywDnTA",
+  },
+  {
+    parrafos: [
+      "Susana es una gran profesional. Me encantan sus clases y siento sus beneficios a nivel mental, físico y emocional. Además, los horarios son flexibles. Recomiendo su Hatha Yoga 100%.",
+    ],
+    autor: "Ana Carla",
+    estrellas: 5,
+    url: "https://maps.app.goo.gl/yUiUK9RUaodPFMZ5A",
   },
 ]

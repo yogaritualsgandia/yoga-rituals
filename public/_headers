@@ -1,0 +1,28 @@
+# Cabeceras de Netlify.
+#
+# Antes no había ninguna, y eso deja tres cosas abiertas que no se ven en una
+# captura de pantalla: la web se puede meter dentro de un iframe ajeno
+# (clickjacking), el navegador adivina tipos de archivo, y el referrer se manda
+# entero a quien sea. En un sitio estático sin sesiones ni pagos el riesgo es
+# bajo, pero son cuatro líneas y se quitan de la lista.
+#
+# La CSP se escribe para que NO rompa nada de lo que hay:
+#  · 'unsafe-inline' en scripts es obligatorio: Next mete el arranque de la
+#    página en línea, y el JSON-LD también. Una CSP con hashes habría que
+#    regenerarla en cada build.
+#  · Google solo aparece si se acepta el cartel, pero los dominios se dejan
+#    puestos para no tener que tocar esto el día que se configure.
+#  · Las fuentes son de casa (next/font las sirve desde /_next), así que
+#    font-src 'self' basta.
+
+/*
+  X-Frame-Options: DENY
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https://scripts.clarity.ms; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com https://*.clarity.ms https://c.bing.com; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com https://*.clarity.ms https://c.bing.com; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+
+# Los archivos de /_next llevan un hash en el nombre: si cambian, cambia el
+# nombre. Se pueden cachear para siempre. El HTML no se toca: Netlify ya manda
+# sus ETag y así un cambio se ve al recargar.

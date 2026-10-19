@@ -65,6 +65,57 @@ export function PaginaLegal({
                   </dl>
                 ) : null}
 
+                {bloque.tabla ? (
+                  /* Envoltorio con scroll propio: la tabla de cookies tiene
+                     cuatro columnas y a 375 px no caben sin romper palabras. */
+                  <div className="mt-6 overflow-x-auto">
+                    <table className="w-full min-w-[34rem] border-collapse text-left">
+                      <thead>
+                        <tr className="border-b border-line">
+                          {bloque.tabla.columnas.map((columna) => (
+                            <th
+                              key={columna}
+                              scope="col"
+                              className="etiqueta py-3 pr-4 font-normal last:pr-0"
+                            >
+                              {columna}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {bloque.tabla.filas.map((fila) => (
+                          <tr
+                            key={fila[0]}
+                            className="border-b border-line align-top"
+                          >
+                            {fila.map((celda, i) =>
+                              i === 0 ? (
+                                <th
+                                  key={celda}
+                                  scope="row"
+                                  className="paso-pequeno py-4 pr-4 font-normal"
+                                >
+                                  <code className="font-mono text-[0.95em]">
+                                    {celda}
+                                  </code>
+                                </th>
+                              ) : (
+                                <td
+                                  key={`${fila[0]}-${i}`}
+                                  className="paso-pequeno py-4 pr-4 text-ink-soft last:pr-0"
+                                >
+                                  {celda}
+                                </td>
+                              ),
+                            )}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : null}
+
                 {bloque.parrafos ? (
                   <div className="mt-5 flex flex-col gap-4">
                     {bloque.parrafos.map((parrafo) => (

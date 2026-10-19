@@ -1,26 +1,31 @@
 import type { Metadata } from "next"
 
+import { ControlConsentimiento } from "@/components/consentimiento/control-consentimiento"
 import { PaginaLegal } from "@/components/layout/pagina-legal"
 import { documentosLegales } from "@/content/legal"
+import { metadatosDePagina } from "@/lib/metadatos"
 
 const documento = documentosLegales.cookies
 
-export const metadata: Metadata = {
-  title: documento.titulo,
-  description: documento.descripcion,
-  alternates: { canonical: documento.ruta },
-}
+export const metadata: Metadata = metadatosDePagina({
+  titulo: documento.titulo,
+  descripcion: documento.descripcion,
+  ruta: documento.ruta,
+})
 
 /**
  * Cookies.
  *
- * La página más corta de las tres, porque no hay nada que contar: esta web no
- * pone ninguna cookie. Lo único que se guarda en el navegador es el modo oscuro
- * que elige quien entra, y la propia Agencia Española de Protección de Datos
- * considera esa preferencia una cookie técnica exenta de consentimiento. Por eso
- * no hay cartel de aceptar, y esa es la parte que hay que explicar: la ausencia
- * de cartel se entiende mejor si se cuenta por qué no hace falta.
+ * El texto cuenta qué se mide y qué no. Debajo va el control para desdecirse:
+ * retirar el permiso tiene que costar lo mismo que darlo, y el sitio donde se
+ * explica qué son las cookies es el sitio donde tiene que estar el botón. Sin
+ * él, aceptar sería un botón en la primera visita y arrepentirse, un trámite
+ * escondido en la configuración del navegador.
  */
 export default function PaginaCookies() {
-  return <PaginaLegal documento={documento} />
+  return (
+    <PaginaLegal documento={documento}>
+      <ControlConsentimiento />
+    </PaginaLegal>
+  )
 }

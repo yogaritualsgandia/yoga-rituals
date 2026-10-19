@@ -265,6 +265,18 @@ export const talleresColegios = {
    * ejemplo— se escribe en minúscula, y para eso está `practicas`.
    */
   talleresRealizadosTitular: "Más de 500 talleres realizados",
+  /**
+   * La misma frase, partida por donde va la cifra.
+   *
+   * En la portada el titular se anima palabra a palabra y lleva el número
+   * escrito. En su propia página, en cambio, la cifra se cuenta con el
+   * contador, y para eso hace falta poder meter el componente entre las dos
+   * mitades sin repetir el texto en dos sitios que luego se corrigen a medias.
+   */
+  talleresRealizadosPartes: {
+    antes: "Más de ",
+    despues: " talleres realizados",
+  },
   /** A quién van dirigidos, con sus palabras. */
   destinatarios: "Primaria, ESO, Bachillerato y Formación Profesional",
   intro:

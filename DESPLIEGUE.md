@@ -132,13 +132,31 @@ lista entera, con todo lo que hay que pedirle a Susana, está en `PENDIENTES.md`
   SVG, las dos versiones sobran.
 - **La imagen para compartir.** Es una tarjeta crema con el logotipo. Cuando
   Susana mande una foto, se sustituye `public/compartir.png` y ya está.
-- **Los textos legales.** `/aviso-legal`, `/privacidad` y `/cookies` existen y
-  están enlazadas desde el pie, pero dentro llevan un aviso de que están en
-  preparación: falta el texto de las tres.
-- **Los enlaces de cada reseña.** Las tres de la portada son reales y llevan a
-  la ficha del estudio en Google; falta el enlace directo a cada una.
+- **El NIF del aviso legal.** En `/aviso-legal` aparece entre corchetes
+  `[NIF de Susana Estruch Espinós]`. Cuando llegue el número, se cambia en
+  `content/legal.ts` y no hay que tocar nada más.
 
-## 6. Cómo se publica a partir de ahora
+## 6. Que no llegue una factura rara
+
+La web es estática: no hay servidor que tumbar ni base de datos que llenar. Lo
+único que se paga es el ancho de banda, y hay dos seguros puestos:
+
+1. **El plan.** En el plan gratuito de Netlify hay un tope de 300 créditos al
+   mes —unos 15 GB de ancho de banda—. Al agotarlos, la web se pausa hasta el
+   mes siguiente: **no genera factura**. Si algún día se pasa a un plan de pago,
+   deja la **recarga automática apagada** (viene apagada de fábrica): así los
+   créditos se acaban en vez de comprarse solos.
+2. **El límite de peticiones.** `netlify.toml` lleva una regla que corta a 300
+   peticiones por minuto y por dirección IP, y devuelve un `429` durante un
+   minuto. Una visita normal gasta entre treinta y sesenta peticiones, así que
+   nadie que esté leyendo la web la va a notar; un rastreador que va a mil, sí.
+
+Para comprobar que Netlify ha leído la regla, se mira el registro del
+despliegue, en la etapa **post-processing**: tiene que aparecer el límite. Si no
+aparece, la regla no ha pasado la validación y hay que revisarla, aunque el
+despliegue no falle por ello.
+
+## 7. Cómo se publica a partir de ahora
 
 Una vez conectado el repositorio, cada vez que se suba un cambio a la rama
 principal, Netlify reconstruye y publica sola, en un par de minutos, sin

@@ -1,0 +1,29 @@
+# Redirecciones de la web antigua.
+#
+# Este archivo TIENE que estar en `public/` para que Netlify lo publique en la
+# raíz del sitio. Mientras estuvo solo en `next.config.ts`, no servía de nada:
+# con `output: "export"` no hay servidor de Next que las aplique, así que las
+# direcciones viejas devolvían un 404. Se descubrió probando el export, no
+# leyendo la configuración.
+#
+# Se mantiene la misma lista que `REDIRECCIONES_ANTIGUAS` en `next.config.ts`,
+# y una prueba comprueba que las dos coinciden, para que no se separen.
+
+/actividades                       /clases                          301
+/actividades/                      /clases                          301
+/tarifas                           /precios                         301
+/tarifas/                          /precios                         301
+/minfulness                        /mindfulness                     301
+/minfulness/                       /mindfulness                     301
+/contacto-imagenes                 /                                301
+/contacto-imagenes/                /                                301
+/contacto                          /                                301
+/contacto/                         /                                301
+/talleres-en-centros-educativos    /talleres-centros-educativos     301
+/talleres-en-centros-educativos/   /talleres-centros-educativos     301
+/proximamente                      /                                301
+/proximamente/                     /                                301
+
+# El dominio viejo servía con www y sin www, las dos con un 200. Aquí se elige
+# una: la del canonical, sin www.
+https://www.yogarituals.es/*       https://yogarituals.es/:splat     301!

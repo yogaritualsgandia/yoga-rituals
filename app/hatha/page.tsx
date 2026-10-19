@@ -3,13 +3,14 @@ import type { Metadata } from "next"
 import { PaginaDeEstilo } from "@/components/layout/pagina-de-estilo"
 import { estilos } from "@/content/clases"
 import { fotos } from "@/content/medios"
+import { metadatosDePagina } from "@/lib/metadatos"
 
-export const metadata: Metadata = {
-  title: "Hatha Yoga en Gandia",
-  description:
-    "Clases de Hatha Yoga en YOGA Rituals, Gandia: posturas sostenidas con calma, respiración consciente y adaptaciones para cada cuerpo. Horarios libres y primera clase gratis.",
-  alternates: { canonical: "/hatha" },
-}
+export const metadata: Metadata = metadatosDePagina({
+  titulo: "Hatha Yoga en Gandia",
+  descripcion:
+    "Clases de Hatha Yoga en Gandia: posturas sostenidas con calma, respiración consciente y adaptaciones para cada cuerpo. Primera clase de prueba gratis.",
+  ruta: "/hatha",
+})
 
 /**
  * Hatha.

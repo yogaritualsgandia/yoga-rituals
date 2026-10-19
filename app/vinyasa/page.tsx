@@ -3,13 +3,14 @@ import type { Metadata } from "next"
 import { PaginaDeEstilo } from "@/components/layout/pagina-de-estilo"
 import { estilos } from "@/content/clases"
 import { fotos } from "@/content/medios"
+import { metadatosDePagina } from "@/lib/metadatos"
 
-export const metadata: Metadata = {
-  title: "Vinyasa Yoga en Gandia",
-  description:
-    "Clases de Vinyasa Yoga en YOGA Rituals, Gandia: secuencias fluidas que enlazan postura y respiración, con opciones para ajustar la intensidad. Horarios libres y primera clase gratis.",
-  alternates: { canonical: "/vinyasa" },
-}
+export const metadata: Metadata = metadatosDePagina({
+  titulo: "Vinyasa Yoga en Gandia",
+  descripcion:
+    "Clases de Vinyasa Yoga en Gandia: secuencias fluidas que enlazan postura y respiración, con opciones para ajustar la intensidad. Primera clase gratis.",
+  ruta: "/vinyasa",
+})
 
 /**
  * Vinyasa.

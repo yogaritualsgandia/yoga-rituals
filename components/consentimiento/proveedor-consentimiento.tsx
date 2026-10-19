@@ -5,12 +5,18 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useSyncExternalStore,
   type ReactNode,
 } from "react"
 
-import { hayAnalitica, idAnalitica } from "@/lib/analitica"
+import {
+  hayAnalitica,
+  hayClaridad,
+  idAnalitica,
+  idClaridad,
+} from "@/lib/analitica"
 
 /**
  * El permiso para medir las visitas.
@@ -49,6 +55,9 @@ export type Estado = Decision | "pendiente"
 
 /** La clave del almacenamiento del navegador. Solo la toca este archivo. */
 export const CLAVE_CONSENTIMIENTO = "consentimiento-analitica"
+
+/** Marca de un solo uso: «al recargar, borra lo que quede de la medición». */
+const CLAVE_BORRAR = "medicion-por-borrar"
 
 /** Lo que dura un permiso antes de volver a preguntar. Dos años, en milisegundos. */
 const CADUCIDAD = 1000 * 60 * 60 * 24 * 365 * 2
@@ -103,29 +112,42 @@ function leer(): Estado {
 const enElServidor = (): Estado => "pendiente"
 
 /**
- * Borra las cookies que Google haya podido dejar.
+ * Borra lo que hayan dejado Google y Microsoft.
  *
  * Se borra cada nombre en las dos formas en que puede estar —en el dominio
  * pelado y en el de primer nivel—, porque una cookie que no coincide
  * exactamente en nombre, ruta y dominio no se borra y se queda ahí sin que
  * nadie se entere. Con el dominio equivocado el navegador no hace nada: no
  * falla, simplemente ignora la orden.
+ *
+ * De Google: `_ga` y `_ga_<contenedor>`. De Microsoft: `_clck`, `_clsk`,
+ * `MUID`, `ANONCHK`, `SM` y `SRM_B`. Además se limpia el almacenamiento local
+ * que usa Clarity, que no es una cookie pero cumple la misma función.
  */
-function borrarCookiesDeGoogle() {
+const NOMBRES_DE_MICROSOFT = /^(_cl|MUID$|ANONCHK$|SM$|SRM_B$)/
+
+function borrarRastroDeMedicion() {
   try {
     const caducada = "expires=Thu, 01 Jan 1970 00:00:00 GMT"
     const dominioDePrimerNivel = location.hostname.split(".").slice(-2).join(".")
 
     for (const trozo of document.cookie.split(";")) {
       const nombre = trozo.split("=")[0]?.trim()
-      if (!nombre?.startsWith("_ga")) continue
+      if (!nombre) continue
+      if (!nombre.startsWith("_ga") && !NOMBRES_DE_MICROSOFT.test(nombre)) continue
 
       document.cookie = `${nombre}=; path=/; ${caducada}`
       document.cookie = `${nombre}=; path=/; domain=.${dominioDePrimerNivel}; ${caducada}`
     }
+
+    for (const almacen of [window.localStorage, window.sessionStorage]) {
+      for (const clave of Object.keys(almacen)) {
+        if (/clarity|^_cl/i.test(clave)) almacen.removeItem(clave)
+      }
+    }
   } catch {
-    /* Si el navegador no deja tocar sus cookies, tampoco las de Google durarán
-       mucho más: se van solas al caducar. */
+    /* Si el navegador no deja tocar sus cookies, tampoco las de Google ni las
+       de Microsoft durarán mucho más: se van solas al caducar. */
   }
 }
 
@@ -177,6 +199,22 @@ function Analitica() {
   )
 }
 
+/**
+ * Microsoft Clarity.
+ *
+ * Es el fragmento que da Microsoft, sin cambiarle nada: monta su propio
+ * cargador y se lleva la cuenta de mapas de calor y grabaciones de sesión.
+ * Solo se monta con un «sí», igual que el de Google, y por eso tampoco hay
+ * ninguna petición a Microsoft antes de que alguien acepte.
+ */
+function Claridad() {
+  return (
+    <Script id="claridad" strategy="afterInteractive">
+      {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "${idClaridad}");`}
+    </Script>
+  )
+}
+
 export function ProveedorConsentimiento({ children }: { children: ReactNode }) {
   const estado = useSyncExternalStore(suscribir, leer, enElServidor)
 
@@ -189,7 +227,7 @@ export function ProveedorConsentimiento({ children }: { children: ReactNode }) {
          preguntar la próxima. Antes eso que no poder leer nada. */
     }
 
-    if (decision === "no") borrarCookiesDeGoogle()
+    if (decision === "no") borrarRastroDeMedicion()
 
     avisarATodos()
   }, [])
@@ -197,13 +235,42 @@ export function ProveedorConsentimiento({ children }: { children: ReactNode }) {
   const reabrir = useCallback(() => {
     try {
       window.localStorage.removeItem(CLAVE_CONSENTIMIENTO)
+
+      /* La marca sobrevive a la recarga, que es justo lo que hace falta: Google
+         escribe su última cookie mientras la página se va. */
+      window.sessionStorage.setItem(CLAVE_BORRAR, "1")
     } catch {
       /* Nada que borrar. */
     }
 
-    borrarCookiesDeGoogle()
+    borrarRastroDeMedicion()
     window.location.reload()
   }, [])
+
+  /* Un «no» no puede dejar nada de la medición, y retirar el permiso tampoco.
+   *
+   * No basta con borrar al pulsar «retirar»: al recargar, Google alcanza a
+   * escribir una última actualización de su cookie en el camino de salida, y la
+   * cookie reaparecía después de haberla borrado. Por eso `reabrir` deja una
+   * marca de un solo uso en el almacenamiento de la sesión y aquí se borra otra
+   * vez al montar, ya con la página nueva y el guion de Google sin cargar.
+   *
+   * No se borra con cualquier estado distinto de «si», aunque parezca lo más
+   * simple: en el servidor no se sabe qué contestó nadie y el primer render
+   * dice «pendiente» aunque la respuesta guardada sea «si». Borrar ahí sería
+   * borrarle la cookie a quien ya había aceptado en cada carga completa. */
+  useEffect(() => {
+    let porBorrar = false
+
+    try {
+      porBorrar = window.sessionStorage.getItem(CLAVE_BORRAR) === "1"
+      if (porBorrar) window.sessionStorage.removeItem(CLAVE_BORRAR)
+    } catch {
+      /* Sin almacenamiento no hay marca; el borrado de `reabrir` ya se hizo. */
+    }
+
+    if (estado === "no" || porBorrar) borrarRastroDeMedicion()
+  }, [estado])
 
   const valor = useMemo(() => ({ estado, decidir, reabrir }), [estado, decidir, reabrir])
 
@@ -213,7 +280,8 @@ export function ProveedorConsentimiento({ children }: { children: ReactNode }) {
 
       {/* Sin identificador configurado no hay nada que pedir ni nada que
           cargar, y el cartel no se pinta: se pregunta por cosas que existen. */}
-      {hayAnalitica && estado === "si" ? <Analitica /> : null}
+      {estado === "si" && hayAnalitica ? <Analitica /> : null}
+      {estado === "si" && hayClaridad ? <Claridad /> : null}
     </Contexto.Provider>
   )
 }

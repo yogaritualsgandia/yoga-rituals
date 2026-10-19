@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { controlCookies } from "@/content/consentimiento"
-import { hayAnalitica } from "@/lib/analitica"
+import { hayMedicion } from "@/lib/analitica"
 
 import { useConsentimiento } from "./proveedor-consentimiento"
 
@@ -23,9 +23,9 @@ import { useConsentimiento } from "./proveedor-consentimiento"
 export function ControlConsentimiento() {
   const { estado, reabrir } = useConsentimiento()
 
-  /* Sin analítica no hay nada que retirar, y ofrecer un botón para cambiar una
+  /* Sin medición no hay nada que retirar, y ofrecer un botón para cambiar una
      decisión que no existe sería una manera rara de decir que no hay nada. */
-  if (!hayAnalitica) return null
+  if (!hayMedicion) return null
 
   return (
     <div>

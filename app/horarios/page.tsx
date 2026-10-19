@@ -10,13 +10,14 @@ import {
   horario,
   horarioLibre,
 } from "@/content/horario"
+import { metadatosDePagina } from "@/lib/metadatos"
 
-export const metadata: Metadata = {
-  title: "Horarios",
-  description:
+export const metadata: Metadata = metadatosDePagina({
+  titulo: "Horarios",
+  descripcion:
     "Horario de YOGA Rituals en Gandia: clases de 35, 60 y 75 minutos de lunes a sábado. Horarios libres, sin reserva previa ni aviso.",
-  alternates: { canonical: "/horarios" },
-}
+  ruta: "/horarios",
+})
 
 /**
  * Horario.
@@ -92,6 +93,10 @@ export default function PaginaHorarios() {
               ))}
             </tbody>
           </table>
+
+          <p className="paso-pequeno mt-6 max-w-[52ch] text-ink-soft">
+            {horarioLibre.notaExpres}
+          </p>
         </Contenedor>
       </section>
 

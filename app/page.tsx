@@ -330,12 +330,19 @@ export default function Inicio() {
       </section>
 
       {/* ── Lo que dicen quienes vienen ─────────────────────────────────────
-          Las tres opiniones van enteras, sin recortar y sin corregir: son
-          suyas. Y van tal cual aunque no midan lo mismo, que es lo que hace
-          que una rejilla de reseñas se estropee: la primera tiene cuatro veces
-          más texto que la tercera. Por eso cada una vive en su columna, con su
-          línea arriba y su nombre abajo pegados a los bordes, midan lo que
-          midan.
+          Cuatro reseñas reales de Google, sin corregir: son suyas. La primera
+          es larga de verdad y por eso lleva «Leer más», que lleva a la reseña
+          entera; las otras tres caben como están.
+
+          Cada nombre enlaza a SU reseña, no a la lista del estudio: quien
+          quiera comprobar que dice eso llega exactamente a esa frase. Son los
+          enlaces que se copian desde el diálogo «Compartir reseña» de Maps, y
+          desde aquí no se pueden componer a mano.
+
+          La rejilla es de dos columnas y no de tres porque ahora son cuatro: en
+          tres, la cuarta se quedaría sola en una fila coja. Cada tarjeta tiene
+          su línea arriba y su firma abajo, así que las cuatro quedan alineadas
+          aunque midan distinto.
 
           Va aquí, entre los talleres y el cierre, y no antes: primero está lo
           que hace el estudio —las clases, los horarios, los talleres en los
@@ -349,55 +356,83 @@ export default function Inicio() {
             retardo={0}
           />
 
-          <ul className="mt-14 grid grid-cols-1 gap-x-12 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-            {testimonios.map((testimonio, i) => (
-              <Revelar
-                as="li"
-                key={testimonio.autor}
-                retardo={Math.min(i, 4)}
-                className="flex flex-col border-t border-line pt-7"
-              >
-                <div className="flex items-center gap-1" aria-hidden="true">
-                  {Array.from({ length: testimonio.estrellas }).map(
-                    (_, estrella) => (
-                      <Star
-                        key={estrella}
-                        className="size-3.5 fill-current text-estrella"
-                      />
-                    ),
-                  )}
-                </div>
-                <span className="sr-only">
-                  {testimonio.estrellas} de 5 estrellas.
-                </span>
+          <ul className="mt-14 grid grid-cols-1 gap-x-12 gap-y-10 sm:grid-cols-2">
+            {testimonios.map((testimonio, i) => {
+              const visibles = testimonio.parrafos.slice(
+                0,
+                testimonio.visibles ?? testimonio.parrafos.length,
+              )
+              const hayMas = visibles.length < testimonio.parrafos.length
 
-                <blockquote className="paso-pequeno mt-5 text-ink-soft">
-                  {testimonio.texto}
-                </blockquote>
+              return (
+                <Revelar
+                  as="li"
+                  key={testimonio.autor}
+                  retardo={Math.min(i, 4)}
+                  className="flex flex-col border-t border-line pt-7"
+                >
+                  <div className="flex items-center gap-1" aria-hidden="true">
+                    {Array.from({ length: testimonio.estrellas }).map(
+                      (_, estrella) => (
+                        <Star
+                          key={estrella}
+                          className="size-3.5 fill-current text-estrella"
+                        />
+                      ),
+                    )}
+                  </div>
+                  <span className="sr-only">
+                    {testimonio.estrellas} de 5 estrellas.
+                  </span>
 
-                {/* El nombre se va abajo del todo de la columna, así que las
-                    tres firmas quedan a la misma altura aunque los textos no
-                    midan lo mismo.
+                  <blockquote className="paso-pequeno mt-5 space-y-4 text-ink-soft">
+                    {visibles.map((parrafo, parrafoIndice) => (
+                      <p key={`${testimonio.autor}-${parrafoIndice}`}>
+                        {parrafo}
+                      </p>
+                    ))}
+                  </blockquote>
 
-                    Y es un enlace, porque quien lee una opinión de cinco
-                    estrellas quiere poder comprobarla. Lleva a la ficha de
-                    Google del estudio, que es donde están publicadas las tres:
-                    sin subrayado y sin icono, con el subrayado solo al pasar por
-                    encima, para que la rejilla siga siendo texto y no un
-                    formulario. */}
-                <p className="etiqueta mt-auto pt-8">
-                  <a
-                    href={testimonio.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-semibold underline-offset-4 hover:text-brand hover:underline"
-                  >
-                    {testimonio.autor}
-                    <span className="sr-only"> en Google</span>
-                  </a>
-                </p>
-              </Revelar>
-            ))}
+                  {hayMas ? (
+                    <p className="mt-4">
+                      <a
+                        href={testimonio.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="paso-pequeno font-semibold text-brand underline underline-offset-4 hover:text-brand-hover"
+                      >
+                        Leer más
+                        <span className="sr-only">
+                          {" "}
+                          de la reseña de {testimonio.autor} en Google
+                        </span>
+                      </a>
+                    </p>
+                  ) : null}
+
+                  {/* El nombre se va abajo del todo de la columna, así que las
+                      firmas quedan a la misma altura aunque los textos no midan
+                      lo mismo.
+
+                      Y es un enlace, porque quien lee una opinión de cinco
+                      estrellas quiere poder comprobarla. Lleva a ESA reseña, no
+                      a la ficha del estudio: sin subrayado y sin icono, con el
+                      subrayado solo al pasar por encima, para que la rejilla
+                      siga siendo texto y no un formulario. */}
+                  <p className="etiqueta mt-auto pt-8">
+                    <a
+                      href={testimonio.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold underline-offset-4 hover:text-brand hover:underline"
+                    >
+                      {testimonio.autor}
+                      <span className="sr-only"> en Google</span>
+                    </a>
+                  </p>
+                </Revelar>
+              )
+            })}
           </ul>
         </Contenedor>
       </section>

@@ -1,44 +1,42 @@
 /**
  * Los tres textos legales.
  *
- * Están escritos describiendo lo que hace esta web, no copiando una plantilla.
- * Lo que hace, comprobado en el código, es poco y conviene tenerlo claro antes
- * de leerlos:
+ * Están escritos describiendo lo que hace esta web de verdad, comprobado en el
+ * código, y no copiando una plantilla. Hoy hace esto:
  *
- *   · No hay cookies. Ni propias ni de terceros. No hay analítica, ni
- *     publicidad, ni botones que avisen a las redes sociales, ni mapas
- *     incrustados: el mapa y las reseñas de Google son enlaces, te llevan a
- *     Google y no se cargan aquí dentro.
+ *   · No hay formularios, ni cuentas, ni base de datos, ni pagos. Los datos
+ *     personales llegan solo porque alguien decide escribir por WhatsApp, por
+ *     correo o por teléfono.
  *
- *   · Lo único que se guarda en el navegador de quien entra es el modo oscuro,
- *     porque lo elige él al pulsar el botón. No es una cookie (es el
- *     almacenamiento local del navegador), no viaja al servidor y no se usa
- *     para nada más. La Agencia Española de Protección de Datos considera esta
- *     clase de preferencia una cookie técnica exenta de consentimiento, así que
- *     no hay cartel de aceptar: no hay nada que aceptar.
+ *   · Hay dos herramientas de medición: Google Analytics 4 y Microsoft
+ *     Clarity. Ninguna se carga hasta que se acepta el cartel de cookies. Sin
+ *     aceptar, no sale ni una petición hacia Google ni hacia Microsoft.
  *
- *   · No hay formularios, ni cuentas, ni base de datos. Los datos llegan porque
- *     alguien decide escribir: por WhatsApp, por correo o por teléfono.
+ *   · El modo claro u oscuro y la propia decisión sobre las cookies se guardan
+ *     en el almacenamiento local del navegador. No son cookies, no viajan al
+ *     servidor y no sirven para seguir a nadie.
  *
- *   · El alojamiento es Netlify (Netlify, Inc., Estados Unidos), que guarda los
- *     registros técnicos de las visitas para dar el servicio, y está adherida
- *     al marco de privacidad de datos entre la Unión Europea y Estados Unidos.
- *     El correo del estudio es una cuenta de Gmail, así que los mensajes que
- *     llegan ahí los aloja Google, que también está adherida.
+ *   · El alojamiento es Netlify (Netlify, Inc., Estados Unidos), que guarda
+ *     los registros técnicos de las visitas para dar el servicio. El correo es
+ *     una cuenta de Gmail y la medición es de Google y Microsoft; las tres
+ *     están adheridas al marco de privacidad de datos entre la Unión Europea y
+ *     Estados Unidos.
  *
- * Lo que no se puede escribir sin preguntar está marcado con `falta` en cada
- * documento, y se ve en la propia página, como en el resto de la web: aquí no
- * se rellena un hueco con algo que suene bien.
+ * Los textos siguen la guía de cookies de la Agencia Española de Protección de
+ * Datos: se informa antes de pedir, rechazar cuesta lo mismo que aceptar, no
+ * hay casillas premarcadas y la decisión se puede retirar tantas veces como se
+ * quiera.
  */
 
 /** Los datos del titular, que pide el artículo 10 de la LSSI. */
 export const titular = {
-  /* El nombre y el NIF los tiene que dar el estudio. La página avisa mientras
-     no estén, y las filas vacías no se pintan. */
-  nombre: "",
-  nif: "",
+  nombre: "Susana Estruch Espinós",
+  /* Falta el número. Se deja escrito entre corchetes —y no vacío— para que se
+     vea que es un hueco y no una omisión: el día que llegue, se sustituye esta
+     línea y no hay que tocar nada más. */
+  nif: "[NIF de Susana Estruch Espinós]",
   domicilio: "Calle Sant Francesc de Borja, 36, 1.º · 46701 Gandia (Valencia)",
-  correo: "yogarituals.gandia@gmail.com",
+  correo: "yogaritualsgandia@gmail.com",
   telefono: "656 187 761",
 }
 
@@ -50,6 +48,8 @@ export type BloqueLegal = {
   lista?: string[]
   /** La ficha, para la identificación del titular. */
   datos?: { etiqueta: string; valor: string }[]
+  /** Una tabla de verdad, para las cookies: nombre, para qué, quién, cuánto. */
+  tabla?: { columnas: string[]; filas: string[][] }
 }
 
 export type DocumentoLegal = {
@@ -67,7 +67,7 @@ export type DocumentoLegal = {
   bloques: BloqueLegal[]
 }
 
-const ACTUALIZADO = "18 de octubre de 2026"
+const ACTUALIZADO = "19 de octubre de 2026"
 
 /** La ficha del titular, sin las filas que aún no tienen dato. */
 const identificacion = (
@@ -85,12 +85,10 @@ const identificacion = (
 const avisoLegal: DocumentoLegal = {
   titulo: "Aviso legal",
   descripcion:
-    "Quién está detrás de yogarituals.es, qué se puede hacer con lo que hay en la web y qué no, y con quién se habla si algo no va bien.",
+    "Quién está detrás de yogarituals.es, qué se puede hacer con sus contenidos y cómo contactar con el estudio.",
   ruta: "/aviso-legal",
   entradilla:
     "Quién está detrás de esta web, qué se puede hacer con lo que hay en ella y qué no.",
-  falta:
-    "Faltan el nombre y el NIF del titular. Los pide la ley (artículo 10 de la LSSI) y no se pueden inventar.",
   actualizado: ACTUALIZADO,
   bloques: [
     {
@@ -98,6 +96,13 @@ const avisoLegal: DocumentoLegal = {
       datos: identificacion,
       parrafos: [
         "Esta web es la del estudio de yoga YOGA Rituals, en Gandia. Todo lo que se cuenta aquí se contrata en el estudio: en esta web no se paga nada ni se compra nada.",
+      ],
+    },
+    {
+      titulo: "Para qué es esta web",
+      parrafos: [
+        "Para contar qué se practica, cuándo se puede venir, cuánto cuesta y cómo se llega. La reserva de la clase de prueba se hace por WhatsApp, no aquí.",
+        "La información es divulgativa. No sustituye a lo que te diga el profesor el día que vengas ni, mucho menos, a lo que te diga un profesional sanitario.",
       ],
     },
     {
@@ -110,7 +115,7 @@ const avisoLegal: DocumentoLegal = {
     {
       titulo: "Lo que hay aquí es del estudio",
       parrafos: [
-        "Los textos y el logotipo son del estudio. Las fotos que se ven hoy son provisionales y lo dicen en su propio pie; las definitivas serán del estudio.",
+        "Los textos y el logotipo son del estudio. Las fotos que se ven hoy son provisionales y lo dicen en su propio pie; las definitivas serán del estudio o se usarán con permiso.",
         "Si quieres usar algo de esta web en otro sitio, pide permiso antes y se habla.",
       ],
     },
@@ -124,8 +129,15 @@ const avisoLegal: DocumentoLegal = {
     {
       titulo: "Enlaces a otros sitios",
       parrafos: [
-        "Hay enlaces a WhatsApp, a Instagram, a Google Maps, a las reseñas de Google y a la delegación de yoga oncológico. Al pulsarlos sales de esta web y entras en la suya, con sus propias condiciones.",
+        "Hay enlaces a WhatsApp, a Instagram, a Google Maps, a las reseñas de Google y a la delegación de yoga oncológico. Al pulsarlos sales de esta web y entras en la suya, con sus propias condiciones y su propia política de privacidad.",
         "De lo que pase a partir de ahí no respondemos, porque no depende de nosotros. Tampoco de lo que publiquen esos sitios.",
+      ],
+    },
+    {
+      titulo: "Responsabilidad",
+      parrafos: [
+        "Se pone cuidado en que la web esté disponible y en que lo que cuenta sea cierto, pero no se puede garantizar que no haya interrupciones ni errores. Si algo no funciona, se avisa al correo de contacto y se intenta arreglar.",
+        "No respondemos de los daños que vengan de un uso de la web distinto del que se describe aquí ni de la imposibilidad de acceder a ella por causas ajenas al estudio.",
       ],
     },
     {
@@ -149,12 +161,10 @@ const avisoLegal: DocumentoLegal = {
 const privacidad: DocumentoLegal = {
   titulo: "Privacidad",
   descripcion:
-    "Qué datos personales trata el estudio, para qué, con qué permiso, cuánto tiempo y cómo pedir que se borren. Esta web no tiene formularios ni analítica: los datos llegan porque tú escribes.",
+    "Qué datos trata YOGA Rituals, para qué, con qué permiso, cuánto tiempo y cómo ejercer tus derechos. Sin formularios.",
   ruta: "/privacidad",
   entradilla:
     "Qué hacemos con tus datos. Corto: los que tú nos das, para contestarte y para darte clase.",
-  falta:
-    "Faltan el nombre y el NIF de la responsable y tres respuestas: si las notas de salud se apuntan en algún sitio, si se van a mandar avisos de talleres y si el estudio tiene alumnado menor de edad.",
   actualizado: ACTUALIZADO,
   bloques: [
     {
@@ -167,9 +177,10 @@ const privacidad: DocumentoLegal = {
     {
       titulo: "Qué datos tenemos y de dónde salen",
       parrafos: [
-        "Esta web no tiene formularios, ni cuentas de usuario, ni medición de visitas. No recogemos nada por el simple hecho de que entres. Los datos llegan solo por donde tú decides escribir: WhatsApp, correo o teléfono.",
+        "Esta web no tiene formularios, ni cuentas de usuario, ni área privada. No recogemos nada por el simple hecho de que entres. Los datos llegan solo por donde tú decides escribir: WhatsApp, correo o teléfono.",
         "Cuando escribes nos llega tu nombre (o el que uses en WhatsApp), tu número y lo que nos cuentes. Si vienes a clase, además necesitamos saber si tienes alguna lesión o algo que haya que tener en cuenta.",
         "El servidor donde vive la web guarda un registro técnico de cada visita (dirección IP, fecha y navegador). Lo guarda el alojamiento para que el sitio funcione y esté protegido, y nosotros no lo usamos para nada más.",
+        "Si aceptas el cartel de cookies, Google Analytics y Microsoft Clarity recogen datos de navegación. Se explica abajo, y puedes rechazarlo sin que la web deje de funcionar.",
       ],
     },
     {
@@ -178,7 +189,16 @@ const privacidad: DocumentoLegal = {
         "Para contestarte y organizar la clase: es lo que hace falta para atenderte antes de que haya un contrato (artículo 6.1.b del RGPD).",
         "Para llevar las cuentas y cumplir con Hacienda: obligación legal (artículo 6.1.c).",
         "Para que la web funcione y esté protegida, con los registros del servidor: interés legítimo en que el sitio esté en pie (artículo 6.1.f).",
-        "Si nos das tu permiso para avisarte de un taller o de un cambio de horario, para eso. Puedes decir que no, y retirarlo cuando quieras sin que pase nada.",
+        "Para medir las visitas con Google Analytics y Microsoft Clarity: tu consentimiento (artículo 6.1.a), que das al aceptar el cartel y puedes retirar cuando quieras.",
+        "Si nos cuentas algo de tu salud, para adaptar la práctica: tu consentimiento explícito (artículo 9.2.a).",
+      ],
+    },
+    {
+      titulo: "La medición de las visitas",
+      parrafos: [
+        "Google Analytics 4 cuenta cuántas personas entran, qué páginas se leen y de dónde se llega. Microsoft Clarity añade mapas de calor y grabaciones de sesión anónimas para ver dónde se atasca la navegación. Sirven para mejorar la web, nada más.",
+        "No hay publicidad, ni perfilado comercial, ni se venden datos a nadie. Tampoco se usan para tomar decisiones automáticas sobre ti.",
+        "Las dos herramientas se cargan solo después de que aceptes. Si rechazas, no se ejecuta su código y no sale ninguna petición hacia Google ni hacia Microsoft. Puedes cambiar la decisión en cualquier momento desde la página de cookies.",
       ],
     },
     {
@@ -190,9 +210,12 @@ const privacidad: DocumentoLegal = {
     },
     {
       titulo: "Cuánto tiempo los guardamos",
-      parrafos: [
-        "Lo que hablamos, el tiempo de atenderte y el que después pida la ley para las facturas y los justificantes (cuatro años, lo que marca Hacienda).",
-        "Los datos de salud, mientras practiques con nosotros. Cuando dejes de venir, o antes si lo pides, se borran.",
+      lista: [
+        "Lo que hablamos y lo necesario para atenderte: el tiempo de la conversación y el de la relación con el estudio.",
+        "Las facturas y justificantes: cuatro años, lo que marca la ley fiscal.",
+        "Los datos de salud: mientras practiques con nosotros. Cuando dejes de venir, o antes si lo pides, se borran.",
+        "Tu decisión sobre las cookies: dos años en el almacenamiento de tu navegador. Después se vuelve a preguntar.",
+        "La medición: el tiempo que cada herramienta tiene configurado y, como máximo, el de sus cookies (13 meses Google Analytics y 13 meses Clarity).",
       ],
     },
     {
@@ -200,13 +223,14 @@ const privacidad: DocumentoLegal = {
       parrafos: [
         "El alojamiento de la web, Netlify, que guarda los registros técnicos de las visitas por el tiempo que necesita para dar el servicio.",
         "El correo del estudio es una cuenta de Gmail, así que los mensajes que mandes al correo los aloja Google. Los de WhatsApp viajan por WhatsApp, que trata esos datos por su cuenta como responsable: nosotros solo vemos lo que nos escribes.",
+        "Si aceptas la medición, Google recibe los datos de navegación para Analytics y Microsoft para Clarity. Son encargados del tratamiento y solo los usan para prestar el servicio.",
         "Y nadie más. Tus datos no se venden, no se ceden y no se usan para publicidad.",
       ],
     },
     {
       titulo: "Fuera de España",
       parrafos: [
-        "Netlify y Google están en Estados Unidos. Las dos están adheridas al marco de privacidad de datos entre la Unión Europea y Estados Unidos, y con las dos hay contrato de encargado del tratamiento. Es lo que cubre que tus datos puedan pasar por ahí con garantías.",
+        "Netlify, Google y Microsoft están en Estados Unidos. Las tres están adheridas al marco de privacidad de datos entre la Unión Europea y Estados Unidos, y con las tres hay contrato de encargado del tratamiento. Es lo que cubre que tus datos puedan pasar por ahí con garantías.",
       ],
     },
     {
@@ -250,10 +274,10 @@ const privacidad: DocumentoLegal = {
 const cookies: DocumentoLegal = {
   titulo: "Cookies",
   descripcion:
-    "Esta web no usa cookies: ni propias ni de terceros. Lo único que guarda el navegador es el modo oscuro que elige quien entra, y se explica por qué eso no necesita permiso.",
+    "Qué cookies usa yogarituals.es, para qué sirven, cuánto duran y cómo aceptarlas, rechazarlas o cambiar tu decisión.",
   ruta: "/cookies",
   entradilla:
-    "Esta web no usa cookies. Lo contamos largo porque es corto, y porque conviene saber por qué no hay cartel de aceptar.",
+    "Qué se guarda en tu navegador cuando entras, para qué y cómo se cambia.",
   actualizado: ACTUALIZADO,
   bloques: [
     {
@@ -263,35 +287,94 @@ const cookies: DocumentoLegal = {
       ],
     },
     {
-      titulo: "Aquí no hay ninguna",
+      titulo: "Qué se usa aquí",
       parrafos: [
-        "Esta web no pone cookies. Ni propias ni de terceros. No hay medición de visitas, no hay publicidad, no hay botones que avisen a las redes sociales cuando los miras y no hay mapas ni vídeos incrustados. El mapa y las reseñas de Google son enlaces: al pulsarlos vas a Google, pero no se carga nada suyo aquí dentro.",
+        "Esta web no pone cookies de publicidad, ni de redes sociales, ni de mapas o vídeos incrustados. El mapa y las reseñas de Google son enlaces: al pulsarlos vas a Google, pero no se carga nada suyo aquí dentro.",
+        "Solo hay dos cosas: un par de preferencias que se guardan en el almacenamiento local del navegador y no necesitan permiso, y dos herramientas de medición que sí lo necesitan y que no se encienden hasta que aceptas.",
       ],
     },
     {
-      titulo: "Lo único que se guarda en tu navegador",
+      titulo: "Las cookies de medición",
+      tabla: {
+        columnas: ["Nombre", "Para qué sirve", "Quién la pone", "Duración"],
+        filas: [
+          [
+            "_ga y _ga_<ID>",
+            "Distinguir a quien visita la web y contar las visitas sin repetirlas.",
+            "Google Analytics 4 (Google LLC)",
+            "13 meses",
+          ],
+          [
+            "_clck",
+            "Identificador anónimo de quien visita, para no contar dos veces la misma visita.",
+            "Microsoft Clarity (Microsoft Corporation)",
+            "1 año",
+          ],
+          [
+            "_clsk",
+            "Unir las páginas que se ven en una misma sesión.",
+            "Microsoft Clarity (Microsoft Corporation)",
+            "1 día",
+          ],
+          [
+            "MUID",
+            "Identificador de usuario de Microsoft.",
+            "Microsoft Corporation",
+            "13 meses",
+          ],
+          [
+            "ANONCHK",
+            "Comprobar si el navegador acepta cookies.",
+            "Microsoft Corporation",
+            "10 minutos",
+          ],
+          [
+            "SM",
+            "Identificador de la sesión.",
+            "Microsoft Corporation",
+            "Sesión",
+          ],
+        ],
+      },
       parrafos: [
-        "Cuando pulsas el botón del modo oscuro, tu navegador apunta esa elección para recordarla la próxima vez. No es una cookie: es el almacenamiento local del navegador. Se queda en tu aparato, no viaja a ningún servidor, no lo lee nadie más y sirve solo para pintar la web como la dejaste.",
-        "Se borra vaciando los datos del navegador, y no pasa nada: la web vuelve a salir clara, que es como sale de fábrica.",
+        "La duración de las cookies de Google se ha recortado a trece meses; por defecto Google las deja dos años.",
+        "Estas cookies no se ponen si rechazas. Tampoco se ponen si no tocas el cartel: mientras no haya un «sí», las herramientas no se cargan.",
       ],
     },
     {
-      titulo: "Por eso no hay cartel de aceptar",
+      titulo: "Lo que se guarda sin pedir permiso",
       parrafos: [
-        "La Agencia Española de Protección de Datos dice que cuando la elección la toma quien visita la web (el idioma, el modo oscuro, el tamaño de la letra) y se usa solo para eso, es una cookie técnica y no hace falta permiso.",
-        "Pedir un permiso para algo que no existe sería un trámite que no protege a nadie, así que no lo hay.",
+        "Cuando pulsas el botón del modo oscuro, tu navegador apunta esa elección para recordarla la próxima vez. Y cuando contestas al cartel, guarda tu respuesta para no preguntarte en cada página. Las dos cosas viven en el almacenamiento local del navegador, no son cookies, no viajan al servidor y no las lee nadie más.",
+        "La Agencia Española de Protección de Datos considera esta clase de preferencias técnicas exentas de consentimiento: sirven solo para recordar lo que tú has elegido.",
+        "Se borran vaciando los datos del navegador, y no pasa nada: la web vuelve a salir clara y vuelve a preguntar por las cookies.",
       ],
     },
     {
-      titulo: "Si algún día se pone algo",
+      titulo: "Cómo se pide el permiso",
       parrafos: [
-        "Si mañana se añade algo que mida las visitas o que enseñe vídeos de fuera, se dice primero aquí y se pregunta antes de encenderlo. Mientras esta página diga que no hay cookies, es que no hay.",
+        "La primera vez que entras sale un cartel abajo, con dos botones del mismo tamaño: aceptar todas y rechazar todas. No hay casillas premarcadas, ni opciones escondidas, ni nada que se encienda antes de que contestes.",
+        "Rechazar no limita la web: se puede leer entera y usar igual. Aceptar solo enciende la medición. La decisión se guarda dos años; pasado ese tiempo se vuelve a preguntar.",
+        "Puedes cambiar de idea tantas veces como quieras desde el botón que hay al final de esta página. Al pulsarlo se borra lo elegido, se borran las cookies de Google y de Microsoft si estaban puestas y se vuelve a preguntar.",
       ],
     },
     {
-      titulo: "Al salir de aquí, otras normas",
+      titulo: "Cómo borrarlas desde el navegador",
       parrafos: [
-        "Los enlaces a WhatsApp, Instagram y Google te llevan a sus webs, y ahí valen sus propias políticas de cookies. No son nuestras y no podemos cambiarlas; si quieres evitarlas, no hace falta pulsar ningún enlace para leer esta web.",
+        "También puedes borrarlas desde los ajustes del navegador: en Chrome, «Privacidad y seguridad» → «Borrar datos de navegación»; en Safari, «Preferencias» → «Privacidad» → «Gestionar datos de sitios»; en Firefox, «Privacidad y seguridad» → «Cookies y datos del sitio»; en Edge, «Privacidad, búsqueda y servicios» → «Borrar datos de exploración».",
+        "Si borras las cookies, la próxima vez que entres volverá a salir el cartel y la medición estará apagada hasta que aceptes.",
+      ],
+    },
+    {
+      titulo: "Las políticas de Google y Microsoft",
+      parrafos: [
+        "La medición la prestan Google y Microsoft, con sus propias políticas. Se pueden leer en policies.google.com/privacy y privacy.microsoft.com. Ahí se explica cómo tratan los datos que reciben.",
+      ],
+    },
+    {
+      titulo: "Si algo de esto cambia",
+      parrafos: [
+        "Si se añade una cookie o una herramienta nueva, se dice primero aquí y se vuelve a pedir permiso. Mientras esta página diga que solo hay estas, es que solo hay estas.",
+        "La autoridad de control en España es la Agencia Española de Protección de Datos (aepd.es), y su guía de cookies es la que se ha seguido para escribir esta página.",
       ],
     },
   ],

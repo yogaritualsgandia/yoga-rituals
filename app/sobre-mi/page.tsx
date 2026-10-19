@@ -8,13 +8,14 @@ import { Button } from "@/components/ui/button"
 import { avisoFotosProvisionales, fotos } from "@/content/medios"
 import { whatsappUrl } from "@/content/site"
 import { biografia, cierreSobreMi, formacion, sobreMi } from "@/content/sobreMi"
+import { metadatosDePagina } from "@/lib/metadatos"
 
-export const metadata: Metadata = {
-  title: "Susana Estruch Espinós",
-  description:
-    "Susana Estruch Espinós, directora de YOGA Rituals en Gandia: profesora de yoga desde 2005 por AIPYS Madrid, con formación en Yoga Restaurativo, Nidra, Oncológico, Mindfulness MBTB y Breathwork Inbreath.",
-  alternates: { canonical: "/sobre-mi" },
-}
+export const metadata: Metadata = metadatosDePagina({
+  titulo: "Susana Estruch Espinós",
+  descripcion:
+    "Susana Estruch Espinós dirige YOGA Rituals en Gandia. Profesora de yoga desde 2005 por AIPYS Madrid, con formación en Yoga Restaurativo, Nidra y Oncológico.",
+  ruta: "/sobre-mi",
+})
 
 /**
  * Susana.
