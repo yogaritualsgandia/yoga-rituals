@@ -2,10 +2,12 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import { Contenedor } from "@/components/layout/contenedor"
+import { BandaFoto } from "@/components/layout/foto-editorial"
 import { Pagina } from "@/components/layout/pagina"
 import { Contador } from "@/components/movimiento/contador"
 import { Button } from "@/components/ui/button"
 import { talleresColegios } from "@/content/clases"
+import { fotos } from "@/content/medios"
 import { accionPrincipal, site, whatsappUrl } from "@/content/site"
 import { metadatosDePagina } from "@/lib/metadatos"
 
@@ -55,6 +57,8 @@ export default function PaginaTalleresCentrosEducativos() {
           </div>
         </Contenedor>
       </section>
+
+      <BandaFoto foto={fotos.talleresAula} aspecto="aspect-3/2" />
 
       {/* ── Los tres talleres ────────────────────────────────────────────── */}
       <section className="seccion pt-0">

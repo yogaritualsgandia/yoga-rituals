@@ -1,25 +1,21 @@
 /**
  * Imágenes.
  *
- * ESTADO: todas provisionales. Susana ha pedido fotos de ejemplo mientras
- * no manda las suyas, así que aquí se usan las que ya había en su web
- * actual (y una de Pexels que ella misma tenía puesta), descargadas a
- * /public/fotos-ejemplo.
+ * Las fotos están ya recortadas y preparadas en tres formatos (AVIF, WebP y
+ * JPEG) y dos anchos (800 y 1600 px). La web se exporta como sitio estático, así
+ * que no hay optimizador en el servidor: lo que se sirve es exactamente lo que
+ * hay en /public/fotos.
  *
- * Cada ficha lleva `origen` para saber de dónde sale y `definitiva` para
- * saber qué hay que sustituir. NINGUNA se hace pasar por el estudio: los
- * textos alternativos describen lo que se ve de verdad en la foto, no lo
- * que nos gustaría que se viera.
+ * Cada ficha guarda el ancho y el alto de la versión de 1600 px. El componente
+ * `FotoEditorial` los usa para reservar el hueco y evitar saltos de maquetación.
  *
- * Las que hay que pedirle a Susana, por orden de importancia:
- *   1. La sala de Gandia, vacía y con gente (es lo que nadie más puede enseñar).
- *   2. Ella dando clase.
- *   3. La entrada y la fachada, para el SEO local.
- *   4. Material y detalles: incienso, mantas, bloques.
+ * Ninguna foto se hace pasar por otra cosa: el texto alternativo describe lo que
+ * se ve. Las que vienen de Pexels llevan su origen; las del archivo de Susana,
+ * también. El detalle de licencias está en CREDITOS-FOTOS.md.
  */
 
 export type Fotografia = {
-  /** Ruta dentro de /public. */
+  /** Ruta base dentro de /public, sin el sufijo -800/-1600 ni la extensión. */
   src: string
   /** Descripción real de lo que se ve. Nunca «imagen de yoga». */
   alt: string
@@ -34,58 +30,116 @@ export type Fotografia = {
 }
 
 export const fotos = {
-  sirsasana: {
-    src: "/fotos-ejemplo/hero-sala.jpg",
-    alt: "Persona haciendo el pino sobre una esterilla oscura, con un valle de montaña entre la niebla al fondo.",
-    ancho: 1401,
-    alto: 350,
-    origen: "Foto de la web actual (yogarituals.es), recortada en panorámico.",
-    definitiva: false,
-    pie: "Sustituir por la sala de Gandia o por Susana dando clase.",
+  heroPractica: {
+    src: "/fotos/hero-practica",
+    alt: "Mujer en la postura del niño sobre una esterilla, con los brazos estirados hacia delante y la cabeza apoyada en el suelo.",
+    ancho: 1600,
+    alto: 2000,
+    origen: "Pexels · Miriam Alonso.",
+    definitiva: true,
   },
-  esterilla: {
-    src: "/fotos-ejemplo/practica-1.jpg",
-    alt: "Pies descalzos y manos enrollando una esterilla de yoga verde oscura sobre un suelo de madera clara.",
-    ancho: 1584,
-    alto: 1064,
-    origen: "Pexels, ya publicada en la web actual. Es la única que no es suya.",
-    definitiva: false,
+  talleresAula: {
+    src: "/fotos/talleres-aula",
+    alt: "Grupo de estudiantes sentados en esterillas durante un taller de yoga en un aula, con la profesora al frente.",
+    ancho: 1600,
+    alto: 1067,
+    origen: "Archivo de YOGA Rituals.",
+    definitiva: true,
   },
-  incienso: {
-    src: "/fotos-ejemplo/practica-2.jpg",
-    alt: "Una barrita de incienso encendida en un soporte de madera; el humo sube recto sobre una mesa clara con hierbas secas alrededor.",
-    ancho: 1080,
-    alto: 1620,
-    origen: "Foto de la web actual. Retrato vertical.",
-    definitiva: false,
+  hathaSentada: {
+    src: "/fotos/hatha-sentada",
+    alt: "Mujer sentada sobre los talones, con las manos unidas frente al pecho y los ojos cerrados.",
+    ancho: 1600,
+    alto: 2000,
+    origen: "Pexels · Polina Tankilevitch.",
+    definitiva: true,
   },
-  flexionSentado: {
-    src: "/fotos-ejemplo/practica-3.jpg",
-    alt: "Mujer doblada hacia delante sentada sobre una esterilla, con la cabeza apoyada en las rodillas, en una sala de suelo de madera clara.",
-    ancho: 1239,
-    alto: 798,
-    origen: "Foto de la web actual.",
-    definitiva: false,
+  vinyasaRueda: {
+    src: "/fotos/vinyasa-rueda",
+    alt: "Mujer en una postura de extensión de espalda, apoyada sobre una mano y un pie, con el otro brazo extendido hacia atrás.",
+    ancho: 1600,
+    alto: 1600,
+    origen: "Archivo de YOGA Rituals.",
+    definitiva: true,
   },
-  material: {
-    src: "/fotos-ejemplo/material.jpg",
-    alt: "Dos bloques de corcho apoyados uno sobre otro encima de una esterilla verde gris, sobre un suelo de madera.",
-    ancho: 1584,
-    alto: 1064,
-    origen: "Foto de la web actual.",
-    definitiva: false,
-    pie: "El material lo pone el estudio: bloques, mantas, banquitos y bolsters.",
+  breathworkIncienso: {
+    src: "/fotos/breathwork-incienso",
+    alt: "Barrita de incienso encendida en un soporte de madera, con el humo subiendo recto.",
+    ancho: 1600,
+    alto: 2000,
+    origen: "Archivo de YOGA Rituals.",
+    definitiva: true,
   },
-  esterillaNaranja: {
-    src: "/fotos-ejemplo/esterilla.jpg",
-    alt: "Manos con pulseras sosteniendo una esterilla naranja enrollada.",
-    ancho: 613,
-    alto: 649,
-    origen: "Foto de la web actual.",
-    definitiva: false,
+  sobreMiCuenco: {
+    src: "/fotos/sobre-mi-cuenco",
+    alt: "Dos cuencos tibetanos y un ramo de lavanda seca sobre una tela bordada.",
+    ancho: 1600,
+    alto: 2000,
+    origen: "Archivo de YOGA Rituals.",
+    definitiva: true,
+  },
+  mindfulnessBuda: {
+    src: "/fotos/mindfulness-buda",
+    alt: "Detalle de una escultura de Buda con pátina verde y dorada.",
+    ancho: 1600,
+    alto: 2000,
+    origen: "Archivo de YOGA Rituals.",
+    definitiva: true,
+  },
+  nidraPiernas: {
+    src: "/fotos/nidra-piernas",
+    alt: "Dos personas tumbadas boca arriba con las piernas apoyadas sobre bolsters.",
+    ancho: 1600,
+    alto: 2000,
+    origen: "Archivo de YOGA Rituals.",
+    definitiva: true,
+  },
+  oncoRestaurativo: {
+    src: "/fotos/onco-restaurativo",
+    alt: "Mujer tumbada boca arriba sobre una esterilla, con la espalda apoyada en un bolster y los brazos abiertos.",
+    ancho: 1600,
+    alto: 1067,
+    origen: "Archivo de YOGA Rituals.",
+    definitiva: true,
+  },
+  retiroZarra: {
+    src: "/fotos/retiro-zarra",
+    alt: "Vista de un pueblo de montaña, con una calle y casas de piedra.",
+    ancho: 1600,
+    alto: 2000,
+    origen: "Archivo de YOGA Rituals.",
+    definitiva: true,
+  },
+  clasesGrupo: {
+    src: "/fotos/clases-grupo",
+    alt: "Grupo de personas practicando yoga en una sala con suelo de madera.",
+    ancho: 1600,
+    alto: 1067,
+    origen: "Archivo de YOGA Rituals.",
+    definitiva: true,
+  },
+  horariosMaterial: {
+    src: "/fotos/horarios-material",
+    alt: "Dos bloques de corcho y una esterilla verde gris sobre un suelo de madera.",
+    ancho: 1600,
+    alto: 700,
+    origen: "Archivo de YOGA Rituals.",
+    definitiva: true,
+  },
+  preciosEsterilla: {
+    src: "/fotos/precios-esterilla",
+    alt: "Manos apoyadas en una esterilla negra, junto a una esterilla verde enrollada.",
+    ancho: 1600,
+    alto: 700,
+    origen: "Pexels · Mikhail Nilov.",
+    definitiva: true,
+  },
+  primeraVezMaterial: {
+    src: "/fotos/primera-vez-material",
+    alt: "Mujer con las manos unidas por encima de la cabeza en una sala con bloques y mantas de yoga.",
+    ancho: 1600,
+    alto: 1067,
+    origen: "Pexels · Yankrukov.",
+    definitiva: true,
   },
 } satisfies Record<string, Fotografia>
-
-/** Aviso que se pinta junto a las imágenes mientras sean de ejemplo. */
-export const avisoFotosProvisionales =
-  "Fotos de ejemplo. Se sustituirán por las del estudio de Gandia."

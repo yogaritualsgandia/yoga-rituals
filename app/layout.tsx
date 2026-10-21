@@ -8,6 +8,7 @@ import { AccionFija } from "@/components/layout/accion-fija"
 import { Cabecera } from "@/components/layout/cabecera"
 import { FondoAmbiente } from "@/components/layout/fondo-ambiente"
 import { Pie } from "@/components/layout/pie"
+import { WhatsAppFlotante } from "@/components/layout/whatsapp-flotante"
 import { ProveedorMovimiento } from "@/components/movimiento/proveedor-movimiento"
 import { TransicionPagina } from "@/components/movimiento/transicion-pagina"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -134,6 +135,8 @@ export default function RootLayout({
               <div aria-hidden="true" className="h-24 lg:hidden" />
 
               <AccionFija />
+
+              <WhatsAppFlotante />
 
               {/* Lo último del documento, y a propósito: el cartel de cookies no
                 entra en el orden de lectura por delante del contenido —quien

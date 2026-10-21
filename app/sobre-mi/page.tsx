@@ -1,11 +1,11 @@
 import type { Metadata } from "next"
-import Image from "next/image"
 
 import { BotonReserva } from "@/components/layout/boton-reserva"
 import { Contenedor } from "@/components/layout/contenedor"
+import { FotoDeSeccion } from "@/components/layout/foto-editorial"
 import { Pagina } from "@/components/layout/pagina"
 import { Button } from "@/components/ui/button"
-import { avisoFotosProvisionales, fotos } from "@/content/medios"
+import { fotos } from "@/content/medios"
 import { whatsappUrl } from "@/content/site"
 import { biografia, cierreSobreMi, formacion, sobreMi } from "@/content/sobreMi"
 import { metadatosDePagina } from "@/lib/metadatos"
@@ -31,7 +31,8 @@ export const metadata: Metadata = metadatosDePagina({
  * tienen que hacer, que es decirle a quien acaba de llegar que esto ya
  * funciona.
  *
- * La foto sigue siendo de ejemplo, y se dice debajo. La suya no existe todavía.
+ * La foto no es un retrato suyo: no hay uno en el archivo. Es un detalle del
+ * material con el que trabaja, y no se hace pasar por ella.
  */
 export default function PaginaSobreMi() {
   return (
@@ -60,20 +61,11 @@ export default function PaginaSobreMi() {
           </div>
 
           <div className="lg:col-span-4 lg:col-start-9">
-            <figure>
-              <div className="relative aspect-4/5 overflow-hidden rounded-lg">
-                <Image
-                  src={fotos.incienso.src}
-                  alt={fotos.incienso.alt}
-                  fill
-                  sizes="(min-width: 1024px) 33vw, 92vw"
-                  className="object-cover"
-                />
-              </div>
-              <figcaption className="etiqueta mt-3 block">
-                {avisoFotosProvisionales}
-              </figcaption>
-            </figure>
+            <FotoDeSeccion
+              foto={fotos.sobreMiCuenco}
+              aspecto="aspect-4/5"
+              sizes="(min-width: 1024px) 33vw, 92vw"
+            />
           </div>
         </Contenedor>
       </section>

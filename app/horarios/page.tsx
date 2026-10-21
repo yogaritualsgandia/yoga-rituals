@@ -3,6 +3,7 @@ import Link from "next/link"
 
 import { BotonReserva } from "@/components/layout/boton-reserva"
 import { Contenedor } from "@/components/layout/contenedor"
+import { BandaFoto } from "@/components/layout/foto-editorial"
 import { Pagina } from "@/components/layout/pagina"
 import { Button } from "@/components/ui/button"
 import {
@@ -10,6 +11,7 @@ import {
   horario,
   horarioLibre,
 } from "@/content/horario"
+import { fotos } from "@/content/medios"
 import { metadatosDePagina } from "@/lib/metadatos"
 
 export const metadata: Metadata = metadatosDePagina({
@@ -99,6 +101,8 @@ export default function PaginaHorarios() {
           </p>
         </Contenedor>
       </section>
+
+      <BandaFoto foto={fotos.horariosMaterial} aspecto="aspect-[16/7]" />
 
       <section className="seccion pt-0">
         <Contenedor>

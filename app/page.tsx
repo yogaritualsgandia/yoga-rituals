@@ -1,11 +1,10 @@
 import { ArrowRight, Star } from "lucide-react"
-import Image from "next/image"
 import Link from "next/link"
 
 import { BotonReserva } from "@/components/layout/boton-reserva"
 import { Contenedor } from "@/components/layout/contenedor"
+import { FotoDeSeccion } from "@/components/layout/foto-editorial"
 import { Contador } from "@/components/movimiento/contador"
-import { Paralaje } from "@/components/movimiento/paralaje"
 import { Revelar, Titular } from "@/components/movimiento/revelar"
 import { Button } from "@/components/ui/button"
 import {
@@ -15,7 +14,7 @@ import {
   talleresColegios,
 } from "@/content/clases"
 import { horarioLibre } from "@/content/horario"
-import { avisoFotosProvisionales, fotos } from "@/content/medios"
+import { fotos } from "@/content/medios"
 import { site, mapaUrl } from "@/content/site"
 import { testimonios } from "@/content/testimonios"
 
@@ -89,7 +88,7 @@ export default function Inicio() {
               <Revelar
                 as="p"
                 cuando="entrada"
-                retardo={8}
+                retardo={0}
                 className="paso-entrada medida mt-9 text-ink-soft"
               >
                 Clases de 75, 60 y 35 minutos. Vienes el día que puedes, sin
@@ -98,7 +97,7 @@ export default function Inicio() {
 
               <Revelar
                 cuando="entrada"
-                retardo={9}
+                retardo={2}
                 className="mt-11 flex flex-wrap items-center gap-4"
               >
                 <BotonReserva />
@@ -110,7 +109,7 @@ export default function Inicio() {
               <Revelar
                 as="p"
                 cuando="entrada"
-                retardo={10}
+                retardo={3}
                 className="paso-pequeno mt-7 text-ink-soft"
               >
                 La clase de prueba es gratuita, y es lo único que hay que
@@ -125,21 +124,12 @@ export default function Inicio() {
                 con el hueco entero, la foto se salía por abajo de la pantalla
                 y asomaba cortada. */}
             <div className="lg:col-span-5 lg:pt-5">
-              <figure>
-                <Paralaje className="aspect-4/5 rounded-lg">
-                  <Image
-                    src={fotos.flexionSentado.src}
-                    alt={fotos.flexionSentado.alt}
-                    fill
-                    priority
-                    sizes="(min-width: 1024px) 40vw, 92vw"
-                    className="object-cover"
-                  />
-                </Paralaje>
-                <figcaption className="etiqueta mt-3 block">
-                  {avisoFotosProvisionales}
-                </figcaption>
-              </figure>
+              <FotoDeSeccion
+                foto={fotos.heroPractica}
+                aspecto="aspect-4/5"
+                sizes="(min-width: 1024px) 40vw, 92vw"
+                prioridad
+              />
             </div>
           </div>
         </Contenedor>
@@ -311,20 +301,11 @@ export default function Inicio() {
           </div>
 
           <div className="lg:col-span-6 lg:col-start-7">
-            <figure>
-              <Paralaje className="aspect-3/2 rounded-lg">
-                <Image
-                  src={fotos.material.src}
-                  alt={fotos.material.alt}
-                  fill
-                  sizes="(min-width: 1024px) 45vw, 92vw"
-                  className="object-cover"
-                />
-              </Paralaje>
-              <figcaption className="etiqueta mt-3 block">
-                {avisoFotosProvisionales}
-              </figcaption>
-            </figure>
+            <FotoDeSeccion
+              foto={fotos.talleresAula}
+              aspecto="aspect-3/2"
+              sizes="(min-width: 1024px) 45vw, 92vw"
+            />
           </div>
         </Contenedor>
       </section>

@@ -2,8 +2,10 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import { Contenedor } from "@/components/layout/contenedor"
+import { BandaFoto } from "@/components/layout/foto-editorial"
 import { Pagina } from "@/components/layout/pagina"
 import { Button } from "@/components/ui/button"
+import { fotos } from "@/content/medios"
 import { preguntasFrecuentes } from "@/content/primeraVez"
 import { accionPrincipal, whatsappUrl } from "@/content/site"
 import { yogaOncologico } from "@/content/yogaOncologico"
@@ -74,6 +76,8 @@ export default function PaginaYogaOncologico() {
           </p>
         </Contenedor>
       </section>
+
+      <BandaFoto foto={fotos.oncoRestaurativo} aspecto="aspect-3/2" />
 
       {/* ── La duda de siempre ───────────────────────────────────────────── */}
       {sobreLesiones ? (

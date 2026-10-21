@@ -2,9 +2,11 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import { Contenedor } from "@/components/layout/contenedor"
+import { FotoDeSeccion } from "@/components/layout/foto-editorial"
 import { Pagina } from "@/components/layout/pagina"
 import { Button } from "@/components/ui/button"
 import { talleresColegios } from "@/content/clases"
+import { fotos } from "@/content/medios"
 import { retiros } from "@/content/retiros"
 import { accionPrincipal, whatsappUrl } from "@/content/site"
 import { metadatosDePagina } from "@/lib/metadatos"
@@ -38,32 +40,42 @@ export default function PaginaRetiros() {
     >
       {/* ── El programa ──────────────────────────────────────────────────── */}
       <section className="seccion pt-0">
-        <Contenedor>
-          <h2 className="font-heading text-2xl">
-            Lo que vivirás en cada encuentro
-          </h2>
-          <p className="medida paso-base mt-4 text-ink-soft">
-            {retiros.intro}
-          </p>
+        <Contenedor className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-10">
+          <div className="lg:col-span-7">
+            <h2 className="font-heading text-2xl">
+              Lo que vivirás en cada encuentro
+            </h2>
+            <p className="medida paso-base mt-4 text-ink-soft">
+              {retiros.intro}
+            </p>
 
-          <ul className="mt-8 border-t border-line">
-            {retiros.programa.map((parte) => (
-              <li key={parte.titulo} className="border-b border-line py-6">
-                <div className="grid grid-cols-1 gap-2 lg:grid-cols-12 lg:gap-10">
-                  <h3 className="font-heading text-lg lg:col-span-4">
-                    {parte.titulo}
-                  </h3>
-                  <p className="medida paso-base text-ink-soft lg:col-span-7 lg:col-start-6">
-                    {parte.texto}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
+            <ul className="mt-8 border-t border-line">
+              {retiros.programa.map((parte) => (
+                <li key={parte.titulo} className="border-b border-line py-6">
+                  <div className="grid grid-cols-1 gap-2 lg:grid-cols-12 lg:gap-10">
+                    <h3 className="font-heading text-lg lg:col-span-4">
+                      {parte.titulo}
+                    </h3>
+                    <p className="medida paso-base text-ink-soft lg:col-span-7 lg:col-start-6">
+                      {parte.texto}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
 
-          <p className="medida paso-base mt-8 text-ink-soft">
-            {retiros.completo}
-          </p>
+            <p className="medida paso-base mt-8 text-ink-soft">
+              {retiros.completo}
+            </p>
+          </div>
+
+          <div className="lg:col-span-4 lg:col-start-9">
+            <FotoDeSeccion
+              foto={fotos.retiroZarra}
+              aspecto="aspect-4/5"
+              sizes="(min-width: 1024px) 33vw, 92vw"
+            />
+          </div>
         </Contenedor>
       </section>
 

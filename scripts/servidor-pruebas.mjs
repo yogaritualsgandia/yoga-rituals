@@ -20,6 +20,7 @@
 import { createServer } from "node:http"
 import { readFile, stat } from "node:fs/promises"
 import { extname, join, resolve, sep } from "node:path"
+import { brotliCompressSync, constants as zlibConstants, gzipSync } from "node:zlib"
 
 const RAIZ = resolve(process.cwd(), "out")
 const PUERTO = Number(process.env.PUERTO ?? 3100)
@@ -42,6 +43,34 @@ const TIPOS = {
   ".woff2": "font/woff2",
   ".woff": "font/woff",
   ".mp4": "video/mp4",
+}
+
+/** Solo se comprime lo que Netlify comprime: texto, no fotos ni fuentes. */
+const COMPRIMIBLES = new Set([
+  ".html",
+  ".css",
+  ".js",
+  ".mjs",
+  ".json",
+  ".txt",
+  ".xml",
+  ".svg",
+])
+
+function comprimir(cuerpo, extension, acepta) {
+  if (!COMPRIMIBLES.has(extension) || cuerpo.length < 1024) return null
+  if (acepta.includes("br")) {
+    return {
+      cuerpo: brotliCompressSync(cuerpo, {
+        params: { [zlibConstants.BROTLI_PARAM_QUALITY]: 5 },
+      }),
+      codificacion: "br",
+    }
+  }
+  if (acepta.includes("gzip")) {
+    return { cuerpo: gzipSync(cuerpo, { level: 9 }), codificacion: "gzip" }
+  }
+  return null
 }
 
 /** Las líneas de `_redirects`: `desde  hacia  estado`. */
@@ -97,8 +126,9 @@ async function leerCabeceras() {
 function cabecerasPara(reglas, ruta) {
   const salida = {}
   for (const regla of reglas) {
+    const comodin = regla.ruta.endsWith("/*")
     const patron = regla.ruta === "/*" ? null : regla.ruta.replace(/\*$/, "")
-    if (patron === null || ruta.startsWith(patron)) {
+    if (patron === null || (comodin ? ruta.startsWith(patron) : ruta === patron)) {
       Object.assign(salida, regla.cabeceras)
     }
   }
@@ -170,11 +200,20 @@ const servidor = createServer(async (peticion, respuesta) => {
   }
 
   try {
-    const cuerpo = await readFile(archivo)
-    respuesta.writeHead(200, {
-      "Content-Type": TIPOS[extname(archivo).toLowerCase()] ?? "application/octet-stream",
+    const original = await readFile(archivo)
+    const extension = extname(archivo).toLowerCase()
+    const acepta = String(peticion.headers["accept-encoding"] ?? "")
+    const comprimido = comprimir(original, extension, acepta)
+    const cuerpo = comprimido?.cuerpo ?? original
+    const cabecerasRespuesta = {
+      "Content-Type": TIPOS[extension] ?? "application/octet-stream",
       ...comunes,
-    })
+      ...(comprimido
+        ? { "Content-Encoding": comprimido.codificacion, Vary: "Accept-Encoding" }
+        : {}),
+    }
+
+    respuesta.writeHead(200, cabecerasRespuesta)
     respuesta.end(peticion.method === "HEAD" ? undefined : cuerpo)
   } catch {
     respuesta.writeHead(500, { "Content-Type": "text/plain; charset=utf-8" })

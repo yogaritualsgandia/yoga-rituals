@@ -25,6 +25,10 @@ export const metadata: Metadata = metadatosDePagina({
  */
 export default function PaginaHatha() {
   return (
-    <PaginaDeEstilo estilo={estilos.hatha} foto={fotos.esterillaNaranja} />
+    <PaginaDeEstilo
+      estilo={estilos.hatha}
+      foto={fotos.hathaSentada}
+      aspecto="aspect-4/5"
+    />
   )
 }

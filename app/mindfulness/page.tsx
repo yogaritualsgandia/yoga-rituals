@@ -2,8 +2,10 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import { Contenedor } from "@/components/layout/contenedor"
+import { FotoDeSeccion } from "@/components/layout/foto-editorial"
 import { Pagina } from "@/components/layout/pagina"
 import { Button } from "@/components/ui/button"
+import { fotos } from "@/content/medios"
 import { mindfulness } from "@/content/mindfulness"
 import { accionPrincipal, whatsappUrl } from "@/content/site"
 import { metadatosDePagina } from "@/lib/metadatos"
@@ -57,15 +59,25 @@ export default function PaginaMindfulness() {
 
       {/* ── Qué esperar ──────────────────────────────────────────────────── */}
       <section className="seccion pt-0">
-        <Contenedor>
-          <h2 className="font-heading text-2xl">Qué esperar</h2>
+        <Contenedor className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-center lg:gap-10">
+          <div className="lg:col-span-6">
+            <h2 className="font-heading text-2xl">Qué esperar</h2>
 
-          <div className="medida mt-5 flex flex-col gap-4">
-            {mindfulness.queEsperar.map((parrafo) => (
-              <p key={parrafo} className="paso-base text-ink-soft">
-                {parrafo}
-              </p>
-            ))}
+            <div className="medida mt-5 flex flex-col gap-4">
+              {mindfulness.queEsperar.map((parrafo) => (
+                <p key={parrafo} className="paso-base text-ink-soft">
+                  {parrafo}
+                </p>
+              ))}
+            </div>
+          </div>
+
+          <div className="lg:col-span-5 lg:col-start-8">
+            <FotoDeSeccion
+              foto={fotos.mindfulnessBuda}
+              aspecto="aspect-4/5"
+              sizes="(min-width: 1024px) 38vw, 92vw"
+            />
           </div>
         </Contenedor>
       </section>

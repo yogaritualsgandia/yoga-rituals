@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 
 import { BotonReserva } from "@/components/layout/boton-reserva"
 import { Contenedor } from "@/components/layout/contenedor"
+import { BandaFoto } from "@/components/layout/foto-editorial"
 import { Pagina } from "@/components/layout/pagina"
 import { Parrafo, atributoEscritura } from "@/components/movimiento/revelar"
 import {
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/accordion"
 import { metadatosDePagina } from "@/lib/metadatos"
 import { Button } from "@/components/ui/button"
+import { fotos } from "@/content/medios"
 import {
   aTenerEnCuenta,
   cierrePrimeraVez,
@@ -80,6 +82,8 @@ export default function PaginaPrimeraVez() {
           </dl>
         </Contenedor>
       </section>
+
+      <BandaFoto foto={fotos.primeraVezMaterial} aspecto="aspect-3/2" />
 
       {/* ── A tener en cuenta ────────────────────────────────────────────── */}
       <section className="seccion pt-0">

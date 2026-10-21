@@ -2,8 +2,10 @@ import type { Metadata } from "next"
 
 import { BotonReserva } from "@/components/layout/boton-reserva"
 import { Contenedor } from "@/components/layout/contenedor"
+import { FotoDeSeccion } from "@/components/layout/foto-editorial"
 import { Pagina } from "@/components/layout/pagina"
 import { Button } from "@/components/ui/button"
+import { fotos } from "@/content/medios"
 import { whatsappUrl } from "@/content/site"
 import { yogaNidra } from "@/content/yogaNidra"
 import { metadatosDePagina } from "@/lib/metadatos"
@@ -78,11 +80,21 @@ export default function PaginaYogaNidra() {
 
       {/* ── Cómo es una sesión ───────────────────────────────────────────── */}
       <section className="seccion pt-0">
-        <Contenedor>
-          <h2 className="font-heading text-2xl">Cómo es una sesión</h2>
-          <p className="paso-base medida mt-5 text-ink-soft">
-            {yogaNidra.comoEs}
-          </p>
+        <Contenedor className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-center lg:gap-10">
+          <div className="lg:col-span-6">
+            <h2 className="font-heading text-2xl">Cómo es una sesión</h2>
+            <p className="paso-base medida mt-5 text-ink-soft">
+              {yogaNidra.comoEs}
+            </p>
+          </div>
+
+          <div className="lg:col-span-5 lg:col-start-8">
+            <FotoDeSeccion
+              foto={fotos.nidraPiernas}
+              aspecto="aspect-4/5"
+              sizes="(min-width: 1024px) 38vw, 92vw"
+            />
+          </div>
         </Contenedor>
       </section>
 

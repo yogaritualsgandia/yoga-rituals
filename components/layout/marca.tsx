@@ -27,6 +27,11 @@ import { cn } from "@/lib/utils"
  *     cambia es solo la tinta, píxel a píxel, y el mandala queda intacto.
  *
  *  Los dos se generan con `scripts/logo-sin-fondo.ps1`, que se puede repetir.
+ *  El original mide 1920 px de ancho y pesa 243 KB; aquí se usan las copias de
+ *  400 px (`-400.png`), que pesan 24 y 28 KB. A 168 px de ancho siguen viéndose
+ *  nítidas en pantallas de doble densidad y no compiten con la foto de portada.
+ *  Si se regenera el logo, hay que volver a sacar esas dos copias.
+ *
  *  Lo correcto, de todas formas, es que Susana pase el logo en SVG: un SVG no
  *  tiene fondo y su tinta se cambia por CSS, así que los dos PNG derivados se
  *  borrarían junto con este comentario.
@@ -50,20 +55,19 @@ export function Marca({ className }: { className?: string }) {
       className={cn("inline-flex items-center rounded-sm", className)}
     >
       <Image
-        src="/marca/logo-sin-fondo.png"
+        src="/marca/logo-sin-fondo-400.png"
         alt=""
-        width={1920}
-        height={495}
+        width={400}
+        height={103}
         priority
         sizes="(min-width: 768px) 168px, 134px"
         className="h-8 w-auto md:h-10 dark:hidden"
       />
       <Image
-        src="/marca/logo-sin-fondo-oscuro.png"
+        src="/marca/logo-sin-fondo-oscuro-400.png"
         alt=""
-        width={1920}
-        height={495}
-        priority
+        width={400}
+        height={103}
         sizes="(min-width: 768px) 168px, 134px"
         className="hidden h-8 w-auto md:h-10 dark:block"
       />

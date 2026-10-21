@@ -1,17 +1,13 @@
-import Image from "next/image"
 import Link from "next/link"
 
 import { Contenedor } from "./contenedor"
 import { Pagina } from "./pagina"
 
 import { BotonReserva } from "@/components/layout/boton-reserva"
-import { Paralaje } from "@/components/movimiento/paralaje"
+import { FotoDeSeccion } from "@/components/layout/foto-editorial"
 import { Button } from "@/components/ui/button"
 import type { EstiloDetalle } from "@/content/clases"
-import {
-  avisoFotosProvisionales,
-  type Fotografia,
-} from "@/content/medios"
+import type { Fotografia } from "@/content/medios"
 import { whatsappUrl } from "@/content/site"
 
 /**
@@ -31,16 +27,17 @@ import { whatsappUrl } from "@/content/site"
  * vocabulario de folleto.
  *
  * La foto la elige cada página y la pasa aquí, en vez de vivir dentro de este
- * componente: son de ejemplo, y el día que lleguen las del estudio se cambia un
- * `foto={...}` y ya está. Mientras tanto van con su aviso debajo, como las de la
- * portada.
+ * componente: así se puede cambiar sin tocar la estructura. Hatha y Vinyasa no
+ * comparten proporción porque las dos fotos no comparten forma.
  */
 export function PaginaDeEstilo({
   estilo,
   foto,
+  aspecto = "aspect-4/5",
 }: {
   estilo: EstiloDetalle
   foto: Fotografia
+  aspecto?: string
 }) {
   return (
     <Pagina etiqueta="Clases" titulo={estilo.nombre} entradilla={estilo.lema}>
@@ -79,20 +76,11 @@ export function PaginaDeEstilo({
               portada, para que la línea del titular y la primera raya no se
               lean como un único bloque de texto pegado al borde de la foto. */}
           <div className="lg:col-span-5 lg:col-start-8 lg:pt-20">
-            <figure>
-              <Paralaje className="aspect-4/5 rounded-lg">
-                <Image
-                  src={foto.src}
-                  alt={foto.alt}
-                  fill
-                  sizes="(min-width: 1024px) 38vw, 92vw"
-                  className="object-cover"
-                />
-              </Paralaje>
-              <figcaption className="etiqueta mt-3 block">
-                {avisoFotosProvisionales}
-              </figcaption>
-            </figure>
+            <FotoDeSeccion
+              foto={foto}
+              aspecto={aspecto}
+              sizes="(min-width: 1024px) 38vw, 92vw"
+            />
           </div>
         </Contenedor>
       </section>

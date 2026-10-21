@@ -1,13 +1,12 @@
 import type { Metadata } from "next"
-import Image from "next/image"
 import Link from "next/link"
 
 import { Contenedor } from "@/components/layout/contenedor"
+import { FotoDeSeccion } from "@/components/layout/foto-editorial"
 import { Pagina } from "@/components/layout/pagina"
-import { Paralaje } from "@/components/movimiento/paralaje"
 import { Button } from "@/components/ui/button"
 import { breathwork } from "@/content/breathwork"
-import { avisoFotosProvisionales, fotos } from "@/content/medios"
+import { fotos } from "@/content/medios"
 import { accionPrincipal, whatsappUrl } from "@/content/site"
 import { metadatosDePagina } from "@/lib/metadatos"
 
@@ -38,9 +37,8 @@ export const metadata: Metadata = metadatosDePagina({
  *      y formación), que es lo que se viene a buscar antes de escribir.
  *   4. Y el cierre, con los botones a la derecha, como en la portada.
  *
- * La foto es de ejemplo y va con su aviso, igual que las de la portada. Es un
- * incienso: humo que sube recto, que es lo más parecido a una respiración que
- * hay en las fotos que hay.
+ * La foto es un incienso: humo que sube recto, que es lo más parecido a una
+ * respiración que hay en las fotos del estudio.
  */
 export default function PaginaBreathwork() {
   return (
@@ -60,20 +58,13 @@ export default function PaginaBreathwork() {
             ))}
           </div>
 
-          <figure className="lg:col-span-5 lg:col-start-8">
-            <Paralaje className="aspect-4/5 rounded-lg">
-              <Image
-                src={fotos.incienso.src}
-                alt={fotos.incienso.alt}
-                fill
-                sizes="(min-width: 1024px) 38vw, 92vw"
-                className="object-cover"
-              />
-            </Paralaje>
-            <figcaption className="etiqueta mt-3 block">
-              {avisoFotosProvisionales}
-            </figcaption>
-          </figure>
+          <div className="lg:col-span-5 lg:col-start-8">
+            <FotoDeSeccion
+              foto={fotos.breathworkIncienso}
+              aspecto="aspect-4/5"
+              sizes="(min-width: 1024px) 38vw, 92vw"
+            />
+          </div>
         </Contenedor>
       </section>
 

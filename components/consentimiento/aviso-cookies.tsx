@@ -89,11 +89,13 @@ export function AvisoCookies() {
       <Contenedor className="pb-4">
         <div
           role="region"
-          aria-label="Uso de cookies"
+          aria-labelledby="titulo-aviso-cookies"
           className="aviso-cookies__caja pointer-events-auto flex flex-col gap-5 rounded-lg border border-line bg-surface p-5 shadow-lg sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:p-6"
         >
           <div className="max-w-[58ch]">
-            <p className="etiqueta">{avisoCookies.etiqueta}</p>
+            <h2 id="titulo-aviso-cookies" className="font-heading text-lg text-ink">
+              {avisoCookies.etiqueta}
+            </h2>
 
             <p className="paso-pequeno mt-2 text-ink-soft">
               {avisoCookies.texto}{" "}

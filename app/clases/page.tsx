@@ -4,6 +4,7 @@ import Link from "next/link"
 
 import { BotonReserva } from "@/components/layout/boton-reserva"
 import { Contenedor } from "@/components/layout/contenedor"
+import { BandaFoto } from "@/components/layout/foto-editorial"
 import { Pagina } from "@/components/layout/pagina"
 import { Button } from "@/components/ui/button"
 import {
@@ -13,6 +14,7 @@ import {
   practicasFueraDeLaSala,
   type Practica,
 } from "@/content/clases"
+import { fotos } from "@/content/medios"
 import { metadatosDePagina } from "@/lib/metadatos"
 
 export const metadata: Metadata = metadatosDePagina({
@@ -73,6 +75,8 @@ export default function PaginaClases() {
           </div>
         </Contenedor>
       </section>
+
+      <BandaFoto foto={fotos.clasesGrupo} aspecto="aspect-3/2" />
 
       {/* ── Las dos listas ───────────────────────────────────────────────── */}
       <Indice

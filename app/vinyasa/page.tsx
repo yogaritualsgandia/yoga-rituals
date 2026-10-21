@@ -20,5 +20,11 @@ export const metadata: Metadata = metadatosDePagina({
  * decidiendo entre las dos.
  */
 export default function PaginaVinyasa() {
-  return <PaginaDeEstilo estilo={estilos.vinyasa} foto={fotos.material} />
+  return (
+    <PaginaDeEstilo
+      estilo={estilos.vinyasa}
+      foto={fotos.vinyasaRueda}
+      aspecto="aspect-square"
+    />
+  )
 }

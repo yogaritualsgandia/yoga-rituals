@@ -3,10 +3,16 @@
 # =============================================================================
 #
 #  Qué genera
-#  Dos archivos en public/marca/, a partir de logo-mandala.png:
+#  Cuatro archivos en public/marca/, a partir de logo-mandala.png:
 #
-#    logo-sin-fondo.png         tinta oscura, para el suelo crema (modo claro)
-#    logo-sin-fondo-oscuro.png  tinta crema, para el suelo oscuro (modo oscuro)
+#    logo-sin-fondo.png              tinta oscura (modo claro)
+#    logo-sin-fondo-oscuro.png       tinta crema (modo oscuro)
+#    logo-sin-fondo-400.png          copia de 400 px para la cabecera
+#    logo-sin-fondo-oscuro-400.png   copia de 400 px para la cabecera
+#
+#  Las copias de 400 px son las que usa la web. El original de 1920 px se
+#  conserva para volver a generar, pero no se sirve: pesa 243 KB y en la
+#  cabecera se ve a 168 px como mucho.
 #
 #  Por qué hacen falta dos
 #  El original trae la tinta en #333 y el mandala en turquesa, todo pintado
@@ -119,6 +125,29 @@ function Convertir-Logotipo {
     }
 }
 
+# La copia que se sirve en la cabecera. El PNG original pesa 243 KB y se ve a
+# 168 px como mucho; a 400 px sobra para una pantalla de doble densidad.
+function Guardar-CopiaWeb {
+    param(
+        [string]$Origen,
+        [string]$Destino
+    )
+
+    $fuente = New-Object System.Drawing.Bitmap($Origen)
+    $alto = [int][Math]::Round($fuente.Height * 400.0 / $fuente.Width)
+    $copia = New-Object System.Drawing.Bitmap(400, $alto)
+    $grafico = [System.Drawing.Graphics]::FromImage($copia)
+    $grafico.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
+    $grafico.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
+    $grafico.DrawImage($fuente, 0, 0, 400, $alto)
+    $copia.Save($Destino, [System.Drawing.Imaging.ImageFormat]::Png)
+    $grafico.Dispose()
+    $copia.Dispose()
+    $fuente.Dispose()
+
+    Write-Host ("  {0} ({1} px de ancho)" -f (Split-Path $Destino -Leaf), 400)
+}
+
 Write-Host "Preparando el logotipo:"
 
 $original = New-Object System.Drawing.Bitmap($origen)
@@ -141,5 +170,13 @@ Convertir-Logotipo `
     -TintaClara $true
 
 $original.Dispose()
+
+Guardar-CopiaWeb `
+    -Origen (Join-Path $raiz "logo-sin-fondo.png") `
+    -Destino (Join-Path $raiz "logo-sin-fondo-400.png")
+
+Guardar-CopiaWeb `
+    -Origen (Join-Path $raiz "logo-sin-fondo-oscuro.png") `
+    -Destino (Join-Path $raiz "logo-sin-fondo-oscuro-400.png")
 
 Write-Host "Listo."
