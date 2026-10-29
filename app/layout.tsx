@@ -93,6 +93,21 @@ export default function RootLayout({
       className={cn("antialiased", literata.variable, sourceSans.variable)}
     >
       <body className="flex min-h-dvh flex-col">
+        {/* Parche definitivo contra el banner flotante de Netlify */}
+        <style dangerouslySetInnerHTML={{__html: `
+          netlify-next-dev-toolbar, 
+          [id*="netlify-dev-toolbar"], 
+          .netlify-dt-element,
+          #netlify-dev-toolbar-root {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            height: 0 !important;
+            width: 0 !important;
+          }
+        `}} />
+
         {/* El primero de todo, y a propósito.
             Dice si el movimiento está permitido poniendo un atributo en el
             <html>, y tiene que hacerlo antes de que se pinte el primer
