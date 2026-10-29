@@ -9,8 +9,8 @@ import { cn } from "@/lib/utils"
  * Acceso directo a WhatsApp, siempre a mano.
  *
  * Va abajo a la derecha y no a la izquierda: es donde el pulgar llega solo en
- * un móvil y donde ya se busca un botón de WhatsApp. En móvil sube por encima
- * de la barra de acción fija para no taparla ni quedar debajo.
+ * un móvil y donde ya se busca un botón de WhatsApp. En móvil se queda pegado
+ * al borde inferior, con el mismo aire que en escritorio.
  *
  * El bocadillo no sale de entrada. Espera unos segundos, se escribe letra a
  * letra, se queda un rato y se borra igual. Solo pasa una vez por sesión: un
@@ -111,7 +111,7 @@ export function WhatsAppFlotante() {
   return (
     <div
       data-whatsapp-flotante
-      className="fixed right-4 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-30 flex flex-col items-end gap-3 sm:right-5 lg:right-6 lg:bottom-6"
+      className="fixed right-4 bottom-[calc(1.5rem+env(safe-area-inset-bottom))] z-30 flex flex-col items-end gap-3 sm:right-5 lg:right-6"
     >
       {/* En una pantalla muy baja, el bocadillo taparía el botón de reserva.
           Ahí se queda solo el botón de WhatsApp. */}

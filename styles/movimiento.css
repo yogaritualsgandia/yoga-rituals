@@ -201,8 +201,11 @@ html.lenis body {
   animation: desplegar-panel var(--escritura, var(--dur-escribir)) linear;
 }
 
+/* Cerrar no compite con abrir: tarda 300 ms, lo justo para que se vea el panel
+   recogerse en vez de desaparecer de golpe. Vale igual cuando se cierra solo
+   porque acaba de abrirse otra pregunta. */
 [data-movimiento="listo"] [data-slot="accordion-content"][data-state="closed"] {
-  animation: plegar-panel var(--dur-fast) var(--ease-out);
+  animation: plegar-panel var(--dur-base) var(--ease-out);
 }
 
 /* La palabra no se parte por la mitad aunque esté escrita letra a letra: sin
@@ -225,7 +228,8 @@ html.lenis body {
    Si las letras se quedaran mientras el panel se pliega, se verían apretarse
    contra el borde de abajo; y si se fueran una detrás de otra, cerrar tardaría
    más que abrir, que es exactamente lo contrario de lo que espera quien acaba
-   de pulsar. Setenta milisegundos: se nota que se van, no se hace esperar. */
+   de pulsar. Ciento cuarenta milisegundos: se nota que se van y el panel las
+   acompaña sin dar un salto seco. */
 @keyframes borrar-letra {
   to {
     opacity: 0;
@@ -236,7 +240,7 @@ html.lenis body {
   [data-slot="accordion-content"][data-state="closed"]
   [data-revelar="escrito"]
   .letra {
-  animation: borrar-letra 70ms linear both;
+  animation: borrar-letra 140ms linear both;
 }
 
 /* --- La salida de emergencia de lo escondido -----------------------------

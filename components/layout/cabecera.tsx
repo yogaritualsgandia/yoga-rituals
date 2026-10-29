@@ -20,8 +20,8 @@ import { MenuMovil } from "./menu-movil"
  *    barra es lo primero que se pierde. El hueco entre el titular y el botón
  *    no se ha tocado.
  *
- * 3. La cabecera solo se queda fija en escritorio. En móvil sería una segunda
- *    barra pegada (la de abajo ya lleva la reserva) y se come la pantalla.
+ * 3. La cabecera solo se queda fija en escritorio. En móvil sería una barra
+ *    pegada más y se come la pantalla.
  *
  * 4. La línea de abajo solo aparece a partir de 768 px, que es cuando la
  *    cabecera se queda fija y el contenido empieza a pasar por debajo. En

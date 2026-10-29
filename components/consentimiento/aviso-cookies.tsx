@@ -25,11 +25,10 @@ import { useConsentimiento } from "./proveedor-consentimiento"
  *
  *  · El marco va aparte de la caja. El marco es fijo y no se mueve nunca; la
  *    caja es la que sube al entrar. Se hace así porque hay que MEDIR el hueco
- *    que ocupa el cartel —lo lee el pie para no quedar debajo y la barra fija
- *    del móvil para subir por encima—, y midiendo la caja la medida incluiría
- *    el desplazamiento de su propia animación: durante el primer cuarto de
- *    segundo saldría un hueco negativo. El marco no se mueve, así que su medida
- *    es la buena desde el primer fotograma.
+ *    que ocupa el cartel —lo lee el pie para no quedar debajo—, y midiendo la
+ *    caja la medida incluiría el desplazamiento de su propia animación: durante
+ *    el primer cuarto de segundo saldría un hueco negativo. El marco no se
+ *    mueve, así que su medida es la buena desde el primer fotograma.
  *
  *  · El marco deja pasar el ratón. Lo único que lo detiene es la caja. Sin eso,
  *    una franja de pantalla —la que va del borde al cartel, a los lados— se

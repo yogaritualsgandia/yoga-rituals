@@ -55,13 +55,6 @@ test("capturas de la fase", async ({ page }, testInfo) => {
       animations: "disabled",
     })
     await page.keyboard.press("Escape")
-
-    await page.evaluate(() => window.scrollTo(0, 1200))
-    await page.waitForTimeout(600)
-    await page.screenshot({
-      path: `capturas/fase-2/${proyecto}/barra-fija.png`,
-      animations: "disabled",
-    })
   }
 
   // El pie, que es donde vive el SEO local y la atribución.

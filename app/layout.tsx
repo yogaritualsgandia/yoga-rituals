@@ -4,7 +4,6 @@ import { Literata, Source_Sans_3 } from "next/font/google"
 import "./globals.css"
 import { AvisoCookies } from "@/components/consentimiento/aviso-cookies"
 import { ProveedorConsentimiento } from "@/components/consentimiento/proveedor-consentimiento"
-import { AccionFija } from "@/components/layout/accion-fija"
 import { Cabecera } from "@/components/layout/cabecera"
 import { FondoAmbiente } from "@/components/layout/fondo-ambiente"
 import { Pie } from "@/components/layout/pie"
@@ -129,12 +128,6 @@ export default function RootLayout({
               </main>
 
               <Pie />
-
-              {/* El hueco que ocupa la barra fija de móvil, para que no tape el
-                final del pie. */}
-              <div aria-hidden="true" className="h-24 lg:hidden" />
-
-              <AccionFija />
 
               <WhatsAppFlotante />
 

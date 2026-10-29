@@ -34,7 +34,7 @@ export function Pie() {
 
   return (
     <footer className="border-t border-line bg-surface-2/50">
-      <Contenedor className="pt-16 pb-40 lg:pt-20 lg:pb-28">
+      <Contenedor className="pt-16 pb-24 lg:pt-20 lg:pb-24">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-8">
           <div className="md:col-span-5 lg:col-span-4">
             <Marca />

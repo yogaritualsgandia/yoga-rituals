@@ -2,33 +2,25 @@
    YOGA Rituals · El cartel de cookies
    ==========================================================================
 
-   Aquí vive lo que necesita el cartel para convivir con lo que ya estaba: la
-   barra fija del móvil y el final del pie.
+   Aquí vive lo que necesita el cartel para no tapar el final del pie.
 
-   EL PROBLEMA. El cartel se pega al borde de abajo y la barra fija del móvil
-   también. Puestos los dos a la vez, uno tapa al otro, y el que taparía —el
-   cartel, que va por delante— es justo el que no se puede tocar sin decidir
-   nada. Y el pie tenía el mismo problema por el otro lado: su última línea se
-   quedaba detrás del cartel, invisible, sin que nada avisara.
+   EL PROBLEMA. El cartel se pega al borde de abajo y el pie llega hasta ahí:
+   su última línea se quedaba detrás del cartel, invisible, sin que nada
+   avisara.
 
    LA SOLUCIÓN. El cartel se mide al aparecer y escribe su altura en
-   `--alto-aviso-cookies`, en la raíz del documento. A partir de ahí son dos
-   reglas: el pie se aparta ese hueco por abajo, y la barra fija sube ese hueco.
-   Cuando el cartel no está, la variable no existe y las dos valen cero.
+   `--alto-aviso-cookies`, en la raíz del documento. El documento se aparta ese
+   hueco por abajo. Cuando el cartel no está, la variable no existe y vale cero.
 
-   Y SE ESCRIBE AQUÍ Y NO EN UN `style` DEL COMPONENTE a propósito: `bottom` y
-   `padding-bottom` tienen que ganarle a las clases de Tailwind que ya llevan
-   esos elementos (`bottom-0` en la barra). Un estilo suelto en el componente
-   empata en especificidad y depende del orden en que el navegador lea las
-   hojas; una regla escrita aquí, fuera de las capas de Tailwind, gana siempre.
+   Y SE ESCRIBE AQUÍ Y NO EN UN `style` DEL COMPONENTE a propósito:
+   `padding-bottom` tiene que ganarle a las clases de Tailwind que ya llevan ese
+   elemento. Un estilo suelto en el componente empata en especificidad y depende
+   del orden en que el navegador lea las hojas; una regla escrita aquí, fuera de
+   las capas de Tailwind, gana siempre.
    ========================================================================== */
 
 body {
   padding-bottom: var(--alto-aviso-cookies, 0px);
-}
-
-[data-accion-fija] {
-  bottom: var(--alto-aviso-cookies, 0px);
 }
 
 /* --- La entrada ----------------------------------------------------------

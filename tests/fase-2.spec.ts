@@ -344,34 +344,6 @@ test.describe("Contenido real", () => {
 test.describe("Móvil", () => {
   test.skip(({ viewport }) => (viewport?.width ?? 0) >= 1024, "solo móvil y tablet")
 
-  test("la barra fija aparece al bajar y lleva a la reserva", async ({ page }) => {
-    await irA(page, "/")
-
-    const barra = page.locator("[data-accion-fija]")
-    await expect(barra).toBeAttached()
-
-    // Aparece al bajar, no de entrada: tapar la portada con una barra antes de
-    // que nadie haya leído nada es empezar pidiendo. Escondida quiere decir
-    // empujada por debajo del borde de abajo, no «borrada».
-    const alto = await page.evaluate(() => window.innerHeight)
-    expect((await barra.boundingBox())!.y).toBeGreaterThan(alto)
-
-    await page.evaluate(() => window.scrollTo(0, 1200))
-    await expect
-      .poll(async () => (await barra.boundingBox())!.y)
-      .toBeLessThan(alto)
-
-    /* Y lleva a la reserva de verdad: a WhatsApp, en otra pestaña. El segundo
-       botón de la barra es el teléfono, no otro WhatsApp. */
-    const reserva = barra.getByRole("link", { name: "Reserva tu clase de prueba" })
-    await expect(reserva).toHaveAttribute("href", /^https:\/\/wa\.me\/34656187761/)
-    await expect(reserva).toHaveAttribute("target", "_blank")
-
-    await expect(
-      barra.getByRole("link", { name: /Llamar al estudio/ }),
-    ).toHaveAttribute("href", "tel:+34656187761")
-  })
-
   test("el menú se abre, atrapa el foco y se cierra con Escape", async ({ page }) => {
     await irA(page, "/")
 
@@ -625,39 +597,6 @@ test.describe("Tema", () => {
 
     await page.getByRole("button", { name: "Cambiar a modo claro" }).click()
     await expect(page.locator("html")).not.toHaveClass(/\bdark\b/)
-  })
-})
-
-/* ── Menos movimiento ───────────────────────────────────────────────────── */
-
-test.describe("Menos movimiento", () => {
-  test("la animación de entrada de la barra fija queda desactivada", async ({
-    page,
-  }) => {
-    test.skip(
-      test.info().project.name !== "reduced-motion",
-      "solo en el proyecto de movimiento reducido",
-    )
-
-    await irA(page, "/")
-    await page.evaluate(() => window.scrollTo(0, 1200))
-
-    const barra = page.locator("[data-accion-fija]")
-
-    const duracion = await barra.evaluate(
-      (el) => getComputedStyle(el as HTMLElement).transitionDuration,
-    )
-
-    // Chrome devuelve las duraciones en segundos, y la salvaguarda global deja
-    // las transiciones en 0.01ms — que es 0.00001s. Se comprueba el valor, no
-    // cómo esté escrito, para no atarse a la notación que elija el navegador.
-    const segundos = duracion
-      .split(",")
-      .map((parte) => Number.parseFloat(parte))
-      .filter((valor) => Number.isFinite(valor))
-
-    expect(segundos.length).toBeGreaterThan(0)
-    expect(Math.max(...segundos)).toBeLessThan(0.05)
   })
 })
 

@@ -95,7 +95,7 @@ test.describe("Detalles en móvil", () => {
     "solo en móvil",
   )
 
-  test("cabecera, menú y barra fija", async ({ page }) => {
+  test("cabecera y menú", async ({ page }) => {
     await prepararPagina(page, "/")
 
     await page.locator("header").screenshot({
@@ -111,12 +111,5 @@ test.describe("Detalles en móvil", () => {
     })
     await page.keyboard.press("Escape")
     await page.waitForTimeout(300)
-
-    await page.evaluate(() => window.scrollTo(0, 1200))
-    await page.waitForTimeout(700)
-    await page.locator("[data-accion-fija]").screenshot({
-      path: "capturas/fase-2/detalles/barra-fija.png",
-      animations: "disabled",
-    })
   })
 })
