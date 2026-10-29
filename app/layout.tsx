@@ -63,7 +63,7 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         /* El texto alternativo describe lo que se ve, no repite el titular:
-           quien no ve la imagen ya tiene el título y la descripción al lado. */
+           quien no veo la imagen ya tiene el título y la descripción al lado. */
         alt: "YOGA Rituals, estudio de yoga en Gandia",
       },
     ],
@@ -93,19 +93,38 @@ export default function RootLayout({
       className={cn("antialiased", literata.variable, sourceSans.variable)}
     >
       <body className="flex min-h-dvh flex-col">
-        {/* Parche definitivo contra el banner flotante de Netlify */}
+        {/* Parche definitivo e indestructible contra el banner de Netlify */}
         <style dangerouslySetInnerHTML={{__html: `
           netlify-next-dev-toolbar, 
           [id*="netlify-dev-toolbar"], 
           .netlify-dt-element,
-          #netlify-dev-toolbar-root {
+          #netlify-dev-toolbar-root,
+          iframe[src*="netlify"] {
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
             pointer-events: none !important;
-            height: 0 !important;
+            position: absolute !important;
+            top: -9999px !important;
+            left: -9999px !important;
             width: 0 !important;
+            height: 0 !important;
           }
+        `}} />
+        <script dangerouslySetInnerHTML={{ __html: `
+          (function() {
+            function aniquilarBanner() {
+              const selectores = ['netlify-next-dev-toolbar', '[id*="netlify-dev-toolbar"]', '.netlify-dt-element', '#netlify-dev-toolbar-root'];
+              selectores.forEach(sel => {
+                document.querySelectorAll(sel).forEach(el => el.remove());
+              });
+            }
+            aniquilarBanner();
+            window.addEventListener('DOMContentLoaded', aniquilarBanner);
+            window.addEventListener('load', aniquilarBanner);
+            const observer = new MutationObserver(aniquilarBanner);
+            observer.observe(document.documentElement, { childList: true, subtree: true });
+          })();
         `}} />
 
         {/* El primero de todo, y a propósito.
