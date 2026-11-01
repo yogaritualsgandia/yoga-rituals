@@ -1,13 +1,14 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 
+import { BotonEnlace } from "@/components/layout/boton-enlace"
 import { Contenedor } from "@/components/layout/contenedor"
 import { FotoDeSeccion } from "@/components/layout/foto-editorial"
 import { Pagina } from "@/components/layout/pagina"
 import { Button } from "@/components/ui/button"
 import { fotos } from "@/content/medios"
 import { mindfulness } from "@/content/mindfulness"
-import { accionPrincipal, whatsappUrl } from "@/content/site"
+import { whatsappUrl } from "@/content/site"
 import { metadatosDePagina } from "@/lib/metadatos"
 
 export const metadata: Metadata = metadatosDePagina({
@@ -119,22 +120,17 @@ export default function PaginaMindfulness() {
           </p>
 
           <div className="mt-10 flex flex-wrap gap-3">
-            <Button asChild size="lg">
-              <a
-                href={whatsappUrl(
-                  "Hola Susana, quiero venir a la sesión de mindfulness.",
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Preguntar por la sesión
-              </a>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <Link href={accionPrincipal.href}>
-                {accionPrincipal.etiqueta}
-              </Link>
-            </Button>
+            <BotonEnlace
+              href={whatsappUrl(
+                "Hola Susana, quiero venir a la sesión de mindfulness.",
+              )}
+              externo
+            >
+              Preguntar por la sesión
+            </BotonEnlace>
+            <BotonEnlace href="/primera-vez" variante="outline">
+              Primera vez
+            </BotonEnlace>
           </div>
         </Contenedor>
       </section>

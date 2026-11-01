@@ -1,13 +1,12 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 
+import { BotonEnlace } from "@/components/layout/boton-enlace"
 import { Contenedor } from "@/components/layout/contenedor"
 import { FotoDeSeccion } from "@/components/layout/foto-editorial"
 import { Pagina } from "@/components/layout/pagina"
-import { Button } from "@/components/ui/button"
 import { breathwork } from "@/content/breathwork"
 import { fotos } from "@/content/medios"
-import { accionPrincipal, whatsappUrl } from "@/content/site"
+import { whatsappUrl } from "@/content/site"
 import { metadatosDePagina } from "@/lib/metadatos"
 
 export const metadata: Metadata = metadatosDePagina({
@@ -131,20 +130,15 @@ export default function PaginaBreathwork() {
           </div>
 
           <div className="flex flex-col items-start gap-4 lg:col-span-4 lg:col-start-9 lg:justify-center">
-            <Button asChild size="lg">
-              <a
-                href={whatsappUrl("Hola Susana, me interesa el breathwork.")}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Escribir por WhatsApp
-              </a>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <Link href={accionPrincipal.href}>
-                {accionPrincipal.etiqueta}
-              </Link>
-            </Button>
+            <BotonEnlace
+              href={whatsappUrl("Hola Susana, me interesa el breathwork.")}
+              externo
+            >
+              Escribir por WhatsApp
+            </BotonEnlace>
+            <BotonEnlace href="/primera-vez" variante="outline">
+              Primera vez
+            </BotonEnlace>
           </div>
         </Contenedor>
       </section>

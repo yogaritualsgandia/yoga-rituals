@@ -4,9 +4,7 @@ import { BotonReserva } from "@/components/layout/boton-reserva"
 import { Contenedor } from "@/components/layout/contenedor"
 import { FotoDeSeccion } from "@/components/layout/foto-editorial"
 import { Pagina } from "@/components/layout/pagina"
-import { Button } from "@/components/ui/button"
 import { fotos } from "@/content/medios"
-import { whatsappUrl } from "@/content/site"
 import { yogaNidra } from "@/content/yogaNidra"
 import { metadatosDePagina } from "@/lib/metadatos"
 
@@ -111,15 +109,6 @@ export default function PaginaYogaNidra() {
 
           <div className="mt-10 flex flex-wrap gap-3">
             <BotonReserva />
-            <Button asChild variant="outline" size="lg">
-              <a
-                href={whatsappUrl("Hola Susana, me interesa el Yoga Nidra.")}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Preguntar por la próxima sesión
-              </a>
-            </Button>
           </div>
         </Contenedor>
       </section>

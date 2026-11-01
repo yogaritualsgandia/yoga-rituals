@@ -1,10 +1,9 @@
 "use client"
 
-import { useRef, type ReactNode } from "react"
+import type { ReactNode } from "react"
 
-import { Button } from "@/components/ui/button"
+import { BotonEnlace } from "@/components/layout/boton-enlace"
 import { accionPrincipal } from "@/content/site"
-import { useImantado } from "@/hooks/use-imantado"
 
 /**
  * «Reserva tu clase de prueba».
@@ -18,12 +17,9 @@ import { useImantado } from "@/hooks/use-imantado"
  * Es un enlace de verdad y no un botón con JavaScript: lleva a WhatsApp, se
  * puede abrir en otra pestaña, se puede copiar y el buscador lo entiende.
  *
- * Y es el único botón de la web que sigue al ratón, en todas sus copias. El
- * imán va aquí dentro y no envolviendo el botón desde fuera por un motivo
- * práctico: el botón se estira o se esconde según el ancho con clases que le
- * pasa quien lo llama, y cualquier envoltorio se quedaría con esas medidas y
- * las estropearía. Poniéndolo dentro, el imán mueve el enlace que ya está
- * colocado, sin tocar la colocación.
+ * Y sigue al ratón en todas sus copias. Ese imán vive en `BotonEnlace`, que es
+ * la misma pieza que usan las acciones de las páginas de propuestas: así no hay
+ * dos formas de atraer el puntero ni dos sitios donde arreglarlo.
  *
  * Estuvo un tiempo con una chapa de metal líquido detrás, que era un lienzo de
  * WebGL animándose dentro del botón. Se quitó: el botón es el color de la casa
@@ -39,20 +35,14 @@ export function BotonReserva({
   onClick?: () => void
   children?: ReactNode
 }) {
-  const enlace = useRef<HTMLAnchorElement>(null)
-  useImantado(enlace)
-
   return (
-    <Button asChild size="lg" className={className} {...(onClick ? { onClick } : {})}>
-      <a
-        ref={enlace}
-        href={accionPrincipal.href}
-        {...(accionPrincipal.externo
-          ? { target: "_blank", rel: "noopener noreferrer" }
-          : {})}
-      >
-        {children ?? accionPrincipal.etiqueta}
-      </a>
-    </Button>
+    <BotonEnlace
+      href={accionPrincipal.href}
+      externo={accionPrincipal.externo}
+      className={className}
+      {...(onClick ? { onClick } : {})}
+    >
+      {children ?? accionPrincipal.etiqueta}
+    </BotonEnlace>
   )
 }

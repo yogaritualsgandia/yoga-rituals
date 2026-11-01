@@ -21,40 +21,55 @@ export function Pagina({
   etiqueta,
   titulo,
   entradilla,
+  aparte,
   children,
 }: {
   etiqueta?: string
   titulo: string
   entradilla?: string
+  /** Contenido que acompaña a la cabecera a la derecha: hoy, la foto del estilo. */
+  aparte?: ReactNode
   children: ReactNode
 }) {
   return (
     <>
       <section className="pt-[clamp(2.5rem,7vw,6rem)] pb-[clamp(2.5rem,5vw,4.5rem)]">
-        <Contenedor>
-          {etiqueta ? (
-            <Revelar as="p" cuando="entrada" retardo={0} className="etiqueta">
-              {etiqueta}
-            </Revelar>
-          ) : null}
+        <Contenedor
+          className={
+            aparte
+              ? "grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-center lg:gap-10"
+              : undefined
+          }
+        >
+          <div className={aparte ? "lg:col-span-7" : undefined}>
+            {etiqueta ? (
+              <Revelar as="p" cuando="entrada" retardo={0} className="etiqueta">
+                {etiqueta}
+              </Revelar>
+            ) : null}
 
-          <Titular
-            as="h1"
-            cuando="entrada"
-            retardo={1}
-            className="paso-titular mt-5 max-w-[22ch]"
-            texto={titulo}
-          />
-
-          {entradilla ? (
-            <Revelar
-              as="p"
+            <Titular
+              as="h1"
               cuando="entrada"
-              retardo={2}
-              className="paso-entrada medida mt-7 text-ink-soft"
-            >
-              {entradilla}
-            </Revelar>
+              retardo={1}
+              className="paso-titular mt-5 max-w-[22ch]"
+              texto={titulo}
+            />
+
+            {entradilla ? (
+              <Revelar
+                as="p"
+                cuando="entrada"
+                retardo={2}
+                className="paso-entrada medida mt-7 text-ink-soft"
+              >
+                {entradilla}
+              </Revelar>
+            ) : null}
+          </div>
+
+          {aparte ? (
+            <div className="lg:col-span-5">{aparte}</div>
           ) : null}
         </Contenedor>
       </section>

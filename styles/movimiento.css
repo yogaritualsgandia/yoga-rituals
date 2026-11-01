@@ -201,11 +201,16 @@ html.lenis body {
   animation: desplegar-panel var(--escritura, var(--dur-escribir)) linear;
 }
 
-/* Cerrar no compite con abrir: tarda 300 ms, lo justo para que se vea el panel
-   recogerse en vez de desaparecer de golpe. Vale igual cuando se cierra solo
-   porque acaba de abrirse otra pregunta. */
+/* Cerrar tarda lo mismo que una entrada corta, y no un parpadeo. Antes eran
+   trescientos milisegundos: el panel se recogía tan rápido que parecía
+   desaparecer, sobre todo después de una respuesta que se había escrito
+   despacio. Ahora dura lo que una entrada, y el cierre se ve.
+
+   Vale igual cuando se cierra solo porque acaba de abrirse otra pregunta: es
+   el mismo estado y la misma animación, así que la anterior no se esconde de
+   golpe mientras la nueva empieza a escribirse. */
 [data-movimiento="listo"] [data-slot="accordion-content"][data-state="closed"] {
-  animation: plegar-panel var(--dur-base) var(--ease-out);
+  animation: plegar-panel var(--dur-slow) var(--ease-out);
 }
 
 /* La palabra no se parte por la mitad aunque esté escrita letra a letra: sin
@@ -228,8 +233,8 @@ html.lenis body {
    Si las letras se quedaran mientras el panel se pliega, se verían apretarse
    contra el borde de abajo; y si se fueran una detrás de otra, cerrar tardaría
    más que abrir, que es exactamente lo contrario de lo que espera quien acaba
-   de pulsar. Ciento cuarenta milisegundos: se nota que se van y el panel las
-   acompaña sin dar un salto seco. */
+   de pulsar. Cuatrocientos milisegundos: el texto se desvanece mientras el
+   panel se recoge, sin dar un salto seco ni quedarse un rato sobre el hueco. */
 @keyframes borrar-letra {
   to {
     opacity: 0;
@@ -240,7 +245,7 @@ html.lenis body {
   [data-slot="accordion-content"][data-state="closed"]
   [data-revelar="escrito"]
   .letra {
-  animation: borrar-letra 140ms linear both;
+  animation: borrar-letra 400ms linear both;
 }
 
 /* --- La salida de emergencia de lo escondido -----------------------------
@@ -293,6 +298,33 @@ html.lenis body {
 
 .circulo-respira {
   animation: respirar 10s var(--ease-inout) infinite;
+}
+
+/* --- El botón de WhatsApp que respira ------------------------------------
+   La misma idea que el círculo, más pequeña: el botón se hincha un seis por
+   ciento y vuelve, sin parar. Seis y no dieciséis porque aquí abajo a la
+   derecha compite con la lectura: es un aviso, no un espectáculo.
+
+   El ciclo dura cuatro segundos y medio, con la subida algo más corta que la
+   bajada. Es el reparto de una respiración tranquila, y evita que el ojo
+   encuentre el punto exacto en que se repite.
+
+   Se anima el envoltorio y no el enlace: el enlace ya encoge y crece al pasar
+   el ratón y al pulsarlo, y si las dos cosas compartieran `transform` la
+   animación se comería el `hover`. Separadas, conviven. */
+
+@keyframes respirar-boton {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.06);
+  }
+}
+
+.boton-respira {
+  animation: respirar-boton 4.5s var(--ease-inout) infinite;
 }
 
 /* --- El paso de una página a otra ----------------------------------------

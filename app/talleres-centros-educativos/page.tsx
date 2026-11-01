@@ -1,14 +1,13 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 
+import { BotonEnlace } from "@/components/layout/boton-enlace"
 import { Contenedor } from "@/components/layout/contenedor"
 import { BandaFoto } from "@/components/layout/foto-editorial"
 import { Pagina } from "@/components/layout/pagina"
 import { Contador } from "@/components/movimiento/contador"
-import { Button } from "@/components/ui/button"
 import { talleresColegios } from "@/content/clases"
 import { fotos } from "@/content/medios"
-import { accionPrincipal, site, whatsappUrl } from "@/content/site"
+import { whatsappUrl } from "@/content/site"
 import { metadatosDePagina } from "@/lib/metadatos"
 
 export const metadata: Metadata = metadatosDePagina({
@@ -94,34 +93,18 @@ export default function PaginaTalleresCentrosEducativos() {
           </p>
 
           <div className="mt-10 flex flex-wrap gap-3">
-            <Button asChild size="lg">
-              <a
-                href={whatsappUrl(
-                  "Hola Susana, me interesan los talleres para un centro educativo.",
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Escribir por WhatsApp
-              </a>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <Link href={accionPrincipal.href}>
-                {accionPrincipal.etiqueta}
-              </Link>
-            </Button>
-          </div>
-
-          <p className="paso-pequeno mt-6 text-ink-soft">
-            Si prefieres llamar, el teléfono del estudio es el{" "}
-            <a
-              href={`tel:${site.contacto.telefono}`}
-              className="text-brand underline underline-offset-4 hover:text-brand-hover"
+            <BotonEnlace
+              href={whatsappUrl(
+                "Hola Susana, me interesan los talleres para un centro educativo.",
+              )}
+              externo
             >
-              {site.contacto.telefonoVisible}
-            </a>
-            .
-          </p>
+              Escribir por WhatsApp
+            </BotonEnlace>
+            <BotonEnlace href="/clases" variante="outline">
+              Ver las clases
+            </BotonEnlace>
+          </div>
         </Contenedor>
       </section>
     </Pagina>

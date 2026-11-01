@@ -37,7 +37,14 @@ export async function prepararPagina(page: Page, ruta: string) {
   await page.waitForFunction(
     () =>
       Array.from(document.images).every(
-        (imagen) => imagen.complete && imagen.naturalWidth > 0,
+        (imagen) =>
+          /* La marca lleva dos logos, uno para cada tema, y el que no toca se
+             queda en `display: none`. El navegador no carga una imagen que no
+             se ve, así que esperarla era esperar veinte segundos a algo que no
+             iba a pasar nunca. Solo cuentan las que van a salir en la captura:
+             una imagen oculta no puede dejar un hueco. */
+          imagen.getClientRects().length === 0 ||
+          (imagen.complete && imagen.naturalWidth > 0),
       ),
     undefined,
     { timeout: 20_000 },

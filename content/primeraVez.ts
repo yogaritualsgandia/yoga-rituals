@@ -87,6 +87,4 @@ export const preguntasFrecuentes: Pregunta[] = [
 
 export const cierrePrimeraVez = {
   titular: "Estamos aquí para acompañarte",
-  /** La web actual cierra esta página con un botón a WhatsApp. Se mantiene. */
-  accion: "Contáctanos por WhatsApp",
 } as const

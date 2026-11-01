@@ -4,9 +4,7 @@ import { BotonReserva } from "@/components/layout/boton-reserva"
 import { Contenedor } from "@/components/layout/contenedor"
 import { FotoDeSeccion } from "@/components/layout/foto-editorial"
 import { Pagina } from "@/components/layout/pagina"
-import { Button } from "@/components/ui/button"
 import { fotos } from "@/content/medios"
-import { whatsappUrl } from "@/content/site"
 import { biografia, cierreSobreMi, formacion, sobreMi } from "@/content/sobreMi"
 import { metadatosDePagina } from "@/lib/metadatos"
 
@@ -105,15 +103,6 @@ export default function PaginaSobreMi() {
 
           <div className="mt-10 flex flex-wrap gap-3">
             <BotonReserva />
-            <Button asChild variant="outline" size="lg">
-              <a
-                href={whatsappUrl("Hola Susana, quiero conoceros.")}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Escribir por WhatsApp
-              </a>
-            </Button>
           </div>
         </Contenedor>
       </section>

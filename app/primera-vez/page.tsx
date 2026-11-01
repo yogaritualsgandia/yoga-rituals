@@ -12,7 +12,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { metadatosDePagina } from "@/lib/metadatos"
-import { Button } from "@/components/ui/button"
 import { fotos } from "@/content/medios"
 import {
   aTenerEnCuenta,
@@ -21,7 +20,6 @@ import {
   primeraVez,
   queNecesitas,
 } from "@/content/primeraVez"
-import { whatsappUrl } from "@/content/site"
 
 export const metadata: Metadata = metadatosDePagina({
   titulo: "Primera vez",
@@ -156,15 +154,6 @@ export default function PaginaPrimeraVez() {
 
           <div className="flex flex-col items-start gap-3 lg:col-span-4 lg:col-start-9 lg:justify-center">
             <BotonReserva />
-            <Button asChild variant="outline" size="lg">
-              <a
-                href={whatsappUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {cierrePrimeraVez.accion}
-              </a>
-            </Button>
           </div>
         </Contenedor>
       </section>

@@ -1,14 +1,13 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 
+import { BotonEnlace } from "@/components/layout/boton-enlace"
 import { Contenedor } from "@/components/layout/contenedor"
 import { FotoDeSeccion } from "@/components/layout/foto-editorial"
 import { Pagina } from "@/components/layout/pagina"
-import { Button } from "@/components/ui/button"
 import { talleresColegios } from "@/content/clases"
 import { fotos } from "@/content/medios"
 import { retiros } from "@/content/retiros"
-import { accionPrincipal, whatsappUrl } from "@/content/site"
+import { whatsappUrl } from "@/content/site"
 import { metadatosDePagina } from "@/lib/metadatos"
 
 export const metadata: Metadata = metadatosDePagina({
@@ -116,22 +115,17 @@ export default function PaginaRetiros() {
           </p>
 
           <div className="mt-10 flex flex-wrap gap-3">
-            <Button asChild size="lg">
-              <a
-                href={whatsappUrl(
-                  "Hola Susana, quiero información sobre el próximo retiro.",
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Preguntar por el próximo retiro
-              </a>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <Link href={accionPrincipal.href}>
-                {accionPrincipal.etiqueta}
-              </Link>
-            </Button>
+            <BotonEnlace
+              href={whatsappUrl(
+                "Hola Susana, quiero información sobre el próximo retiro.",
+              )}
+              externo
+            >
+              Preguntar por el próximo retiro
+            </BotonEnlace>
+            <BotonEnlace href="/clases" variante="outline">
+              Ver las clases
+            </BotonEnlace>
           </div>
         </Contenedor>
       </section>

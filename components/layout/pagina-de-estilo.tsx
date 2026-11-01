@@ -8,7 +8,6 @@ import { FotoDeSeccion } from "@/components/layout/foto-editorial"
 import { Button } from "@/components/ui/button"
 import type { EstiloDetalle } from "@/content/clases"
 import type { Fotografia } from "@/content/medios"
-import { whatsappUrl } from "@/content/site"
 
 /**
  * La página de un estilo: Hatha o Vinyasa.
@@ -28,7 +27,13 @@ import { whatsappUrl } from "@/content/site"
  *
  * La foto la elige cada página y la pasa aquí, en vez de vivir dentro de este
  * componente: así se puede cambiar sin tocar la estructura. Hatha y Vinyasa no
- * comparten proporción porque las dos fotos no comparten forma.
+ * comparten proporción porque las dos fotos no comparten forma, y por eso el
+ * `aspecto` llega desde fuera.
+ *
+ * La foto va en la cabecera, al lado del nombre del estilo: es lo primero que
+ * se quiere ver al entrar, y ahí acompaña al titular en vez de esperar a mitad
+ * de página. El bloque de «Qué vas a encontrar en clase» se queda sin ella y
+ * puede usar más ancho para el texto.
  */
 export function PaginaDeEstilo({
   estilo,
@@ -40,7 +45,19 @@ export function PaginaDeEstilo({
   aspecto?: string
 }) {
   return (
-    <Pagina etiqueta="Clases" titulo={estilo.nombre} entradilla={estilo.lema}>
+    <Pagina
+      etiqueta="Clases"
+      titulo={estilo.nombre}
+      entradilla={estilo.lema}
+      aparte={
+        <FotoDeSeccion
+          foto={foto}
+          aspecto={aspecto}
+          sizes="(min-width: 1024px) 40vw, 92vw"
+          prioridad
+        />
+      }
+    >
       {/* ── Qué es ───────────────────────────────────────────────────────── */}
       <section className="seccion pt-0">
         <Contenedor>
@@ -50,37 +67,23 @@ export function PaginaDeEstilo({
 
       {/* ── Qué vas a encontrar en clase ─────────────────────────────────── */}
       <section className="seccion pt-0">
-        <Contenedor className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-6">
-            <h2 className="paso-titular max-w-[24ch]">
-              Qué vas a encontrar en clase
-            </h2>
+        <Contenedor>
+          {/* Ahora que la foto está arriba, el bloque se estira un poco más que
+              la media columna que ocupaba: lo justo para que el titular y las
+              rayas de los puntos acaben a la misma altura. */}
+          <div className="max-w-[46rem]">
+            <h2 className="paso-titular">Qué vas a encontrar en clase</h2>
 
-            {/* Las líneas largas siguen cortadas a `medida` aunque la columna
-                dé para más: la raya de debajo de cada punto marca dónde acaba
-                la lectura, y sin ese tope cada punto mediría lo que mida la
-                pantalla. */}
             <ul className="mt-12 flex flex-col border-t border-line">
               {estilo.enClase.map((punto) => (
                 <li
                   key={punto}
-                  className="medida paso-base border-b border-line py-5 text-ink-soft"
+                  className="paso-base border-b border-line py-5 text-ink-soft"
                 >
                   {punto}
                 </li>
               ))}
             </ul>
-          </div>
-
-          {/* La foto baja veinte píxeles respecto al titular, igual que en la
-              portada, para que la línea del titular y la primera raya no se
-              lean como un único bloque de texto pegado al borde de la foto. */}
-          <div className="lg:col-span-5 lg:col-start-8 lg:pt-20">
-            <FotoDeSeccion
-              foto={foto}
-              aspecto={aspecto}
-              sizes="(min-width: 1024px) 38vw, 92vw"
-            />
           </div>
         </Contenedor>
       </section>
@@ -111,17 +114,6 @@ export function PaginaDeEstilo({
 
           <div className="flex flex-col items-start gap-3 lg:col-span-4 lg:col-start-9 lg:justify-center">
             <BotonReserva />
-            <Button asChild variant="outline" size="lg">
-              <a
-                href={whatsappUrl(
-                  `Hola Susana, me interesa el ${estilo.nombre}.`,
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Preguntar por WhatsApp
-              </a>
-            </Button>
             <Button asChild variant="outline" size="lg">
               <Link href="/horarios">Ver horarios</Link>
             </Button>
