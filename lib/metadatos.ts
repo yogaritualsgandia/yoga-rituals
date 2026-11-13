@@ -10,7 +10,7 @@ import { site } from "@/content/site"
  * los metadatos del layout con los de la página, y en ese reparto lo que la
  * página no dice se queda con lo del layout. Resultado: al compartir /precios
  * por WhatsApp salía el titular de la portada y, peor, `og:url` apuntaba
- * siempre a https://yogarituals.es. Cualquier enlace compartido se convertía
+ * siempre a https://www.yogarituals.es. Cualquier enlace compartido se convertía
  * en un enlace a la portada.
  *
  * La solución no es copiar seis campos en dieciséis archivos —ahí es cuestión
@@ -25,12 +25,15 @@ export function metadatosDePagina({
   titulo,
   descripcion,
   ruta,
+  noindex = false,
 }: {
   /** Título corto, sin la marca. El layout le añade «· YOGA Rituals». */
   titulo: string
   descripcion: string
   /** Ruta absoluta dentro del sitio, con barra inicial. */
   ruta: string
+  /** true en páginas que existen pero no deben salir en Google. */
+  noindex?: boolean
 }): Metadata {
   const tituloCompleto = `${titulo} · ${site.nombre}`
   const imagen = {
@@ -39,11 +42,18 @@ export function metadatosDePagina({
     height: 630,
     alt: "YOGA Rituals, estudio de yoga en Gandia",
   }
+  const markdown = ruta === "/" ? "/index.md" : `${ruta}.md`
 
   return {
     title: titulo,
     description: descripcion,
-    alternates: { canonical: ruta },
+    alternates: {
+      canonical: ruta,
+      /* La versión limpia para asistentes. Se genera en el postbuild desde
+         esta misma página; aquí solo se anuncia. Las páginas `noindex` no
+         llevan enlace porque no se generan en Markdown. */
+      ...(noindex ? {} : { types: { "text/markdown": markdown } }),
+    },
     openGraph: {
       type: "website",
       locale: "es_ES",
@@ -59,5 +69,6 @@ export function metadatosDePagina({
       description: descripcion,
       images: [imagen.url],
     },
+    ...(noindex ? { robots: { index: false, follow: true } } : {}),
   }
 }

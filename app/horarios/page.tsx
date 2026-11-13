@@ -6,18 +6,14 @@ import { Contenedor } from "@/components/layout/contenedor"
 import { BandaFoto } from "@/components/layout/foto-editorial"
 import { Pagina } from "@/components/layout/pagina"
 import { Button } from "@/components/ui/button"
-import {
-  duracionEnPalabras,
-  horario,
-  horarioLibre,
-} from "@/content/horario"
+import { duracionEnPalabras, horario, horarioLibre } from "@/content/horario"
 import { fotos } from "@/content/medios"
 import { metadatosDePagina } from "@/lib/metadatos"
 
 export const metadata: Metadata = metadatosDePagina({
-  titulo: "Horarios",
+  titulo: "Horarios de yoga en Gandia",
   descripcion:
-    "Horario de YOGA Rituals en Gandia: clases de 35, 60 y 75 minutos de lunes a sábado. Horarios libres, sin reserva previa ni aviso.",
+    "Horario de yoga en Gandia: clases de 35, 60 y 75 minutos de lunes a sábado. Elige el día que te encaja, sin reserva previa ni aviso.",
   ruta: "/horarios",
 })
 
@@ -38,8 +34,9 @@ export default function PaginaHorarios() {
   return (
     <Pagina
       etiqueta="Horarios"
-      titulo="Tienes plena libertad para organizar tus horarios"
+      titulo="Horarios de yoga en Gandia"
       entradilla={horarioLibre.entradilla}
+      ruta="/horarios"
     >
       <section className="seccion pt-0">
         <Contenedor>
@@ -122,6 +119,9 @@ export default function PaginaHorarios() {
             <BotonReserva />
             <Button asChild variant="outline" size="lg">
               <Link href="/precios">Ver los precios</Link>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <Link href="/primera-vez">Es mi primera vez</Link>
             </Button>
           </div>
         </Contenedor>

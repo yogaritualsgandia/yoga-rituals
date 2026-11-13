@@ -1,20 +1,18 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 
 import { BotonEnlace } from "@/components/layout/boton-enlace"
 import { Contenedor } from "@/components/layout/contenedor"
 import { FotoDeSeccion } from "@/components/layout/foto-editorial"
 import { Pagina } from "@/components/layout/pagina"
-import { Button } from "@/components/ui/button"
 import { fotos } from "@/content/medios"
 import { mindfulness } from "@/content/mindfulness"
 import { whatsappUrl } from "@/content/site"
 import { metadatosDePagina } from "@/lib/metadatos"
 
 export const metadata: Metadata = metadatosDePagina({
-  titulo: "Mindfulness",
+  titulo: "Mindfulness en Gandia",
   descripcion:
-    "Mindfulness en la Biblioteca Benipeixcar-Raval de Gandia: miércoles a las 10:30, una hora. Con Susana Estruch, monitora de Mindfulness MBTB.",
+    "Mindfulness en Gandia: sesión semanal en la Biblioteca Benipeixcar-Raval, miércoles a las 10:30, con Susana Estruch, monitora MBTB.",
   ruta: "/mindfulness",
 })
 
@@ -34,8 +32,9 @@ export default function PaginaMindfulness() {
   return (
     <Pagina
       etiqueta="Propuestas concretas"
-      titulo="Mindfulness"
+      titulo="Mindfulness en Gandia"
       entradilla={mindfulness.entradilla}
+      ruta="/mindfulness"
     >
       {/* ── Los cuatro datos, y el estado de las plazas ──────────────────── */}
       <section className="seccion pt-0">
@@ -44,7 +43,7 @@ export default function PaginaMindfulness() {
             {mindfulness.datos.map((dato) => (
               <div key={dato.etiqueta}>
                 <dt className="etiqueta">{dato.etiqueta}</dt>
-                <dd className="font-heading mt-2 text-xl">{dato.valor}</dd>
+                <dd className="mt-2 font-heading text-xl">{dato.valor}</dd>
               </div>
             ))}
           </dl>
@@ -83,32 +82,6 @@ export default function PaginaMindfulness() {
         </Contenedor>
       </section>
 
-      {/* ── El taller de respiración que viene ───────────────────────────── */}
-      <section className="seccion pt-0">
-        <Contenedor>
-          <div className="rounded-lg border border-line p-6 md:flex md:items-center md:justify-between md:gap-10 md:p-8">
-            <div>
-              <p className="etiqueta">{mindfulness.proximoTaller.titular}</p>
-              <p className="font-heading mt-2 text-xl">
-                {mindfulness.proximoTaller.cuando}
-              </p>
-              <p className="paso-pequeno mt-1 text-ink-soft">
-                {mindfulness.proximoTaller.donde}
-              </p>
-            </div>
-
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="mt-6 shrink-0 md:mt-0"
-            >
-              <Link href="/breathwork">Ver el taller</Link>
-            </Button>
-          </div>
-        </Contenedor>
-      </section>
-
       {/* ── Preguntar ────────────────────────────────────────────────────── */}
       <section className="seccion pt-0">
         <Contenedor>
@@ -122,7 +95,7 @@ export default function PaginaMindfulness() {
           <div className="mt-10 flex flex-wrap gap-3">
             <BotonEnlace
               href={whatsappUrl(
-                "Hola Susana, quiero venir a la sesión de mindfulness.",
+                "Hola Susana, quiero venir a la sesión de mindfulness."
               )}
               externo
             >

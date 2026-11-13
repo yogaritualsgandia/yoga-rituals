@@ -10,6 +10,7 @@ export const metadata: Metadata = metadatosDePagina({
   titulo: documento.titulo,
   descripcion: documento.descripcion,
   ruta: documento.ruta,
+  noindex: true,
 })
 
 /**

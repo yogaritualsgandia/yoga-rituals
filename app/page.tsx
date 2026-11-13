@@ -6,6 +6,7 @@ import { Contenedor } from "@/components/layout/contenedor"
 import { FotoDeSeccion } from "@/components/layout/foto-editorial"
 import { Contador } from "@/components/movimiento/contador"
 import { Revelar, Titular } from "@/components/movimiento/revelar"
+import { DatosEstructurados } from "@/components/seo/datos-estructurados"
 import { Button } from "@/components/ui/button"
 import {
   bloquesDePracticas,
@@ -17,6 +18,7 @@ import { horarioLibre } from "@/content/horario"
 import { fotos } from "@/content/medios"
 import { site, mapaUrl } from "@/content/site"
 import { testimonios } from "@/content/testimonios"
+import { datosDePagina } from "@/lib/datos-estructurados"
 
 /**
  * Portada.
@@ -44,6 +46,15 @@ import { testimonios } from "@/content/testimonios"
 export default function Inicio() {
   return (
     <>
+      <DatosEstructurados
+        datos={datosDePagina({
+          ruta: "/",
+          titulo: "YOGA Rituals · Estudio de yoga en Gandia",
+          descripcion:
+            "Yoga en el centro de Gandia: Hatha, Vinyasa, Yoga Nidra, mindfulness y yoga oncológico. Horarios libres, sin reservar. Primera clase de prueba gratis.",
+        })}
+      />
+
       {/* ── Entrada ─────────────────────────────────────────────────────── */}
       <section className="pt-[clamp(2.5rem,7vw,6rem)] pb-[clamp(3rem,6vw,5rem)]">
         <Contenedor>
@@ -82,7 +93,7 @@ export default function Inicio() {
                 cuando="entrada"
                 retardo={1}
                 className="paso-display max-w-[15ch]"
-                texto="Yoga a tu propio ritmo"
+                texto="Yoga en Gandia, a tu propio ritmo"
               />
 
               <Revelar
@@ -91,8 +102,8 @@ export default function Inicio() {
                 retardo={0}
                 className="paso-entrada medida mt-9 text-ink-soft"
               >
-                Clases de 75, 60 y 35 minutos. Vienes el día que puedes, sin
-                reservar y sin avisar a nadie.
+                Clases de yoga en Gandia de 75, 60 y 35 minutos. Vienes el día
+                que puedes, sin reservar y sin avisar a nadie.
               </Revelar>
 
               <Revelar
@@ -283,9 +294,7 @@ export default function Inicio() {
                  se cambian las dos y ya está. */
               reemplazo={{
                 palabra: String(talleresColegios.talleresRealizados),
-                por: (
-                  <Contador valor={talleresColegios.talleresRealizados} />
-                ),
+                por: <Contador valor={talleresColegios.talleresRealizados} />,
               }}
               className="paso-titular mt-5"
               retardo={0}
@@ -341,7 +350,7 @@ export default function Inicio() {
             {testimonios.map((testimonio, i) => {
               const visibles = testimonio.parrafos.slice(
                 0,
-                testimonio.visibles ?? testimonio.parrafos.length,
+                testimonio.visibles ?? testimonio.parrafos.length
               )
               const hayMas = visibles.length < testimonio.parrafos.length
 
@@ -359,7 +368,7 @@ export default function Inicio() {
                           key={estrella}
                           className="size-3.5 fill-current text-estrella"
                         />
-                      ),
+                      )
                     )}
                   </div>
                   <span className="sr-only">

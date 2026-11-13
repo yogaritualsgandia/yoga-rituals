@@ -107,6 +107,21 @@ test.describe("Las entradas", () => {
     await page.emulateMedia({ reducedMotion: "reduce" })
     await irA(page, "/")
 
+    /* La primera carga ya no lleva desvanecido —se reserva para los cambios
+       de página, para no retrasar el LCP—, así que aquí no hay nada que
+       animar. */
+    await expect(page.locator(".transicion-pagina")).toHaveCount(0)
+
+    /* Antes de pulsar hay que dejar que React hidrate: si el clic llega antes,
+       el navegador hace una navegación normal —con recarga— y el envoltorio
+       vuelve a nacer como primera carga. `irA` espera al DOM, no a esto. */
+    await page.waitForLoadState("networkidle")
+
+    await page.getByRole("link", { name: "Horarios", exact: true }).click()
+    await expect(page).toHaveURL(/\/horarios$/)
+
+    /* Y al cambiar de página, el envoltorio existe pero no se enciende: con
+       «menos movimiento» la animación no llega a aplicarse. */
     await expect(page.locator(".transicion-pagina")).toHaveCSS(
       "animation-name",
       "none",

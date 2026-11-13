@@ -10,9 +10,9 @@ import { whatsappUrl } from "@/content/site"
 import { metadatosDePagina } from "@/lib/metadatos"
 
 export const metadata: Metadata = metadatosDePagina({
-  titulo: "Breathwork",
+  titulo: "Breathwork en Gandia",
   descripcion:
-    "Sesiones individuales de breathwork en Gandia: respiración consciente para soltar lo que el cuerpo guarda. 90 minutos, sin experiencia previa.",
+    "Breathwork en Gandia: sesiones individuales de respiración consciente para soltar lo que el cuerpo guarda. 90 minutos, sin experiencia previa.",
   ruta: "/breathwork",
 })
 
@@ -43,8 +43,9 @@ export default function PaginaBreathwork() {
   return (
     <Pagina
       etiqueta="Sesión individual"
-      titulo="Breathwork"
+      titulo="Breathwork en Gandia"
       entradilla={breathwork.entradilla}
+      ruta="/breathwork"
     >
       {/* ── El texto ─────────────────────────────────────────────────────── */}
       <section className="seccion pt-0">
@@ -71,10 +72,10 @@ export default function PaginaBreathwork() {
       <section className="bg-surface-2/60 py-16 lg:py-24">
         <Contenedor className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-6">
-            <p className="paso-entrada font-heading max-w-[24ch] text-balance">
+            <p className="paso-entrada max-w-[24ch] font-heading text-balance">
               {breathwork.estrofa.primera}
             </p>
-            <p className="paso-entrada font-heading mt-4 max-w-[24ch] text-balance">
+            <p className="paso-entrada mt-4 max-w-[24ch] font-heading text-balance">
               {breathwork.estrofa.segunda}
             </p>
           </div>

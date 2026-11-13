@@ -3,6 +3,12 @@
   "version": "0.0.1",
   "type": "module",
   "private": true,
+  "browserslist": [
+    "chrome >= 111",
+    "edge >= 111",
+    "firefox >= 111",
+    "safari >= 16.4"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,7 +17,7 @@
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit",
     "test:e2e": "playwright test",
-    "postbuild": "node scripts/copiar-segmentos-rsc.mjs"
+    "postbuild": "node scripts/copiar-segmentos-rsc.mjs && node scripts/generar-archivos-ia.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

@@ -7,6 +7,7 @@ import { BotonReserva } from "@/components/layout/boton-reserva"
 import { FotoDeSeccion } from "@/components/layout/foto-editorial"
 import { Button } from "@/components/ui/button"
 import type { EstiloDetalle } from "@/content/clases"
+import { estilos } from "@/content/clases"
 import type { Fotografia } from "@/content/medios"
 
 /**
@@ -44,11 +45,14 @@ export function PaginaDeEstilo({
   foto: Fotografia
   aspecto?: string
 }) {
+  const otro = estilo.slug === "hatha" ? estilos.vinyasa : estilos.hatha
+
   return (
     <Pagina
       etiqueta="Clases"
-      titulo={estilo.nombre}
+      titulo={estilo.titular}
       entradilla={estilo.lema}
+      ruta={`/${estilo.slug}`}
       aparte={
         <FotoDeSeccion
           foto={foto}
@@ -109,6 +113,18 @@ export function PaginaDeEstilo({
               reserva: nos escribes, te decimos qué día encaja mejor y vienes
               sin traer nada. A partir de ahí, el horario es libre y vienes el
               día que puedas, sin apuntarte a nada.
+            </p>
+
+            <p className="paso-pequeno medida mt-4 text-ink-soft">
+              Si estás dudando entre las dos prácticas, puedes leer también
+              sobre el{" "}
+              <Link
+                href={`/${otro.slug}`}
+                className="font-semibold text-brand underline underline-offset-4 hover:text-brand-hover"
+              >
+                {otro.titular}
+              </Link>
+              .
             </p>
           </div>
 

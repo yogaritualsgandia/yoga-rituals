@@ -65,23 +65,23 @@ se sustituye esa línea y no hay que tocar nada más.
   pone, y es información muy buscada.
 - **Yoga Nidra:** ¿se hace la sesión?, ¿con qué frecuencia? Ahora no está en el
   horario semanal y se anuncia aparte.
-- **Yoga oncológico:** la web actual anuncia los viernes de 11:00 a 12:00, y en
-  el horario no hay ninguna franja a esa hora. ¿Cuál de las dos es la buena?
-- **¿Se puede aparcar cerca del estudio?** Es la primera pregunta de cualquiera
-  que viene en coche y no hay ni una línea escrita sobre eso.
+- **Yoga oncológico:** no se hace de momento; no se anuncia ninguna franja.
+  La página del servicio se queda como información, sin horario.
+- **Aparcamiento:** resuelto. En `/contacto` figuran los dos parkings públicos
+  más cercanos: Parking Colón (C/ Alzira, 26), a unos 230 m, y Parking Plaza del
+  Prado, a unos 350 m.
 
 ## 6. Retiros
 
-Falta el calendario: **la fecha del próximo retiro, lo que cuesta, dónde se
-duerme y cómo se reserva la plaza**. Con esos cuatro datos la página puede
-llenar plazas; sin ellos solo puede contarlo bien, que es lo que hace.
+Ahora mismo **no hay ningún retiro convocado**. La página cuenta cómo es el
+retiro de Zarra y dice expresamente que no hay fecha abierta. Cuando se convoque
+uno, faltarán la fecha, el precio, el alojamiento y la reserva.
 
 ## 7. Breathwork
 
-- En la página de Mindfulness aparece el **próximo taller de respiración: 18, 19
-  y 20 de noviembre, de 8:00 a 8:50 h**, en el estudio. Está puesto tal como
-  venía en la guía, y **lleva fecha, así que caduca**: hay que confirmar que son
-  esas y saber si se repite, para poner el siguiente cuando pase.
+- El **taller de respiración del 18, 19 y 20 de noviembre de 2026** se retiró de
+  la web: ya habrá pasado cuando se publique. Si hay otra edición, se añade con
+  año, precio e inscripción.
 - La sesión individual son 90 minutos tumbado. ¿Se ofrece también en grupo?
 
 ## 8. Mindfulness
@@ -96,10 +96,35 @@ lleva la biblioteca). Quedan dos cosas:
 
 ## 9. Precios
 
-- Hay una tarifa en la web actual que no está: **«Ilimitadas», 85 € al mes o
-  240 € el trimestre**. ¿Se añade?
+- **«Ilimitadas» no existe**: no se añade.
 - Las cuotas y los bonos están tal como estaban publicados. Si algo ha cambiado,
   se cambia.
+
+---
+
+## 10. Legibilidad para asistentes y buscadores
+
+La web ya genera `llms.txt`, `llms-full.txt`, `robots.txt`, `sitemap.xml` y una
+versión `.md` de cada página en el build. Estas son las decisiones que quedan:
+
+- **Textos de la web.** Se van a rehacer. Cuando estén, se regeneran desde ellos
+  las preguntas frecuentes, los `.md`, `llms.txt` y `llms-full.txt`. No se
+  publica texto nuevo hasta entonces.
+- **Dominio.** Resuelto el 13/11/2026: se publica en Netlify y el canónico es
+  `https://www.yogarituals.es`, con el dominio sin `www` redirigiendo allí. El
+  proyecto sigue en `yogaritualsweb.netlify.app` hasta que los DNS de OVHcloud
+  apunten al dominio. Los pasos están en `DESPLIEGUE.md`.
+- **Bots de entrenamiento.** `robots.txt` permite por defecto a `GPTBot`,
+  `ClaudeBot`, `CCBot`, `Google-Extended`, etc. Si se prefiere bloquear el
+  entrenamiento, están las líneas `Disallow: /` comentadas para descomentar.
+- **Noindex provisional.** El sitio sale con `X-Robots-Tag: noindex` mientras
+  viva en `yogaritualsweb.netlify.app`. Se controla con `NOINDEX = "1"` en
+  `netlify.toml`; hay que quitarlo el día que el dominio definitivo esté
+  activo.
+- **Preguntas frecuentes nuevas.** Se retiraron el 13/11/2026 de portada,
+  clases, horarios, precios, Hatha y Vinyasa. Los textos de la web se van a
+  rehacer; cuando estén, las preguntas, los `.md` y el `FAQPage` se generarán de
+  nuevo desde esos textos, no desde los actuales.
 
 ---
 

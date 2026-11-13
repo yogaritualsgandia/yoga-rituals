@@ -1,6 +1,9 @@
 import type { ReactNode } from "react"
 
 import { Revelar, Titular } from "@/components/movimiento/revelar"
+import { DatosEstructurados } from "@/components/seo/datos-estructurados"
+import type { Pregunta } from "@/content/faqs"
+import { datosDePagina, type TipoPagina } from "@/lib/datos-estructurados"
 
 import { Contenedor } from "./contenedor"
 
@@ -22,6 +25,9 @@ export function Pagina({
   titulo,
   entradilla,
   aparte,
+  ruta,
+  tipo,
+  preguntas,
   children,
 }: {
   etiqueta?: string
@@ -29,10 +35,27 @@ export function Pagina({
   entradilla?: string
   /** Contenido que acompaña a la cabecera a la derecha: hoy, la foto del estilo. */
   aparte?: ReactNode
+  /** Ruta absoluta de la página. Si viene, se publica su JSON-LD. */
+  ruta?: string
+  tipo?: TipoPagina
+  /** Solo en la página de preguntas frecuentes. */
+  preguntas?: readonly Pregunta[]
   children: ReactNode
 }) {
   return (
     <>
+      {ruta ? (
+        <DatosEstructurados
+          datos={datosDePagina({
+            ruta,
+            titulo,
+            descripcion: entradilla ?? titulo,
+            tipo,
+            preguntas,
+          })}
+        />
+      ) : null}
+
       <section className="pt-[clamp(2.5rem,7vw,6rem)] pb-[clamp(2.5rem,5vw,4.5rem)]">
         <Contenedor
           className={
@@ -68,9 +91,7 @@ export function Pagina({
             ) : null}
           </div>
 
-          {aparte ? (
-            <div className="lg:col-span-5">{aparte}</div>
-          ) : null}
+          {aparte ? <div className="lg:col-span-5">{aparte}</div> : null}
         </Contenedor>
       </section>
 

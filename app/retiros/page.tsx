@@ -11,9 +11,9 @@ import { whatsappUrl } from "@/content/site"
 import { metadatosDePagina } from "@/lib/metadatos"
 
 export const metadata: Metadata = metadatosDePagina({
-  titulo: "Retiros y eventos",
+  titulo: "Retiro de yoga en Zarra",
   descripcion:
-    "Retiro de Yoga en Zarra con YOGA Rituals: un fin de semana de yoga, pranayama, meditación y paseos por el Bosque Encantado, con alojamiento y comidas.",
+    "Retiro de yoga en Zarra (Valencia) con YOGA Rituals: un fin de semana de yoga, pranayama, meditación, Bosque Encantado, alojamiento y comidas.",
   ruta: "/retiros",
 })
 
@@ -34,8 +34,9 @@ export default function PaginaRetiros() {
   return (
     <Pagina
       etiqueta="Fuera de la sala"
-      titulo="Retiros y eventos"
+      titulo="Retiro de yoga en Zarra"
       entradilla={retiros.entradilla}
+      ruta="/retiros"
     >
       {/* ── El programa ──────────────────────────────────────────────────── */}
       <section className="seccion pt-0">
@@ -110,18 +111,16 @@ export default function PaginaRetiros() {
         <Contenedor>
           <h2 className="paso-titular max-w-[24ch]">{retiros.cierre}</h2>
           <p className="paso-entrada medida mt-6 text-ink-soft">
-            Escríbenos y te contamos cuándo es el próximo y qué hay que hacer
-            para guardarte una plaza.
+            Ahora mismo no hay ninguna fecha abierta. Si quieres saber cómo es
+            el retiro, escríbenos.
           </p>
 
           <div className="mt-10 flex flex-wrap gap-3">
             <BotonEnlace
-              href={whatsappUrl(
-                "Hola Susana, quiero información sobre el próximo retiro.",
-              )}
+              href={whatsappUrl("Hola Susana, quiero información sobre el retiro.")}
               externo
             >
-              Preguntar por el próximo retiro
+              Preguntar por el retiro
             </BotonEnlace>
             <BotonEnlace href="/clases" variante="outline">
               Ver las clases

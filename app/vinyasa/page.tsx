@@ -6,9 +6,9 @@ import { fotos } from "@/content/medios"
 import { metadatosDePagina } from "@/lib/metadatos"
 
 export const metadata: Metadata = metadatosDePagina({
-  titulo: "Vinyasa Yoga en Gandia",
+  titulo: "Vinyasa yoga en Gandia",
   descripcion:
-    "Clases de Vinyasa Yoga en Gandia: secuencias fluidas que enlazan postura y respiración, con opciones para ajustar la intensidad. Primera clase gratis.",
+    "Clases de Vinyasa yoga en Gandia: secuencias fluidas que enlazan postura y respiración, con opciones para ajustar la intensidad. Prueba gratis.",
   ruta: "/vinyasa",
 })
 

@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 
 import { BotonReserva } from "@/components/layout/boton-reserva"
 import { Contenedor } from "@/components/layout/contenedor"
@@ -9,9 +10,9 @@ import { fotos } from "@/content/medios"
 import { metadatosDePagina } from "@/lib/metadatos"
 
 export const metadata: Metadata = metadatosDePagina({
-  titulo: "Precios",
+  titulo: "Precios de yoga en Gandia",
   descripcion:
-    "Precios de YOGA Rituals en Gandia: desde 40 € al mes por una clase semanal, con opción trimestral. Bono de 6 clases y clase suelta. Primera clase gratis.",
+    "Precios de yoga en Gandia: desde 40 € al mes por una clase a la semana, con opción trimestral, bono de 6 clases y clase suelta. Prueba gratis.",
   ruta: "/precios",
 })
 
@@ -31,8 +32,9 @@ export default function PaginaPrecios() {
   return (
     <Pagina
       etiqueta="Precios"
-      titulo="Cuántas clases quieres a la semana"
+      titulo="Precios de yoga en Gandia, sin sorpresas"
       entradilla="Eliges el ritmo que te encaja y lo puedes cambiar. Si un mes vienes menos, tienes el bono; si vienes mucho, el plan de tres días sale mejor."
+      ruta="/precios"
     >
       <section className="seccion pt-0">
         <Contenedor>
@@ -58,7 +60,10 @@ export default function PaginaPrecios() {
 
             <tbody>
               {planes.map((plan) => (
-                <tr key={plan.nombre} className="border-b border-line align-top">
+                <tr
+                  key={plan.nombre}
+                  className="border-b border-line align-top"
+                >
                   <th scope="row" className="py-6 pr-4 font-normal">
                     <span className="block font-heading text-xl">
                       {plan.nombre}
@@ -69,7 +74,7 @@ export default function PaginaPrecios() {
                   </th>
 
                   <td className="py-6 pr-4">
-                    <span className="font-heading text-2xl tabular-nums whitespace-nowrap">
+                    <span className="font-heading text-2xl whitespace-nowrap tabular-nums">
                       {euros(plan.mensual)}
                     </span>
                     <span className="paso-pequeno mt-1 block text-ink-soft">
@@ -78,7 +83,7 @@ export default function PaginaPrecios() {
                   </td>
 
                   <td className="py-6">
-                    <span className="font-heading text-2xl tabular-nums whitespace-nowrap">
+                    <span className="font-heading text-2xl whitespace-nowrap tabular-nums">
                       {euros(plan.trimestral)}
                     </span>
                     <span className="paso-pequeno mt-1 block text-ink-soft">
@@ -90,6 +95,24 @@ export default function PaginaPrecios() {
               ))}
             </tbody>
           </table>
+
+          <p className="paso-pequeno medida mt-8 text-ink-soft">
+            ¿Es tu primera vez? La{" "}
+            <Link
+              href="/primera-vez"
+              className="font-semibold text-brand underline underline-offset-4 hover:text-brand-hover"
+            >
+              clase de prueba es gratuita
+            </Link>{" "}
+            y no tienes que decidir nada más. Si ya vienes, mira el{" "}
+            <Link
+              href="/horarios"
+              className="font-semibold text-brand underline underline-offset-4 hover:text-brand-hover"
+            >
+              horario semanal
+            </Link>{" "}
+            para ver cuántos días te encajan.
+          </p>
 
           <div className="mt-14 grid grid-cols-1 gap-10 md:grid-cols-2">
             <div>
@@ -106,7 +129,7 @@ export default function PaginaPrecios() {
                         {bono.nota}
                       </span>
                     </dt>
-                    <dd className="font-heading text-xl tabular-nums whitespace-nowrap">
+                    <dd className="font-heading text-xl whitespace-nowrap tabular-nums">
                       {euros(bono.precio)}
                     </dd>
                   </div>
@@ -120,8 +143,8 @@ export default function PaginaPrecios() {
                 {pruebaGratuita.nota}
               </p>
               <p className="paso-pequeno medida mt-4 text-ink-soft">
-                Es la única vez que hay que reservar. Después ya puedes venir
-                el día que quieras, sin avisar.
+                Es la única vez que hay que reservar. Después ya puedes venir el
+                día que quieras, sin avisar.
               </p>
               <BotonReserva className="mt-7" />
             </div>

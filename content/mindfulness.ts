@@ -53,17 +53,6 @@ export const mindfulness = {
     "Una sesión guiada para aprender a estar presente, con prácticas sencillas de respiración y atención plena.",
     "No hace falta experiencia previa. Ven con ropa cómoda y con ganas de desconectar un rato.",
   ],
-  /**
-   * El taller que viene.
-   *
-   * Lleva fecha puesta, así que caduca: el día que pase, o se cambia por el
-   * siguiente o se quita el bloque entero.
-   */
-  proximoTaller: {
-    titular: "Próximo taller de respiración",
-    cuando: "18, 19 y 20 de noviembre, de 8:00 a 8:50 h",
-    donde: "En el estudio, en Gandia.",
-  },
   /** El cierre, que lleva a los dos sitios donde se puede preguntar. */
   cierre: {
     titular: "Si quieres venir el miércoles",

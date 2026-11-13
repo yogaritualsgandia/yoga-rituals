@@ -12,6 +12,13 @@
   NEXT_PUBLIC_GA_ID = "G-QXR1789H2K"
   NEXT_PUBLIC_CLARITY_ID = "z05bd7dg6k"
 
+  # Mientras la web solo viva en `yogaritualsweb.netlify.app`, no se indexa:
+  # el dominio bueno es `www.yogarituals.es`. El generador convierte esta
+  # variable en una cabecera `X-Robots-Tag: noindex` para todo el sitio.
+  # QUITAR ESTA LÍNEA el día que el dominio definitivo esté activo y volver a
+  # publicar; si no, el dominio bueno también saldría con noindex.
+  NOINDEX = "1"
+
 # ── Límite de peticiones ───────────────────────────────────────────────────
 #
 # La web es estática: no hay servidor que tumbar ni base de datos que llenar.

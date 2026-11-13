@@ -67,6 +67,8 @@ export type Practica = {
 export type EstiloDetalle = {
   slug: string
   nombre: string
+  /** El titular de su página, con la ciudad: el `nombre` se queda corto. */
+  titular: string
   /** La línea corta que abre su página. Suya. */
   lema: string
   /** Dos frases, para la lista de clases y para la tarjeta de la portada. */
@@ -85,6 +87,7 @@ export const estilos = {
   hatha: {
     slug: "hatha",
     nombre: "Hatha",
+    titular: "Hatha yoga en Gandia",
     lema: "Despacio, con presencia y a tu ritmo",
     entradilla:
       "Posturas que se sostienen unos instantes y se acompañan de la respiración. La puerta de entrada a la práctica, y el sitio al que siempre se vuelve.",
@@ -104,6 +107,7 @@ export const estilos = {
   vinyasa: {
     slug: "vinyasa",
     nombre: "Vinyasa",
+    titular: "Vinyasa yoga en Gandia",
     lema: "Muévete con la respiración",
     entradilla:
       "Cada movimiento nace de una inhalación o de una exhalación: las posturas se enlazan en una secuencia fluida. Para quien quiere moverse y soltar el ruido mental.",
@@ -194,11 +198,11 @@ export const practicas: Practica[] = [
  * nueva o cambiarle el grupo la coloca en su bloque sin tocar la página.
  */
 export const practicasEnElEstudio = practicas.filter(
-  (practica) => practica.grupo !== "fuera",
+  (practica) => practica.grupo !== "fuera"
 )
 
 export const practicasFueraDeLaSala = practicas.filter(
-  (practica) => practica.grupo === "fuera",
+  (practica) => practica.grupo === "fuera"
 )
 
 /**
@@ -211,8 +215,7 @@ export const practicasFueraDeLaSala = practicas.filter(
 export const bloquesDePracticas = {
   estudio:
     "Las clases del día a día, todas con horario libre. Vienes, practicas y te vas con el cuerpo más suelto.",
-  fuera:
-    "El yoga también sale del estudio, y lleva años haciéndolo.",
+  fuera: "El yoga también sale del estudio, y lleva años haciéndolo.",
 } as const
 
 /**

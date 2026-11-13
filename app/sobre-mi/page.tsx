@@ -9,9 +9,9 @@ import { biografia, cierreSobreMi, formacion, sobreMi } from "@/content/sobreMi"
 import { metadatosDePagina } from "@/lib/metadatos"
 
 export const metadata: Metadata = metadatosDePagina({
-  titulo: "Susana Estruch Espinós",
+  titulo: "Susana Estruch, profesora de yoga",
   descripcion:
-    "Susana Estruch Espinós dirige YOGA Rituals en Gandia. Profesora de yoga desde 2005 por AIPYS Madrid, con formación en Yoga Restaurativo, Nidra y Oncológico.",
+    "Susana Estruch dirige YOGA Rituals en Gandia. Profesora de yoga desde 2005 por AIPYS Madrid, con formación en yoga restaurativo, Nidra y oncológico.",
   ruta: "/sobre-mi",
 })
 
@@ -38,6 +38,8 @@ export default function PaginaSobreMi() {
       etiqueta="Sobre mí"
       titulo={sobreMi.nombre}
       entradilla={sobreMi.entradilla}
+      ruta="/sobre-mi"
+      tipo="AboutPage"
     >
       {/* ── Su historia, y la formación al lado ──────────────────────────── */}
       <section className="seccion pt-0">
@@ -47,7 +49,10 @@ export default function PaginaSobreMi() {
 
             <div className="flex flex-col gap-5">
               {biografia.map((parrafo) => (
-                <p key={parrafo} className="paso-base medida text-ink-soft first:mt-5">
+                <p
+                  key={parrafo}
+                  className="paso-base medida text-ink-soft first:mt-5"
+                >
                   {parrafo}
                 </p>
               ))}

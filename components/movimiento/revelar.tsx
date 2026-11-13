@@ -106,6 +106,7 @@ export function Titular({
     <Etiqueta
       id={id}
       data-revelar={cuando}
+      data-palabras="si"
       aria-label={texto}
       suppressHydrationWarning
       style={posicion(retardo)}
@@ -199,6 +200,7 @@ export function Parrafo({
   return (
     <p
       data-revelar={cuando}
+      data-palabras="si"
       suppressHydrationWarning
       style={{ ...posicion(retardo), "--paso": `${paso}ms` } as CSSProperties}
       className={className}

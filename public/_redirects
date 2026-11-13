@@ -17,13 +17,23 @@
 /minfulness/                       /mindfulness                     301
 /contacto-imagenes                 /                                301
 /contacto-imagenes/                /                                301
-/contacto                          /                                301
-/contacto/                         /                                301
 /talleres-en-centros-educativos    /talleres-centros-educativos     301
 /talleres-en-centros-educativos/   /talleres-centros-educativos     301
 /proximamente                      /                                301
 /proximamente/                     /                                301
 
-# El dominio viejo servía con www y sin www, las dos con un 200. Aquí se elige
-# una: la del canonical, sin www.
-https://www.yogarituals.es/*       https://yogarituals.es/:splat     301!
+# El dominio se sirve en `www`, que es el canónico. La dirección sin `www`
+# redirige allí, pero esa redirección NO se escribe aquí: la hace Netlify sola
+# al marcar `www.yogarituals.es` como dominio principal. Escribirla a mano
+# duplicaría la regla y, el día que alguien cambiara el dominio principal,
+# formaría un bucle de redirecciones entre las dos versiones.
+
+# ── Dominio provisional ───────────────────────────────────────────────────
+#
+# `yogaritualsweb.netlify.app` es la dirección de Netlify del proyecto. Cuando
+# los DNS de OVHcloud ya apunten a `www.yogarituals.es`, descomentar esta línea
+# para que esa dirección deje de servir una copia indexable de la web y mande a
+# la buena. Se deja comentada mientras el dominio no esté activo: activarla
+# antes dejaría la web nueva sin ninguna dirección a la que ir.
+#
+# https://yogaritualsweb.netlify.app/*   https://www.yogarituals.es/:splat   301!

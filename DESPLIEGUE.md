@@ -1,13 +1,22 @@
-# Publicar la web y mudar el dominio
+# Publicar la web y quedarse con el dominio
 
 Esta guía es para hacerlo una vez. Está escrita para poder seguirla en orden,
 sin saber nada de servidores, y para poder comprobar en cada paso si ha salido
 bien antes de dar el siguiente.
 
-La web se publica en **Netlify** y el dominio (yogarituals.es) sigue siendo el
-mismo. Eso último es importante: **el dominio no cambia**, solo cambia dónde
-apunta. Por eso no hay que hacer ninguna «migración de dominio» ni decirle nada
-especial a Google; basta con que las direcciones viejas redirijan a las nuevas.
+La web se publica en **Netlify**. El dominio `yogarituals.es` está contratado
+en **OVHcloud** y sigue siendo el mismo: lo que cambia es dónde apunta y qué
+hay detrás. Hoy en ese dominio hay una web hecha con **Webnode**; cuando los DNS
+apunten a Netlify, esa web deja de servirse sola. No hay que hacer ninguna
+«migración de dominio» ni usar «Change of address» en Google: el dominio no
+cambia.
+
+La dirección canónica es **`https://www.yogarituals.es`**, con `www`. La
+versión sin `www` redirige allí. Se elige `www` por dos motivos: es la que ya
+usan hoy la web antigua y los enlaces y fichas que existen, así que no se mueve
+nada de sitio; y, con los DNS fuera de Netlify, `www` puede ser un CNAME y
+aprovechar la CDN, mientras que el dominio sin `www` no admite CNAME y Netlify
+lo recomienda solo como redirección.
 
 ---
 
@@ -20,123 +29,179 @@ especial a Google; basta con que las direcciones viejas redirijan a las nuevas.
    construcción, ni carpeta de salida, ni complementos. El archivo `netlify.toml`
    del proyecto ya lleva lo poco que hace falta.
 4. Espera. Cuando termine, Netlify da una dirección provisional del tipo
-   `algo-random.netlify.app`. **Ábrela y pruébala entera** antes de seguir:
-   móvil y escritorio, el menú, la reserva, el WhatsApp. Esa dirección es
-   temporal y no la va a ver nadie, así que un error aquí no cuesta nada.
+   `algo-random.netlify.app` (la actual es `yogaritualsweb.netlify.app`).
+   **Ábrela y pruébala entera** antes de seguir: móvil y escritorio, el menú, la
+   reserva, el WhatsApp, `/contacto` y el mapa. Esa dirección es temporal, así
+   que un error aquí no cuesta nada.
+5. En **Site configuration → Environment variables**, comprueba que
+   `NEXT_PUBLIC_SITE_URL` no existe o vale `https://www.yogarituals.es`. Si
+   vale otra cosa, el canonical y el mapa del sitio apuntarán ahí.
+6. **Noindex provisional.** `netlify.toml` lleva `NOINDEX = "1"` mientras la web
+   solo viva en `*.netlify.app`. Eso añade `X-Robots-Tag: noindex` a todo el
+   sitio. El día que el dominio definitivo esté activo, **quita esa línea** y
+   vuelve a publicar; si no, el dominio bueno también saldría con `noindex`.
 
-## 2. Conectar el dominio
+## 2. Añadir el dominio en Netlify
 
 Solo cuando la dirección provisional esté perfecta.
 
 1. En Netlify: **Domain management → Add a domain** y escribe
-   `yogarituals.es`.
-2. Netlify dirá que hay que apuntar los DNS. Hay dos caminos:
-   - **Cambiar los servidores de nombres** en el sitio donde esté registrado el
-     dominio, a los que Netlify indique. Es el camino más simple y el que
-     recomiendo.
-   - **Mantener los DNS donde están** y añadir los registros que Netlify pida.
-     Más trabajo y más fácil equivocarse.
-3. Deja `yogarituals.es` como dominio principal y añade `www.yogarituals.es`
-   como alias. Netlify redirige el `www` al principal por su cuenta, y eso es
-   justo lo que queremos: hoy la web antigua sirve las dos versiones a la vez,
-   las dos con un 200, y eso para Google es duplicar cada página. Quedarnos con
-   una arregla eso de paso.
-4. El certificado HTTPS lo pone Netlify solo, gratis, en cuanto los DNS
-   apunten. Puede tardar unos minutos. Hasta que no esté, no toques nada más.
+   `www.yogarituals.es`.
+2. Si Netlify pregunta, elige **usar los DNS actuales** (los de OVH). No hace
+   falta que Netlify gestione la zona para que el dominio funcione.
+3. Deja `www.yogarituals.es` como **dominio principal**. Netlify añade el
+   dominio sin `www` como alias y lo redirige al principal por su cuenta, con
+   un 301. Por eso esa redirección **no** está escrita en `public/_redirects`:
+   duplicarla solo serviría para montar un bucle el día que alguien cambie el
+   dominio principal.
+4. Netlify te dirá qué registros DNS faltan. Son los del paso siguiente.
 
-### Dos avisos sobre los DNS
+## 3. Apuntar el dominio desde OVHcloud
 
-- **El correo.** La web no tiene correo propio: en el pie figura
-  `yogaritualsgandia@gmail.com`, que es Gmail y no depende del dominio, así que
-  cambiar los DNS no rompe nada. **Si algún día hay correo con el dominio**
-  (`algo@yogarituals.es`), antes de tocar los servidores de nombres hay que
-  copiar a Netlify los registros MX. Si no, el correo deja de llegar en
-  silencio, y eso se descubre cuando alguien dice «te escribí y no contestaste».
-- **No canceles Webnode el mismo día.** Déjala viva al menos un mes. Es el
-  seguro: si algo de la web nueva falla, las direcciones antiguas redirigen
-  igual, y siempre se puede volver atrás cambiando los DNS otra vez.
+Hay dos caminos. El primero es el más simple y el que recomiendo.
 
-## 3. Comprobar que no se ha perdido nada
+### Camino A · Delegar los DNS en Netlify (recomendado)
+
+1. En Netlify, en la ficha del dominio, apunta los cuatro servidores de nombres
+   que te da (del tipo `dns1.p0X.nsone.net`).
+2. En OVHcloud: **Web Cloud → Dominios → yogarituals.es → Servidores DNS**.
+   Elige la opción de usar servidores DNS personalizados y escribe esos cuatro.
+   OVH pide un mínimo de dos; pon los cuatro.
+3. Guarda. La propagación puede tardar hasta 24 horas, aunque suele ser menos.
+4. Ventaja: Netlify crea y mantiene los registros del dominio sin que nadie
+   tenga que acordarse de ellos. Si algún día se cambia de hosting, se cambian
+   los servidores de nombres y ya está.
+
+### Camino B · Mantener los DNS en OVHcloud
+
+Si prefieres no tocar los servidores de nombres, hay que crear dos registros en
+la zona DNS de OVH (**Web Cloud → Dominios → yogarituals.es → Zona DNS**):
+
+| Tipo  | Subdominio | Valor                          |
+| ----- | ---------- | ------------------------------ |
+| CNAME | `www`      | `yogaritualsweb.netlify.app.`  |
+| A     | `@` (vacío)| `75.2.60.5`                    |
+
+- El `CNAME` es el que sirve la web. El `A` del dominio sin `www` solo existe
+  para que Netlify pueda redirigir de ahí al `www`; apunta al balanceador de
+  Netlify, que es esa IP fija.
+- OVH no ofrece registros `ALIAS`/`ANAME`, así que el dominio raíz va con `A`.
+  Es el motivo de que el canónico sea `www` y no el dominio a secas.
+- **Antes de borrar nada, mira lo que ya hay.** La zona probablemente tenga un
+  `A` o un `CNAME` apuntando al alojamiento de la web antigua: ese es el que se
+  sustituye. Pero si hay registros `MX`, `TXT` (SPF, verificaciones) o `CNAME`
+  de correo, **no se tocan**. Borrar la zona entera para «empezar limpio» es la
+  forma más rápida de perder el correo sin enterarse.
+
+En los dos caminos, el certificado HTTPS lo pone Netlify solo y gratis en cuanto
+los DNS apunten. Puede tardar unos minutos. Hasta que no esté, no toques nada
+más.
+
+## 4. Retirar la web antigua
+
+Primero se comprueba que la nueva funciona (paso 5). Después:
+
+1. La web antigua deja de verse sola en cuanto los DNS apuntan a Netlify. No
+   hay que «despublicarla»: ya no recibe visitas.
+2. La web antigua está publicada con **Webnode** (responde con
+   `Server: webnode`). **No canceles el plan el mismo día.** Déjalo vivo al
+   menos un mes. Es el seguro: si algo falla, se puede volver atrás cambiando
+   los DNS otra vez.
+3. Pasado ese mes, se cancela la suscripción de Webnode desde su panel. El
+   dominio **no** se toca: sigue en OVHcloud, que es quien lo registra y quien
+   cobra la renovación.
+4. En OVHcloud no hay que cancelar ningún alojamiento por esto: el dominio es
+   solo el registro y la zona DNS. Si algún día hay correo con el dominio, ese
+   correo no se toca: se queda donde esté y solo se cambian los registros de la
+   web.
+
+## 5. Comprobar que no se ha perdido nada
 
 Estas son las comprobaciones de verdad. Se pegan en una terminal, una detrás de
-otra, sustituyendo nada. La primera columna es lo que hay que hacer, la segunda
-lo que tiene que responder.
+otra. La primera línea es lo que hay que hacer, la segunda lo que tiene que
+responder.
 
 ```bash
 # Las direcciones que cambian de nombre redirigen con un 301 permanente.
-curl -sI https://yogarituals.es/actividades/ | head -3
+curl -sI https://www.yogarituals.es/actividades/ | head -3
 #   HTTP/2 301
 #   location: /clases
 
-curl -sI https://yogarituals.es/tarifas/ | head -3
+# El dominio bueno ya se puede indexar: no debe salir X-Robots-Tag.
+curl -sI https://www.yogarituals.es/ | grep -i x-robots-tag
+#   (sin salida)
+
+curl -sI https://www.yogarituals.es/tarifas/ | head -3
 #   HTTP/2 301
 #   location: /precios
 
-curl -sI https://yogarituals.es/minfulness/ | head -3
+curl -sI https://www.yogarituals.es/minfulness/ | head -3
 #   HTTP/2 301
 #   location: /mindfulness
 
-# El www lleva al dominio principal, y no al revés.
-curl -sI https://www.yogarituals.es/ | head -3
+# El dominio sin www lleva al www, y no al revés.
+curl -sI https://yogarituals.es/ | head -3
 #   HTTP/2 301
-#   location: https://yogarituals.es/
+#   location: https://www.yogarituals.es/
 
 # Una dirección que no existe da un 404 de verdad, no un 200 disfrazado.
-curl -sI https://yogarituals.es/esto-no-existe | head -1
+curl -sI https://www.yogarituals.es/esto-no-existe | head -1
 #   HTTP/2 404
 
-# El mapa del sitio está y lleva las diecisiete páginas.
-curl -s https://yogarituals.es/sitemap.xml | grep -c "<loc>"
-#   17
+# El mapa del sitio está y lleva las quince páginas indexables.
+curl -s https://www.yogarituals.es/sitemap.xml | grep -c "<loc>"
+#   15
 
 # Y robots.txt apunta a ese mapa.
-curl -s https://yogarituals.es/robots.txt
+curl -s https://www.yogarituals.es/robots.txt
 #   User-Agent: *
 #   Allow: /
-#   Sitemap: https://yogarituals.es/sitemap.xml
+#   Sitemap: https://www.yogarituals.es/sitemap.xml
 ```
 
-Si alguna de estas no sale, no sigas. Mira `next.config.ts`, que es donde están
-las redirecciones con el motivo de cada una, y la configuración de dominios de
-Netlify. Y avísame: esas mismas redirecciones están comprobadas automáticamente
-en cada cambio, así que si fallan en producción es que Netlify está haciendo
-algo por su cuenta antes de llegar a la web.
+Si alguna no sale, no sigas. Mira la configuración de dominios de Netlify y la
+zona DNS de OVH. Y avísame: esas mismas redirecciones están comprobadas
+automáticamente en cada cambio, así que si fallan en producción es que los DNS
+o Netlify están haciendo algo por su cuenta antes de llegar a la web.
 
-## 4. Decirle a Google
+## 6. Decirle a Google
 
 1. En [Google Search Console](https://search.google.com/search-console), añade
-   la propiedad `yogarituals.es` si no la tienes y verifícala.
+   la propiedad de **dominio** `yogarituals.es` (la que se verifica con un
+   registro `TXT` en el DNS). Esa propiedad cubre `www` y sin `www` a la vez.
 2. **Sitemaps → Añadir un sitemap**: `sitemap.xml`.
-3. **Inspección de URL**: pega dos o tres direcciones antiguas
-   (`https://yogarituals.es/actividades/`, `/precios/`, `/minfulness/`) y
-   comprueba que Google ve la redirección y la página nueva. Tarda unos días en
-   actualizar el índice.
-4. **No hay que usar «Change of address».** Ese trámite es para cuando la web
-   se muda a OTRO dominio, y aquí el dominio es el mismo. Usarlo cuando no toca
-   solo confunde.
+3. **Inspección de URL**: pega tres o cuatro direcciones antiguas
+   (`/actividades/`, `/tarifas/`, `/minfulness/`) y comprueba que Google ve la
+   redirección y la página nueva. Tarda unos días en actualizar el índice.
+4. **No hay que usar «Change of address».** Ese trámite es para mudanzas a otro
+   dominio, y aquí el dominio es el mismo: solo cambia el `www`.
+5. En la ficha de Google (Perfil de Empresa), cambia el campo **Sitio web** a
+   `https://www.yogarituals.es`. Si apunta a la web antigua, Google sigue
+   mandando visitas allí.
 
 Conviene repetir la inspección a la semana y al mes, y mirar **Cobertura** para
 ver que las páginas antiguas van desapareciendo y las nuevas van entrando. Es
 normal que durante unas semanas convivan unas y otras.
 
-## 5. Lo que todavía no está
+## 7. Lo que todavía no está
 
-No hay que hacer nada con esto ahora; está apuntado para que no se olvide. La
-lista entera, con todo lo que hay que pedirle a Susana, está en `PENDIENTES.md`.
+No hay que hacer nada con esto ahora; está apuntado para que no se olvide.
 
-- **Las fotos.** Las seis que hay son de ejemplo y está dicho en la propia web.
-  Cuando lleguen las del estudio, se sustituyen en `public/fotos-ejemplo/` sin
-  tocar el código, cada una en su sitio.
+- **Las fotos.** Las que hay son de ejemplo. Cuando lleguen las del estudio y
+  de Susana, se sustituyen en `public/fotos/` sin tocar el código, cada una en
+  su sitio.
 - **El logotipo en SVG.** El actual es un PNG al que se le ha quitado el fondo
   y del que se ha hecho una segunda versión clara para el modo oscuro. Con un
   SVG, las dos versiones sobran.
-- **La imagen para compartir.** Es una tarjeta crema con el logotipo. Cuando
-  Susana mande una foto, se sustituye `public/compartir.png` y ya está.
+- **La imagen para compartir.** Es una tarjeta con el logotipo. Cuando haya una
+  foto, se sustituye `public/compartir.png` y ya está.
 - **El NIF del aviso legal.** En `/aviso-legal` aparece entre corchetes
   `[NIF de Susana Estruch Espinós]`. Cuando llegue el número, se cambia en
   `content/legal.ts` y no hay que tocar nada más.
+- **Los retiros.** Cuando haya fecha, precio y plazas, se añaden a `/retiros` y
+  se marcan como evento en los datos estructurados.
 
-## 6. Que no llegue una factura rara
+## 8. Que no llegue una factura rara
 
 La web es estática: no hay servidor que tumbar ni base de datos que llenar. Lo
 único que se paga es el ancho de banda, y hay dos seguros puestos:
@@ -156,7 +221,7 @@ despliegue, en la etapa **post-processing**: tiene que aparecer el límite. Si n
 aparece, la regla no ha pasado la validación y hay que revisarla, aunque el
 despliegue no falle por ello.
 
-## 7. Cómo se publica a partir de ahora
+## 9. Cómo se publica a partir de ahora
 
 Una vez conectado el repositorio, cada vez que se suba un cambio a la rama
 principal, Netlify reconstruye y publica sola, en un par de minutos, sin

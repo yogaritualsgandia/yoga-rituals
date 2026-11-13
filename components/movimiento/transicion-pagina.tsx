@@ -1,7 +1,9 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import type { ReactNode } from "react"
+import { useRef, type ReactNode } from "react"
+
+import { cn } from "@/lib/utils"
 
 /**
  * Entrada de página.
@@ -12,20 +14,28 @@ import type { ReactNode } from "react"
  * crearía de nuevo y la animación solo se vería la primera vez, en la primera
  * página que se abriera.
  *
+ * En la PRIMERA carga no se anima, y eso es a propósito: el desvanecido de la
+ * página entera retrasa el pintado del titular y de la foto de portada, que es
+ * justo lo que mide el LCP. Al abrir la web, lo que tiene que entrar son las
+ * palabras del titular, que ya lo hacen por su cuenta; el desvanecido se
+ * reserva para cuando de verdad hay un cambio de página.
+ *
  * La animación la pone el CSS, no JavaScript, y por eso está escrita en
  * styles/movimiento.css detrás del mismo interruptor que todo lo demás: si no
  * hay paquete de JavaScript o se ha pedido menos movimiento, el bloque está
  * desde el primer momento a la vista, sin desvanecido y sin nada que pueda
  * dejarlo en blanco.
- *
- * El `key` no cuesta nada por el camino: al cambiar de dirección el contenido
- * es otro de todas formas.
  */
 export function TransicionPagina({ children }: { children: ReactNode }) {
   const ruta = usePathname()
+  const rutaInicial = useRef(ruta)
+  const esPrimeraCarga = ruta === rutaInicial.current
 
   return (
-    <div key={ruta} className="transicion-pagina">
+    <div
+      key={ruta}
+      className={cn(!esPrimeraCarga && "transicion-pagina")}
+    >
       {children}
     </div>
   )

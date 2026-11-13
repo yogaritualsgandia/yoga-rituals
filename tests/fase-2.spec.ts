@@ -23,6 +23,7 @@ const RUTAS = [
   "/precios",
   "/primera-vez",
   "/sobre-mi",
+  "/contacto",
   "/aviso-legal",
   "/privacidad",
   "/cookies",
@@ -53,6 +54,7 @@ const RUTAS_CON_AXE = [
   "/retiros",
   "/talleres-centros-educativos",
   "/sobre-mi",
+  "/contacto",
 ]
 
 function recogerErrores(page: Page) {
@@ -81,8 +83,8 @@ async function irA(page: Page, ruta: string) {
   await page.evaluate(
     () =>
       new Promise<void>((listo) =>
-        requestAnimationFrame(() => requestAnimationFrame(() => listo())),
-      ),
+        requestAnimationFrame(() => requestAnimationFrame(() => listo()))
+      )
   )
 
   /* Y se espera a que pare lo que se mueve. Medir a media entrada da
@@ -109,7 +111,10 @@ test.describe("Todas las rutas", () => {
     for (const ruta of RUTAS) {
       await irA(page, ruta)
       await expect(page.locator("h1"), `h1 en ${ruta}`).toHaveCount(1)
-      await expect(page.locator("main#contenido"), `main en ${ruta}`).toBeVisible()
+      await expect(
+        page.locator("main#contenido"),
+        `main en ${ruta}`
+      ).toBeVisible()
     }
 
     expect(errores, "errores de consola").toEqual([])
@@ -128,9 +133,10 @@ test.describe("Todas las rutas", () => {
       const descripcion = await page
         .locator('meta[name="description"]')
         .getAttribute("content")
-      expect(descripcion?.length ?? 0, `descripción en ${ruta}`).toBeGreaterThan(
-        40,
-      )
+      expect(
+        descripcion?.length ?? 0,
+        `descripción en ${ruta}`
+      ).toBeGreaterThan(40)
     }
   })
 
@@ -138,7 +144,7 @@ test.describe("Todas las rutas", () => {
     for (const ruta of RUTAS) {
       await irA(page, ruta)
       const desborde = await page.evaluate(
-        () => document.documentElement.scrollWidth - window.innerWidth,
+        () => document.documentElement.scrollWidth - window.innerWidth
       )
       expect(desborde, `desborde en ${ruta}`).toBeLessThanOrEqual(1)
     }
@@ -156,11 +162,11 @@ test.describe("Accesibilidad", () => {
         .analyze()
 
       const graves = violations.filter(
-        (v) => v.impact === "serious" || v.impact === "critical",
+        (v) => v.impact === "serious" || v.impact === "critical"
       )
 
       expect(
-        graves.map((v) => `${v.id} · ${v.help} · ${v.nodes.length} nodo(s)`),
+        graves.map((v) => `${v.id} · ${v.help} · ${v.nodes.length} nodo(s)`)
       ).toEqual([])
     })
   }
@@ -196,7 +202,9 @@ test.describe("Accesibilidad", () => {
 
     await expect(page.locator("main#contenido")).toBeInViewport()
 
-    const enlaces = page.getByRole("link", { name: /Reserva tu clase de prueba/ })
+    const enlaces = page.getByRole("link", {
+      name: /Reserva tu clase de prueba/,
+    })
     await expect(enlaces.first()).toBeVisible()
   })
 
@@ -204,7 +212,7 @@ test.describe("Accesibilidad", () => {
     await irA(page, "/")
 
     const controles = page.locator(
-      'button:visible, [data-slot="button"]:visible, a[data-slot="button"]:visible',
+      'button:visible, [data-slot="button"]:visible, a[data-slot="button"]:visible'
     )
     const cuantos = await controles.count()
     expect(cuantos, "tiene que haber controles que medir").toBeGreaterThan(2)
@@ -217,10 +225,11 @@ test.describe("Accesibilidad", () => {
       if (caja.height < 44 - 0.5 || caja.width < 44 - 0.5) {
         const texto = ((await control.textContent()) ?? "").trim().slice(0, 30)
         const etiqueta = await control.evaluate(
-          (el) => `${el.tagName.toLowerCase()}.${(el.className || "").toString().split(" ").slice(0, 3).join(".")}`,
+          (el) =>
+            `${el.tagName.toLowerCase()}.${(el.className || "").toString().split(" ").slice(0, 3).join(".")}`
         )
         pequeños.push(
-          `«${texto || "(sin texto)"}» ${Math.round(caja.width)}x${Math.round(caja.height)} — ${etiqueta}`,
+          `«${texto || "(sin texto)"}» ${Math.round(caja.width)}x${Math.round(caja.height)} — ${etiqueta}`
         )
       }
     }
@@ -238,7 +247,7 @@ test.describe("Estructura", () => {
     await irA(page, "/")
 
     await expect(
-      page.getByRole("link", { name: "YOGA Rituals, ir al inicio" }).first(),
+      page.getByRole("link", { name: "YOGA Rituals, ir al inicio" }).first()
     ).toBeVisible()
 
     /* El pie llevó durante un tiempo un crédito a Skiper UI, porque el
@@ -258,14 +267,19 @@ test.describe("Estructura", () => {
 
     const destinos = await page
       .locator('footer a[href^="/"]')
-      .evaluateAll((enlaces) =>
-        [...new Set(enlaces.map((e) => (e as HTMLAnchorElement).getAttribute("href")!))],
-      )
+      .evaluateAll((enlaces) => [
+        ...new Set(
+          enlaces.map((e) => (e as HTMLAnchorElement).getAttribute("href")!)
+        ),
+      ])
 
-    // Cuatro: el logotipo y los tres textos legales. El pie tuvo trece
-    // mientras fue un mapa del sitio, y ya no lo es; la página de contacto
-    // también se quitó, porque el contacto vive en el propio pie.
-    expect(destinos.length, "el pie tiene que enlazar a algún sitio").toBeGreaterThan(3)
+    // Cinco: el logotipo, «Contacto y cómo llegar» y los tres textos legales.
+    // El pie tuvo trece mientras fue un mapa del sitio, y ya no lo es; el
+    // contacto volvió cuando tuvo algo que contar (horario y mapa).
+    expect(
+      destinos.length,
+      "el pie tiene que enlazar a algún sitio"
+    ).toBeGreaterThan(3)
 
     for (const destino of destinos) {
       const respuesta = await page.request.get(destino)
@@ -280,10 +294,9 @@ test.describe("Estructura", () => {
     await expect(pie).toContainText("Sant Francesc de Borja")
     await expect(pie).toContainText("46701")
     await expect(pie).toContainText("Gandia")
-    await expect(pie.getByRole("link", { name: /656 18 77 61/ })).toHaveAttribute(
-      "href",
-      "tel:+34656187761",
-    )
+    await expect(
+      pie.getByRole("link", { name: /656 18 77 61/ })
+    ).toHaveAttribute("href", "tel:+34656187761")
   })
 
   test("hay datos estructurados del negocio con la dirección y el horario", async ({
@@ -298,11 +311,26 @@ test.describe("Estructura", () => {
     expect(crudo).toBeTruthy()
 
     const datos = JSON.parse(crudo!)
-    expect(datos["@type"]).toBe("HealthAndBeautyBusiness")
-    expect(datos.address.addressLocality).toBe("Gandia")
-    expect(datos.telephone).toBe("+34656187761")
-    expect(datos.openingHoursSpecification.length).toBe(9)
-    expect(datos.foundingDate).toBe("2017-03-01")
+    const grafo = datos["@graph"] as Array<Record<string, unknown>>
+    const negocio = grafo.find(
+      (nodo) => nodo["@type"] === "HealthAndBeautyBusiness"
+    )
+
+    expect(negocio, "falta el negocio en el grafo").toBeTruthy()
+    expect(negocio!.address).toMatchObject({ addressLocality: "Gandia" })
+    expect(negocio!.telephone).toBe("+34656187761")
+    expect((negocio!.openingHoursSpecification as unknown[]).length).toBe(9)
+    expect(negocio!.foundingDate).toBe("2017-03-01")
+    expect(negocio!.image).toMatchObject({
+      url: "https://www.yogarituals.es/fotos/clases-grupo-1600.jpg",
+    })
+    expect(negocio!.logo).toMatchObject({
+      url: "https://www.yogarituals.es/icon.png",
+    })
+
+    // Y el sitio y la persona, que antes no estaban.
+    expect(grafo.some((nodo) => nodo["@type"] === "WebSite")).toBe(true)
+    expect(grafo.some((nodo) => nodo["@type"] === "Person")).toBe(true)
   })
 })
 
@@ -342,22 +370,25 @@ test.describe("Contenido real", () => {
 /* ── Móvil ──────────────────────────────────────────────────────────────── */
 
 test.describe("Móvil", () => {
-  test.skip(({ viewport }) => (viewport?.width ?? 0) >= 1024, "solo móvil y tablet")
+  test.skip(
+    ({ viewport }) => (viewport?.width ?? 0) >= 1024,
+    "solo móvil y tablet"
+  )
 
-  test("el menú se abre, atrapa el foco y se cierra con Escape", async ({ page }) => {
+  test("el menú se abre, atrapa el foco y se cierra con Escape", async ({
+    page,
+  }) => {
     await irA(page, "/")
 
     await abrirMenu(page)
 
     const dialogo = page.getByRole("dialog")
     await expect(dialogo).toBeVisible()
-    await expect(
-      dialogo.getByRole("link", { name: "Horarios" }),
-    ).toBeVisible()
+    await expect(dialogo.getByRole("link", { name: "Horarios" })).toBeVisible()
 
     // El foco tiene que estar dentro del diálogo, no detrás.
-    const focoDentro = await page.evaluate(() =>
-      !!document.activeElement?.closest('[role="dialog"]'),
+    const focoDentro = await page.evaluate(
+      () => !!document.activeElement?.closest('[role="dialog"]')
     )
     expect(focoDentro, "el foco se queda dentro del menú").toBe(true)
 
@@ -383,7 +414,10 @@ test.describe("Móvil", () => {
   test("el menú se cierra y navega al elegir una sección", async ({ page }) => {
     await irA(page, "/")
     await abrirMenu(page)
-    await page.getByRole("dialog").getByRole("link", { name: "Horarios" }).click()
+    await page
+      .getByRole("dialog")
+      .getByRole("link", { name: "Horarios" })
+      .click()
 
     await expect(page).toHaveURL(/\/horarios$/)
     await expect(page.getByRole("dialog")).toBeHidden()
@@ -409,7 +443,7 @@ test.describe("Preguntas frecuentes", () => {
 
     await expect(pregunta).toHaveAttribute("aria-expanded", "true")
     await expect(
-      page.getByText("La flexibilidad llega con la práctica"),
+      page.getByText("La flexibilidad llega con la práctica")
     ).toBeVisible()
   })
 })
@@ -419,7 +453,7 @@ test.describe("Preguntas frecuentes", () => {
 test.describe("Imagen para compartir", () => {
   test.skip(
     ({ viewport }) => (viewport?.width ?? 0) !== 1440,
-    "solo hace falta una vez",
+    "solo hace falta una vez"
   )
 
   test("el enlace lleva imagen y la imagen existe de verdad", async ({
@@ -430,7 +464,7 @@ test.describe("Imagen para compartir", () => {
 
     await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
       "content",
-      /compartir\.png/,
+      /compartir\.png/
     )
 
     // Que la etiqueta esté no significa que el archivo esté. Una ruta mal
@@ -449,7 +483,7 @@ test.describe("Imagen para compartir", () => {
 test.describe("Buscadores", () => {
   test.skip(
     ({ viewport }) => (viewport?.width ?? 0) !== 1440,
-    "solo hace falta una vez",
+    "solo hace falta una vez"
   )
 
   test("el mapa del sitio lleva todas las páginas", async ({ request }) => {
@@ -458,9 +492,28 @@ test.describe("Buscadores", () => {
 
     const mapa = await respuesta.text()
 
-    for (const ruta of RUTAS) {
+    const noIndexables = ["/aviso-legal", "/privacidad", "/cookies"]
+
+    for (const ruta of RUTAS.filter((r) => !noIndexables.includes(r))) {
       expect(mapa, `falta ${ruta} en el mapa del sitio`).toContain(
-        `<loc>https://yogarituals.es${ruta}</loc>`,
+        `<loc>https://www.yogarituals.es${ruta}</loc>`
+      )
+    }
+
+    for (const ruta of noIndexables) {
+      expect(mapa, `${ruta} no debería estar en el mapa`).not.toContain(
+        `<loc>https://www.yogarituals.es${ruta}</loc>`
+      )
+    }
+  })
+
+  test("las páginas legales se pueden leer pero no se indexan", async ({
+    request,
+  }) => {
+    for (const ruta of ["/aviso-legal", "/privacidad", "/cookies"]) {
+      const html = await (await request.get(ruta)).text()
+      expect(html, `${ruta} tendría que llevar noindex`).toMatch(
+        /<meta name="robots" content="noindex, follow"/
       )
     }
   })
@@ -472,7 +525,9 @@ test.describe("Buscadores", () => {
     const texto = await respuesta.text()
 
     expect(texto).toMatch(/^Allow: \/$/m)
-    expect(texto).toMatch(/sitemap: https:\/\/yogarituals\.es\/sitemap\.xml/i)
+    expect(texto).toMatch(
+      /sitemap: https:\/\/www\.yogarituals\.es\/sitemap\.xml/i
+    )
   })
 
   /*
@@ -490,18 +545,18 @@ test.describe("Buscadores", () => {
       expect(respuesta.status(), `${ruta} tendría que existir`).toBe(200)
 
       const html = await respuesta.text()
-      const canonical = html.match(
-        /<link rel="canonical" href="([^"]+)"/,
-      )?.[1]
+      const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1]
 
-      // La portada no lleva barra final: `https://yogarituals.es` y
-      // `https://yogarituals.es/` son la misma dirección, y Next resuelve la
+      // La portada no lleva barra final: `https://www.yogarituals.es` y
+      // `https://www.yogarituals.es/` son la misma dirección, y Next resuelve la
       // raíz a la forma corta.
       const esperado =
-        ruta === "/" ? "https://yogarituals.es" : `https://yogarituals.es${ruta}`
+        ruta === "/"
+          ? "https://www.yogarituals.es"
+          : `https://www.yogarituals.es${ruta}`
 
       expect(canonical, `${ruta} no declara cuál es su dirección buena`).toBe(
-        esperado,
+        esperado
       )
     }
   })
@@ -526,12 +581,13 @@ test.describe("Buscadores", () => {
       for (const forma of [desde, `${desde}/`]) {
         const final = await request.get(forma)
 
-        expect(final.status(), `${forma} tendría que acabar en una página`).toBe(
-          200,
-        )
+        expect(
+          final.status(),
+          `${forma} tendría que acabar en una página`
+        ).toBe(200)
         expect(
           new URL(final.url()).pathname,
-          `${forma} tendría que acabar en ${hacia}`,
+          `${forma} tendría que acabar en ${hacia}`
         ).toBe(hacia)
       }
 
@@ -554,7 +610,10 @@ test.describe("Buscadores", () => {
    * `public/_redirects` y esta prueba impide que las dos se separen.
    */
   test("la lista de redirecciones y public/_redirects dicen lo mismo", () => {
-    const texto = readFileSync(join(process.cwd(), "public", "_redirects"), "utf8")
+    const texto = readFileSync(
+      join(process.cwd(), "public", "_redirects"),
+      "utf8"
+    )
     const lineas = texto
       .split(/\r?\n/)
       .map((linea) => linea.trim())
@@ -577,7 +636,7 @@ test.describe("Tema", () => {
   // El tema es de toda la web, no de un ancho: basta con mirarlo una vez.
   test.skip(
     ({ viewport }) => (viewport?.width ?? 0) !== 1440,
-    "solo hace falta una vez",
+    "solo hace falta una vez"
   )
 
   test("el botón cambia el tema y dice a dónde va", async ({ page }) => {
@@ -592,7 +651,7 @@ test.describe("Tema", () => {
     // El nombre accesible anuncia a dónde lleva el botón, no dónde está el
     // tema: quien lo lee con lector de pantalla sabe qué consigue al pulsarlo.
     await expect(
-      page.getByRole("button", { name: "Cambiar a modo claro" }),
+      page.getByRole("button", { name: "Cambiar a modo claro" })
     ).toBeVisible()
 
     await page.getByRole("button", { name: "Cambiar a modo claro" }).click()
@@ -606,11 +665,13 @@ test.describe("Imágenes", () => {
   test("ninguna imagen se queda sin texto alternativo", async ({ page }) => {
     await irA(page, "/")
 
-    const sinAlt = await page.locator("img").evaluateAll((imagenes) =>
-      imagenes
-        .filter((imagen) => imagen.getAttribute("alt") === null)
-        .map((imagen) => (imagen as HTMLImageElement).currentSrc || "sin src"),
-    )
+    const sinAlt = await page
+      .locator("img")
+      .evaluateAll((imagenes) =>
+        imagenes
+          .filter((imagen) => imagen.getAttribute("alt") === null)
+          .map((imagen) => (imagen as HTMLImageElement).currentSrc || "sin src")
+      )
 
     expect(sinAlt).toEqual([])
   })
@@ -632,7 +693,7 @@ test.describe("Página no encontrada", () => {
     expect(respuesta?.status()).toBe(404)
 
     await expect(page.locator("h1")).toHaveText(
-      "No se ha podido encontrar la página.",
+      "No se ha podido encontrar la página."
     )
 
     /* El número grande va marcado como decorativo a propósito: quien oye la
@@ -644,7 +705,9 @@ test.describe("Página no encontrada", () => {
        declara el armazón para todas y la que añade Next para este caso. Se
        busca la que decide, no la primera: cuando hay dos, el buscador se queda
        con la más restrictiva, y la restrictiva es esta. */
-    await expect(page.locator('meta[name="robots"][content*="noindex"]')).toHaveCount(1)
+    await expect(
+      page.locator('meta[name="robots"][content*="noindex"]')
+    ).toHaveCount(1)
 
     await page.getByRole("link", { name: "Volver al inicio" }).click()
     await expect(page).toHaveURL("/")

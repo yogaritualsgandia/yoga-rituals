@@ -26,7 +26,7 @@ export const avisoCookies = {
   etiqueta: "Uso de cookies",
   texto:
     "Utilizamos Google Analytics y Microsoft Clarity con el fin de conocer el número de visitantes, las páginas más consultadas y los puntos de la navegación que pueden mejorarse. Estas herramientas solo se activarán si aceptas su uso. En caso de rechazarlas, el sitio web funcionará con normalidad y no se recogerá ningún dato de medición.",
-  enlace: "Más información",
+  enlace: "Más información sobre las cookies",
   aceptar: "Aceptar todas",
   rechazar: "Rechazar todas",
 } as const

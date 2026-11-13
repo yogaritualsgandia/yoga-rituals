@@ -71,8 +71,10 @@ html.lenis body {
    `bloque` es para lo de más abajo: se parte escondido y se enseña al llegar.
 
    En las dos, si el elemento lleva palabras sueltas dentro, se mueven las
-   palabras una detrás de otra y el elemento se queda quieto. El `:has()` es
-   lo que pregunta si las lleva.
+   palabras una detrás de otra y el elemento se queda quieto. Quién lleva
+   palabras lo dice el propio elemento con `data-palabras`, y no se pregunta
+   con `:has()`: esa consulta obliga al navegador a mirar todos los descendientes
+   de cada elemento animado en cada recálculo de estilo, y aquí hay muchas
 
    Se hace por palabras y no por líneas porque las líneas hay que medirlas, y
    esa medida se queda vieja en cuanto cambia el ancho de la ventana o termina
@@ -86,7 +88,7 @@ html.lenis body {
   }
 }
 
-[data-movimiento="listo"] [data-revelar="entrada"]:not(:has(.palabra)) {
+[data-movimiento="listo"] [data-revelar="entrada"]:not([data-palabras]) {
   animation: entrar var(--dur-slow) var(--ease-out) backwards;
   animation-delay: calc(var(--i, 0) * 80ms);
 }
@@ -96,7 +98,7 @@ html.lenis body {
   animation-delay: calc(var(--i, 0) * 45ms);
 }
 
-[data-movimiento="listo"] [data-revelar="bloque"]:not(:has(.palabra)) {
+[data-movimiento="listo"] [data-revelar="bloque"]:not([data-palabras]) {
   opacity: 0;
   transform: translateY(1.125rem);
   transition:
@@ -105,7 +107,7 @@ html.lenis body {
 }
 
 [data-movimiento="listo"]
-  [data-revelar="bloque"]:not(:has(.palabra))[data-revelado] {
+  [data-revelar="bloque"]:not([data-palabras])[data-revelado] {
   opacity: 1;
   transform: none;
 }
@@ -260,7 +262,7 @@ html.lenis body {
    para quien navegue sin el paquete, y no hay ninguna forma de llegar al foco
    sin que esto se dispare. */
 [data-movimiento="listo"]
-  [data-revelar="bloque"]:not(:has(.palabra)):focus-within {
+  [data-revelar="bloque"]:not([data-palabras]):focus-within {
   opacity: 1;
   transform: none;
   /* Sin desvanecido. Esto no es una entrada, es un rescate: quien llega aquí
@@ -269,7 +271,7 @@ html.lenis body {
 }
 
 [data-movimiento="listo"]
-  [data-revelar="bloque"]:has(.palabra):focus-within
+  [data-revelar="bloque"][data-palabras]:focus-within
   .palabra {
   opacity: 1;
   transform: none;

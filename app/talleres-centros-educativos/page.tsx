@@ -11,9 +11,9 @@ import { whatsappUrl } from "@/content/site"
 import { metadatosDePagina } from "@/lib/metadatos"
 
 export const metadata: Metadata = metadatosDePagina({
-  titulo: "Talleres en centros educativos",
+  titulo: "Talleres de yoga en colegios",
   descripcion:
-    "Talleres de educación postural, mindfulness y Yoga Nidra «Calma en el examen» en colegios e institutos de Gandia y La Safor. Más de 500 desde 2017.",
+    "Talleres de educación postural, mindfulness y Yoga Nidra en colegios e institutos de Gandia y La Safor. Más de 500 talleres desde 2017.",
   ruta: "/talleres-centros-educativos",
 })
 
@@ -33,8 +33,9 @@ export default function PaginaTalleresCentrosEducativos() {
   return (
     <Pagina
       etiqueta="Fuera del estudio"
-      titulo="Talleres en centros educativos"
-      entradilla="Con más de 500 talleres realizados, llevamos el yoga y el mindfulness a las aulas."
+      titulo="Talleres de yoga en centros educativos"
+      entradilla="Con más de 500 talleres realizados, llevamos el yoga y el mindfulness a las aulas de Gandia y La Safor."
+      ruta="/talleres-centros-educativos"
     >
       {/* ── A quién van dirigidos ────────────────────────────────────────── */}
       <section className="seccion pt-0">
@@ -48,7 +49,7 @@ export default function PaginaTalleresCentrosEducativos() {
 
           <div className="lg:col-span-4 lg:col-start-9">
             <p className="etiqueta">En centros educativos, desde 2017</p>
-            <p className="font-heading mt-2 text-4xl">
+            <p className="mt-2 font-heading text-4xl">
               {talleresColegios.talleresRealizadosPartes.antes}
               <Contador valor={talleresColegios.talleresRealizados} />
               {talleresColegios.talleresRealizadosPartes.despues}
@@ -95,7 +96,7 @@ export default function PaginaTalleresCentrosEducativos() {
           <div className="mt-10 flex flex-wrap gap-3">
             <BotonEnlace
               href={whatsappUrl(
-                "Hola Susana, me interesan los talleres para un centro educativo.",
+                "Hola Susana, me interesan los talleres para un centro educativo."
               )}
               externo
             >

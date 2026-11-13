@@ -18,11 +18,9 @@ import { Marca } from "./marca"
  * portada, y convertía el pie en la parte más densa de la web.
  *
  * De aquel bloque quedó un rato un enlace a la página de contacto, y también se
- * ha ido. Sobraba por dos motivos: el contacto entero está aquí al lado —la
- * dirección, el teléfono y el correo se pulsan— y la reserva no se hace en
- * ninguna página, se hace por WhatsApp, que es lo que hay justo a la derecha.
- * Un enlace que dice «Contacto y reserva» y lleva a un sitio donde no se
- * reserva es peor que no tenerlo.
+ * ha ido. Ahora vuelve, pero con otro trabajo: la página de contacto ya no es un
+ * formulario que no existe, sino el horario completo y un mapa para llegar, que
+ * es lo que el pie no puede dar. Se enlaza desde aquí y desde el sitemap.
  *
  * Aquí vive el SEO local: la dirección completa como texto, en un <address>
  * de verdad, con el nombre del estudio y la ciudad. Es lo que leen Google y
@@ -36,7 +34,7 @@ export function Pie() {
     <footer className="border-t border-line bg-surface-2/50">
       <Contenedor className="pt-16 pb-24 lg:pt-20 lg:pb-24">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-8">
-          <div className="md:col-span-5 lg:col-span-4">
+          <div className="md:col-span-4 lg:col-span-4">
             <Marca />
             <p className="paso-pequeno mt-5 max-w-[32ch] text-ink-soft">
               Estudio de yoga en Gandia. Presencial, en grupos pequeños, con
@@ -45,9 +43,17 @@ export function Pie() {
             <p className="paso-pequeno mt-2 text-ink-soft">
               {site.aniversarioTexto}
             </p>
+            <p className="mt-4">
+              <Link
+                href="/contacto"
+                className="paso-pequeno font-semibold text-brand underline underline-offset-4 hover:text-brand-hover"
+              >
+                Contacto y cómo llegar
+              </Link>
+            </p>
           </div>
 
-          <div className="flex flex-col gap-3 md:col-span-4 lg:col-span-4 lg:col-start-6">
+          <div className="flex min-w-0 flex-col gap-3 md:col-span-5 lg:col-span-4 lg:col-start-6">
             <address className="flex flex-col gap-3 not-italic">
               {/* La dirección es un enlace al mapa, y ese es el arreglo más útil
                   que se le podía hacer a este bloque: quien la lee la está
@@ -64,7 +70,7 @@ export function Pie() {
                   aria-hidden="true"
                   className="mt-1 size-4 shrink-0 text-ink-soft"
                 />
-                <span>
+                <span className="text-pretty">
                   {calle}, {piso}
                   <br />
                   {codigoPostal} {ciudad} ({provincia})
@@ -73,7 +79,7 @@ export function Pie() {
 
               <a
                 href={`tel:${site.contacto.telefono}`}
-                className="inline-flex items-center gap-2.5 min-h-11 hover:text-brand"
+                className="inline-flex min-h-11 items-center gap-2.5 hover:text-brand"
               >
                 <Phone
                   aria-hidden="true"
@@ -82,15 +88,19 @@ export function Pie() {
                 {site.contacto.telefonoVisible}
               </a>
 
+              {/* El correo es una sola palabra larga: en la columna estrecha del
+                  pie no cabe y se salía por encima del bloque de al lado. Se
+                  parte donde haga falta antes que pisar el botón del tema; en
+                  escritorio cabe entero y no se parte. */}
               <a
                 href={`mailto:${site.contacto.email}`}
-                className="inline-flex items-center gap-2.5 min-h-11 hover:text-brand"
+                className="inline-flex min-h-11 min-w-0 items-center gap-2.5 hover:text-brand"
               >
                 <Mail
                   aria-hidden="true"
                   className="size-4 shrink-0 text-ink-soft"
                 />
-                {site.contacto.email}
+                <span className="break-all">{site.contacto.email}</span>
               </a>
             </address>
           </div>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 
 import { BotonReserva } from "@/components/layout/boton-reserva"
 import { Contenedor } from "@/components/layout/contenedor"
@@ -13,18 +14,18 @@ import {
 } from "@/components/ui/accordion"
 import { metadatosDePagina } from "@/lib/metadatos"
 import { fotos } from "@/content/medios"
+import { preguntasPrimeraVez as preguntasFrecuentes } from "@/content/faqs"
 import {
   aTenerEnCuenta,
   cierrePrimeraVez,
-  preguntasFrecuentes,
   primeraVez,
   queNecesitas,
 } from "@/content/primeraVez"
 
 export const metadata: Metadata = metadatosDePagina({
-  titulo: "Primera vez",
+  titulo: "Tu primera clase de yoga en Gandia",
   descripcion:
-    "Vienes por primera vez a YOGA Rituals, en Gandia: qué llevar, cómo empezar sin prisa y las dudas más habituales antes de tu primera clase.",
+    "¿Primera vez en un estudio de yoga? En Gandia te contamos qué llevar, cómo empezar sin prisa y las dudas más habituales. Clase de prueba gratuita.",
   ruta: "/primera-vez",
 })
 
@@ -52,8 +53,11 @@ export default function PaginaPrimeraVez() {
   return (
     <Pagina
       etiqueta="Primera vez"
-      titulo="Todo lo que necesitas saber"
+      titulo="Tu primera clase de yoga en Gandia"
       entradilla={primeraVez.entradilla}
+      ruta="/primera-vez"
+      tipo="FAQPage"
+      preguntas={preguntasFrecuentes}
     >
       {/* ── Qué necesitas ────────────────────────────────────────────────── */}
       <section className="seccion pt-0">
@@ -129,7 +133,12 @@ export default function PaginaPrimeraVez() {
                 style={atributoEscritura(pregunta.respuesta).estilo}
               >
                 <AccordionTrigger>{pregunta.pregunta}</AccordionTrigger>
-                <AccordionContent>
+                {/* `forceMount` mantiene la respuesta en el HTML aunque el
+                    panel esté cerrado. Radix sigue ocultándolo con `hidden`,
+                    así que la página se ve igual, pero un rastreador que no
+                    ejecuta JavaScript puede leerla y el JSON-LD deja de
+                    declarar respuestas invisibles. */}
+                <AccordionContent forceMount>
                   <Parrafo texto={pregunta.respuesta} />
                 </AccordionContent>
               </AccordionItem>
@@ -148,7 +157,21 @@ export default function PaginaPrimeraVez() {
             <p className="paso-entrada medida mt-6 text-ink-soft">
               Escríbenos y te contamos lo que necesites. Para venir no hace
               falta reservar nada; la clase de prueba es la única que se pide
-              con cita.
+              con cita. Puedes consultar el{" "}
+              <Link
+                href="/horarios"
+                className="font-semibold text-brand underline underline-offset-4 hover:text-brand-hover"
+              >
+                horario semanal
+              </Link>{" "}
+              y los{" "}
+              <Link
+                href="/precios"
+                className="font-semibold text-brand underline underline-offset-4 hover:text-brand-hover"
+              >
+                precios
+              </Link>{" "}
+              antes de escribir.
             </p>
           </div>
 

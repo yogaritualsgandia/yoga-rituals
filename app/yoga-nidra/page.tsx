@@ -9,9 +9,9 @@ import { yogaNidra } from "@/content/yogaNidra"
 import { metadatosDePagina } from "@/lib/metadatos"
 
 export const metadata: Metadata = metadatosDePagina({
-  titulo: "Yoga Nidra",
+  titulo: "Yoga Nidra en Gandia",
   descripcion:
-    "Yoga Nidra en Gandia: meditación guiada y relajación profunda, tumbado y en Savasana. Sesiones de 90 minutos, sin experiencia previa. YOGA Rituals.",
+    "Yoga Nidra en Gandia: meditación guiada y relajación profunda, tumbado en Savasana. Sesiones de 90 minutos, sin experiencia previa.",
   ruta: "/yoga-nidra",
 })
 
@@ -31,8 +31,9 @@ export default function PaginaYogaNidra() {
   return (
     <Pagina
       etiqueta="Propuestas concretas"
-      titulo="Yoga Nidra"
+      titulo="Yoga Nidra en Gandia"
       entradilla={yogaNidra.entradilla}
+      ruta="/yoga-nidra"
     >
       {/* ── En qué consiste, y los datos ─────────────────────────────────── */}
       <section className="seccion pt-0">

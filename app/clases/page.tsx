@@ -18,9 +18,9 @@ import { fotos } from "@/content/medios"
 import { metadatosDePagina } from "@/lib/metadatos"
 
 export const metadata: Metadata = metadatosDePagina({
-  titulo: "Clases y sesiones",
+  titulo: "Clases de yoga en Gandia",
   descripcion:
-    "Todo lo que se puede practicar en YOGA Rituals, Gandia: Hatha, Vinyasa, Yoga Nidra, Mindfulness, Breathwork y Yoga oncológico, retiros y talleres.",
+    "Clases de yoga en Gandia para todos los niveles: Hatha, Vinyasa, Yoga Nidra, mindfulness, breathwork y yoga oncológico. Horario libre y prueba gratis.",
   ruta: "/clases",
 })
 
@@ -46,9 +46,11 @@ export const metadata: Metadata = metadatosDePagina({
 export default function PaginaClases() {
   return (
     <Pagina
-      etiqueta="Clases"
-      titulo="Todo lo que se puede practicar"
+      etiqueta="Clases y sesiones"
+      titulo="Clases de yoga en Gandia"
       entradilla={paginaClases.entradilla}
+      ruta="/clases"
+      tipo="CollectionPage"
     >
       {/* ── Cómo funciona ────────────────────────────────────────────────── */}
       <section className="seccion pt-0">

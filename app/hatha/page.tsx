@@ -6,9 +6,9 @@ import { fotos } from "@/content/medios"
 import { metadatosDePagina } from "@/lib/metadatos"
 
 export const metadata: Metadata = metadatosDePagina({
-  titulo: "Hatha Yoga en Gandia",
+  titulo: "Hatha yoga en Gandia",
   descripcion:
-    "Clases de Hatha Yoga en Gandia: posturas sostenidas con calma, respiración consciente y adaptaciones para cada cuerpo. Primera clase de prueba gratis.",
+    "Clases de Hatha yoga en Gandia: posturas sostenidas, respiración consciente y adaptaciones para cada cuerpo. Primera clase de prueba gratis.",
   ruta: "/hatha",
 })
 

@@ -11,7 +11,7 @@ import { yogaOncologico } from "@/content/yogaOncologico"
 import { metadatosDePagina } from "@/lib/metadatos"
 
 export const metadata: Metadata = metadatosDePagina({
-  titulo: "Yoga oncológico",
+  titulo: "Yoga oncológico en Gandia",
   descripcion:
     "Yoga oncológico en Gandia: práctica adaptada para quien está pasando por un proceso oncológico, con o sin experiencia. Escríbenos antes de empezar.",
   ruta: "/yoga-oncologico",
@@ -41,14 +41,15 @@ export const metadata: Metadata = metadatosDePagina({
  */
 export default function PaginaYogaOncologico() {
   const sobreLesiones = preguntasFrecuentes.find((pregunta) =>
-    pregunta.pregunta.includes("lesión"),
+    pregunta.pregunta.includes("lesión")
   )
 
   return (
     <Pagina
       etiqueta="Propuestas concretas"
-      titulo="Yoga oncológico"
+      titulo="Yoga oncológico en Gandia"
       entradilla={yogaOncologico.entradilla}
+      ruta="/yoga-oncologico"
     >
       {/* ── Qué es ───────────────────────────────────────────────────────── */}
       <section className="seccion pt-0">
@@ -113,7 +114,7 @@ export default function PaginaYogaOncologico() {
           <div className="mt-10 flex flex-wrap gap-3">
             <BotonEnlace
               href={whatsappUrl(
-                "Hola Susana, quiero información sobre el yoga oncológico.",
+                "Hola Susana, quiero información sobre el yoga oncológico."
               )}
               externo
             >

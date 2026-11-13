@@ -16,14 +16,17 @@
 #    font-src 'self' basta.
 
 # La foto de la portada es el elemento LCP. Se precarga desde la cabecera HTTP,
-# antes de que el navegador empiece a leer el HTML. Si el navegador no entiende
-# AVIF ignora esta pista y carga el WebP del <picture>.
+# antes de que el navegador empiece a leer el HTML. La cabecera lleva el mismo
+# `imagesrcset` que el `<img>` para que cada pantalla se descargue su ancho (el
+# móvil, 800; el escritorio, 1600) y `fetchpriority=high` para que no compita
+# por detrás de las fuentes, que también se precargan. Si el navegador no
+# entiende AVIF ignora esta pista y carga la foto del `<img>`.
 /
-  Link: </fotos/hero-practica-800.avif>; rel=preload; as=image; type=image/avif
+  Link: </fotos/hero-practica-800.avif>; rel=preload; as=image; type=image/avif; imagesrcset="/fotos/hero-practica-800.avif 800w, /fotos/hero-practica-1600.avif 1600w"; imagesizes="(min-width: 1024px) 40vw, 92vw"; fetchpriority=high
 
 /*
   X-Frame-Options: DENY
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https://scripts.clarity.ms; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com https://*.clarity.ms https://c.bing.com; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com https://*.clarity.ms https://c.bing.com; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https://scripts.clarity.ms; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com https://*.clarity.ms https://c.bing.com; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com https://*.clarity.ms https://c.bing.com; frame-src https://www.openstreetmap.org; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
@@ -32,3 +35,37 @@
 # Los archivos de /_next llevan un hash en el nombre: si cambian, cambia el
 # nombre. Se pueden cachear para siempre. El HTML no se toca: Netlify ya manda
 # sus ETag y así un cambio se ve al recargar.
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Las fotos no llevan hash: si algún día se sustituye una, se sustituye con el
+# mismo nombre. Un mes es suficiente para que la repetición salga de caché y
+# corto como para no servir una foto vieja durante un año.
+/fotos/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+# La imagen para compartir cambia poco y pesa: una semana.
+/compartir.png
+  Cache-Control: public, max-age=604800
+
+# El logotipo y sus versiones de tema. Cambian cuando cambia la marca, no cada
+# día; una semana de caché evita volver a pedirlos en cada visita.
+/marca/*
+  Cache-Control: public, max-age=604800
+
+# ── Archivos para asistentes y buscadores ─────────────────────────────────
+#
+# Sin estas reglas, Netlify puede servir los `.md` con un tipo genérico y el
+# navegador los descarga en vez de mostrarlos. `llms.txt` se sirve como texto
+# plano; las versiones Markdown de las páginas, como Markdown.
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+/llms-full.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+/*.md
+  Content-Type: text/markdown; charset=utf-8
+  Cache-Control: public, max-age=3600

@@ -41,8 +41,7 @@ export const aTenerEnCuenta = {
   puntos: [
     {
       etiqueta: "Llega unos minutos antes",
-      texto:
-        "Así podremos enseñarte el centro y explicarte lo básico.",
+      texto: "Así podremos enseñarte el centro y explicarte lo básico.",
     },
     {
       etiqueta: "Silencio",
@@ -56,34 +55,14 @@ export const aTenerEnCuenta = {
   ],
 } as const
 
-export type Pregunta = {
-  /** La pregunta, tal cual. Se lee de un tirón en el acordeón. */
-  pregunta: string
-  respuesta: string
-}
-
 /**
- * Las tres preguntas que ya están publicadas, con su respuesta exacta.
- * El acordeón de shadcn es una petición expresa de Susana, aunque la
- * dirección de arte prefería texto corrido: manda ella.
+ * Las preguntas viven en `content/faqs.ts` desde que las usan varias páginas.
+ * Se reexportan aquí para no romper las importaciones antiguas.
  */
-export const preguntasFrecuentes: Pregunta[] = [
-  {
-    pregunta: "No soy flexible, ¿puedo hacer yoga?",
-    respuesta:
-      "¡Por supuesto! La flexibilidad llega con la práctica, no es un requisito.",
-  },
-  {
-    pregunta: "¿Qué pasa si no puedo seguir el ritmo?",
-    respuesta:
-      "Nada. En YOGA Rituals respetamos los tiempos de cada cuerpo. Si una postura te resulta intensa, puedes descansar en cualquier momento. Siempre hay diferentes opciones.",
-  },
-  {
-    pregunta: "Tengo una lesión o una dolencia, ¿puedo practicar?",
-    respuesta:
-      "Sí, pero siempre bajo supervisión médica, y avísanos antes de empezar. Adaptaremos las posturas para que tu práctica sea segura y terapéutica.",
-  },
-]
+export {
+  preguntasPrimeraVez as preguntasFrecuentes,
+  type Pregunta,
+} from "./faqs"
 
 export const cierrePrimeraVez = {
   titular: "Estamos aquí para acompañarte",

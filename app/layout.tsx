@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Literata, Source_Sans_3 } from "next/font/google"
 
 import "./globals.css"
@@ -49,7 +49,10 @@ export const metadata: Metadata = {
   applicationName: site.nombre,
   authors: [{ name: site.fundadora }],
   creator: site.fundadora,
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    types: { "text/markdown": "/index.md" },
+  },
   openGraph: {
     type: "website",
     locale: "es_ES",
@@ -81,6 +84,13 @@ export const metadata: Metadata = {
   formatDetection: { telephone: true, address: true },
 }
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F4EFE7" },
+    { media: "(prefers-color-scheme: dark)", color: "#2B2621" },
+  ],
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -93,8 +103,13 @@ export default function RootLayout({
       className={cn("antialiased", literata.variable, sourceSans.variable)}
     >
       <body className="flex min-h-dvh flex-col">
-        {/* Parche definitivo e indestructible contra el banner de Netlify */}
-        <style dangerouslySetInnerHTML={{__html: `
+        {/* El banner del plugin de Netlify se oculta desde el primer pintado.
+            Basta con el CSS: no hace falta borrar nodos ni quedarse mirando
+            cada cambio del documento, y ese vigilante permanente costaba más
+            que el problema que resolvía. */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
           netlify-next-dev-toolbar, 
           [id*="netlify-dev-toolbar"], 
           .netlify-dt-element,
@@ -110,22 +125,9 @@ export default function RootLayout({
             width: 0 !important;
             height: 0 !important;
           }
-        `}} />
-        <script dangerouslySetInnerHTML={{ __html: `
-          (function() {
-            function aniquilarBanner() {
-              const selectores = ['netlify-next-dev-toolbar', '[id*="netlify-dev-toolbar"]', '.netlify-dt-element', '#netlify-dev-toolbar-root'];
-              selectores.forEach(sel => {
-                document.querySelectorAll(sel).forEach(el => el.remove());
-              });
-            }
-            aniquilarBanner();
-            window.addEventListener('DOMContentLoaded', aniquilarBanner);
-            window.addEventListener('load', aniquilarBanner);
-            const observer = new MutationObserver(aniquilarBanner);
-            observer.observe(document.documentElement, { childList: true, subtree: true });
-          })();
-        `}} />
+        `,
+          }}
+        />
 
         {/* El primero de todo, y a propósito.
             Dice si el movimiento está permitido poniendo un atributo en el

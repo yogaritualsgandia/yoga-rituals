@@ -32,30 +32,53 @@ export function FotoEditorial({
   className?: string
 }) {
   return (
-    <picture className="block h-full w-full">
-      <source
-        type="image/avif"
-        srcSet={srcSet(foto, "avif")}
-        sizes={sizes}
-      />
-      <source
-        type="image/webp"
-        srcSet={srcSet(foto, "webp")}
-        sizes={sizes}
-      />
-      <img
-        src={`${foto.src}-1600.jpg`}
-        srcSet={srcSet(foto, "jpg")}
-        sizes={sizes}
-        alt={foto.alt}
-        width={foto.ancho}
-        height={foto.alto}
-        loading={prioridad ? "eager" : "lazy"}
-        fetchPriority={prioridad ? "high" : "auto"}
-        decoding="async"
-        className={cn("h-full w-full object-cover", className)}
-      />
-    </picture>
+    <>
+      {/* La foto de la primera pantalla va sin `<picture>` y en AVIF directo.
+          Es la única excepción, y tiene motivo: el navegador descarga la imagen
+          del `<source>` que elige, y el `fetchPriority` del `<img>` no llega
+          hasta ahí, así que la foto que decide el LCP se descargaba con
+          prioridad baja. Con el AVIF en el propio `<img>`, la prioridad se
+          aplica. AVIF lo entienden todos los navegadores desde 2023; en el
+          resto de fotos se mantiene `<picture>` con sus tres formatos. */}
+      {prioridad ? (
+        <img
+          src={`${foto.src}-1600.avif`}
+          srcSet={srcSet(foto, "avif")}
+          sizes={sizes}
+          alt={foto.alt}
+          width={foto.ancho}
+          height={foto.alto}
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+          className={cn("h-full w-full object-cover", className)}
+        />
+      ) : (
+        <picture className="block h-full w-full">
+          <source
+            type="image/avif"
+            srcSet={srcSet(foto, "avif")}
+            sizes={sizes}
+          />
+          <source
+            type="image/webp"
+            srcSet={srcSet(foto, "webp")}
+            sizes={sizes}
+          />
+          <img
+            src={`${foto.src}-1600.jpg`}
+            srcSet={srcSet(foto, "jpg")}
+            sizes={sizes}
+            alt={foto.alt}
+            width={foto.ancho}
+            height={foto.alto}
+            loading="lazy"
+            decoding="async"
+            className={cn("h-full w-full object-cover", className)}
+          />
+        </picture>
+      )}
+    </>
   )
 }
 

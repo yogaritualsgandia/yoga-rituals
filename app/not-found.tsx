@@ -8,6 +8,7 @@ import { site } from "@/content/site"
 export const metadata: Metadata = {
   title: "Página no encontrada",
   description: `La dirección que has escrito no corresponde a ninguna página de ${site.nombre}.`,
+  alternates: { canonical: "/404" },
 }
 
 /**
@@ -37,7 +38,7 @@ export default function PaginaNoEncontrada() {
 
         <p
           aria-hidden="true"
-          className="font-heading mt-4 text-[clamp(5rem,20vw,10rem)] leading-[0.9] text-ink"
+          className="mt-4 font-heading text-[clamp(5rem,20vw,10rem)] leading-[0.9] text-ink"
         >
           404
         </p>

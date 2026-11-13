@@ -98,7 +98,7 @@ export function duracionEnPalabras(minutos: number): string {
 export const horarioLibre = {
   titular: "Tú diseñas tu semana",
   entradilla:
-    "En YOGA Rituals no hay grupos cerrados ni reservas. El horario de abajo son las horas a las que el estudio está abierto: eliges el día que te encaja y vienes. Sin avisar y sin apuntarte a nada.",
+    "Aquí no tienes que encajar en un grupo: el grupo se encaja contigo. Elige el día que te venga bien y ven, sin reservar y sin avisar.",
   /**
    * Las sesiones de 35 minutos se anuncian como «exprés» en la tabla y, sin
    * esta frase, quien las ve no sabe cuánto cuentan. Dos exprés son una clase

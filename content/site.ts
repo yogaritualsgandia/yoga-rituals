@@ -5,24 +5,44 @@
  * lo que me ha dicho Susana. Lo que no tenemos va marcado, no inventado.
  */
 
+/**
+ * La URL canónica del sitio, en un solo sitio.
+ *
+ * El valor por defecto es el dominio final. En Netlify se puede cambiar sin
+ * tocar código con `NEXT_PUBLIC_SITE_URL`, que es lo que permite usar la URL
+ * del preview o probar el dominio nuevo antes de la migración. Se quita la
+ * barra final para que nunca se compongan URLs con `//`.
+ */
+const urlDelEntorno = process.env.NEXT_PUBLIC_SITE_URL?.trim()
+
+export const SITE_URL = (
+  urlDelEntorno || "https://www.yogarituals.es"
+).replace(/\/+$/, "")
+
 export const site = {
   nombre: "YOGA Rituals",
   fundadora: "Susana Estruch Espinós",
   rol: "Directora de YOGA Rituals",
 
   /**
-   * El dominio canónico.
+   * El dominio canónico: `www`.
    *
-   * Es el ápice, sin www, y es una decisión, no una casualidad: la web antigua
-   * (Webnode) servía las dos versiones a la vez, las dos con un 200 y sin
+   * Es una decisión, no una casualidad. Con el dominio alojado fuera de
+   * Netlify (está en OVHcloud y los DNS se quedan allí), Netlify recomienda
+   * que el dominio principal sea el subdominio `www`: así el registro `www`
+   * puede ser un CNAME y aprovechar la CDN. El ápice, que no admite CNAME, se
+   * queda como alias y Netlify lo redirige al `www` automáticamente. El detalle
+   * de cómo se configura está en DESPLIEGUE.md.
+   *
+   * La web antigua servía las dos versiones a la vez, las dos con un 200 y sin
    * redirigir una a la otra, así que de cara a Google eso era contenido
-   * duplicado en cada página. Aquí se elige una y la otra redirige. El detalle
-   * de cómo se configura en Netlify está en DESPLIEGUE.md.
+   * duplicado en cada página. Aquí se elige una y la otra redirige.
    *
-   * Si algún día se cambia, se cambia AQUÍ. De este valor salen el canonical,
-   * la imagen para compartir, el mapa del sitio y robots.txt.
+   * Si algún día se cambia, se cambia AQUÍ o con `NEXT_PUBLIC_SITE_URL`. De
+   * este valor salen el canonical, la imagen para compartir, el mapa del sitio,
+   * robots.txt, llms.txt y las versiones Markdown de las páginas.
    */
-  url: "https://yogarituals.es",
+  url: SITE_URL,
 
   /** Real: «Se abrió el 1/marzo/2017». */
   apertura: new Date("2017-03-01"),
@@ -47,9 +67,15 @@ export const site = {
     provincia: "Valencia",
     pais: "España",
     region: "ES-VC",
-    /** Del mapa de la web actual. */
-    latitud: 38.9675,
-    longitud: -0.1815,
+    /**
+     * Las coordenadas de la ficha de Google (Perfil de Empresa).
+     *
+     * No son las de la web antigua: aquellas estaban unos 95 m al este, fuera
+     * de la calle. Estas coinciden con la dirección y con cómo la sitúa
+     * OpenStreetMap, que es lo que se usa para el mapa de `/contacto`.
+     */
+    latitud: 38.9675205,
+    longitud: -0.1826086,
   },
 
   contacto: {
@@ -69,6 +95,18 @@ export const site = {
       url: "https://www.instagram.com/_yogarituals/",
     },
   },
+
+  /**
+   * La ficha de Google (Perfil de Empresa).
+   *
+   * Es el enlace corto que da Google al compartir la ficha. Se usa en los datos
+   * estructurados, en `hasMap` y en `sameAs`: es donde el buscador comprueba
+   * que esta web y esa ficha son el mismo negocio.
+   *
+   * Los botones «Abrir en Google Maps» no usan este enlace, sino `mapaUrl`, que
+   * se arma con la dirección: así no dependen de que el enlace corto siga vivo.
+   */
+  fichaGoogle: "https://maps.app.goo.gl/ZyN5LZfQHjV5Shy16",
 
   /** Frase real de la casa, en valenciano. */
   lema: "Tota pedra fa paret",
