@@ -1,7 +1,7 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { useRef, type ReactNode } from "react"
+import { useState, type ReactNode } from "react"
 
 import { cn } from "@/lib/utils"
 
@@ -28,8 +28,12 @@ import { cn } from "@/lib/utils"
  */
 export function TransicionPagina({ children }: { children: ReactNode }) {
   const ruta = usePathname()
-  const rutaInicial = useRef(ruta)
-  const esPrimeraCarga = ruta === rutaInicial.current
+  /* `useState` guarda la ruta de la primera carga y no cambia después. Antes
+     era un `useRef`, pero leerlo durante el render es justo lo que prohíbe la
+     regla `react-hooks/refs` de ESLint: el valor no se recalcula al cambiar la
+     ruta, que es lo que se busca, y el estado deja la intención más clara. */
+  const [rutaInicial] = useState(ruta)
+  const esPrimeraCarga = ruta === rutaInicial
 
   return (
     <div

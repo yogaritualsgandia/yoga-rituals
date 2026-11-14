@@ -10,8 +10,26 @@ import { cn } from "@/lib/utils"
 import { Contenedor } from "./contenedor"
 import { Paralaje } from "@/components/movimiento/paralaje"
 
+const ANCHOS = [400, 700, 800, 1200, 1600] as const
+
 const srcSet = (foto: Fotografia, extension: "avif" | "webp" | "jpg") =>
-  `${foto.src}-800.${extension} 800w, ${foto.src}-1600.${extension} 1600w`
+  ANCHOS.map((ancho) => `${foto.src}-${ancho}.${extension} ${ancho}w`).join(", ")
+
+/**
+ * Cinco anchos y no dos.
+ *
+ * El navegador elige el primero que cubre el ancho de maquetación por la
+ * densidad de la pantalla. Con solo 800 y 1600, un móvil de densidad 1 se
+ * bajaba la de 800 para pintarla a 372 px —más del doble de lo que necesita— y
+ * un móvil de densidad alta saltaba directamente a la de 1600. Los 400 evitan
+ * lo primero; los 1200, lo segundo.
+ *
+ * Los 700 cubren el caso intermedio que queda justo por debajo de 800: un móvil
+ * de densidad 1,75 pinta la portada a unos 372 px, o sea que necesita 651 px
+ * reales. Sin el escalón de 700 el navegador subía a 800 y Lighthouse seguía
+ * marcando la foto como más grande de lo necesario. Los 800 y 1600 siguen ahí
+ * para las pantallas grandes y para los navegadores sin `srcset`.
+ */
 
 /**
  * Una foto responsive, sin JavaScript y sin depender del optimizador.

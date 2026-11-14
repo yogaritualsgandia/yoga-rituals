@@ -7,9 +7,14 @@
  * a 372 px de ancho, un móvil de densidad 1 descargaba la de 800 y un móvil de
  * densidad 2,6 seguía descargando la de 1600. Faltaban los dos extremos.
  *
- * Este script añade 400 y 1200 px a todas las fotos, y 128 y 256 px al
+ * Este script añade 400, 700 y 1200 px a todas las fotos, y 128 y 256 px al
  * logotipo. Los anchos que ya había no se tocan. Se puede repetir: sobrescribe
  * las copias y no toca los originales.
+ *
+ * Los 700 px son para el móvil de densidad 1,75: la foto de portada mide unos
+ * 372 px de ancho, así que necesita 651 px reales. Sin ese escalón el navegador
+ * subía a 800 y Lighthouse lo seguía marcando como imagen más grande de lo
+ * necesario.
  *
  *   node scripts/imagenes-responsive.mjs
  *
@@ -26,7 +31,7 @@ const FOTOS = join(RAIZ, "public", "fotos")
 const MARCA = join(RAIZ, "public", "marca")
 
 /** Los anchos nuevos. Los que ya había —800 y 1600— se quedan como están. */
-const ANCHOS_FOTOS = [400, 1200]
+const ANCHOS_FOTOS = [400, 700, 1200]
 
 const FORMATOS = [
   { salida: "avif", opciones: { quality: 60, effort: 9 } },

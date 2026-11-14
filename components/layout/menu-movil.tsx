@@ -1,115 +1,75 @@
 "use client"
 
-import { Menu, Phone, X } from "lucide-react"
-import Link from "next/link"
-import { useState } from "react"
+import { Menu } from "lucide-react"
+import dynamic from "next/dynamic"
+import { useRef, useState } from "react"
 
-import { BotonReserva } from "@/components/layout/boton-reserva"
 import { Button } from "@/components/ui/button"
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
-import { navegacionPrincipal, site } from "@/content/site"
-import { useEnlacePropio } from "@/hooks/use-enlace-propio"
 
 /**
- * Menú de móvil y tablet.
+ * El botón que abre el menú de móvil.
  *
- * Va sobre el Dialog de Radix (a través de Sheet) y no sobre un desplegable
- * hecho a mano, porque Dialog ya trae lo que hay que traer: se encierra el
- * foco dentro, Escape cierra, el fondo queda inerte y el lector de pantalla
- * anuncia un diálogo con su nombre.
+ * El botón se pinta con el HTML y no depende de JavaScript: si el paquete no
+ * llega, se ve y se puede pulsar, aunque no abra nada. El panel —Radix Dialog,
+ * el foco atrapado, el fondo inerte, Escape— se descarga aparte, la primera vez
+ * que alguien lo pide. Antes viajaba en el arranque de todas las páginas y lo
+ * usaba una minoría: en escritorio el menú ni siquiera se ve.
  *
- * Como todo shadcn, se ha reestilizado entero: nada del gris por defecto.
+ * Se empieza a descargar al pasar el puntero o al enfocar el botón, para que en
+ * el momento del clic ya esté o falte poco. Si la red es lenta, el panel tarda
+ * un instante en aparecer; el botón no se queda muerto, y el `aria-expanded`
+ * dice que se ha pedido abrir.
  *
- * DENTRO SOLO HAY SEIS COSAS Y UN BOTÓN, y es una decisión que se tomó después
- * de verlo lleno. Hubo aquí un bloque «También» con las ocho páginas de dentro
- * —Mindfulness, Yoga Nidra, Breathwork, Yoga Oncológico, Retiros, Talleres— y
- * un enlace de texto a WhatsApp al final. En un móvil eso era una lista de
- * catorce renglones para llegar a lo mismo que se llega por el pie, y el
- * WhatsApp aparecía dos veces en el mismo panel: una en el botón de reserva y
- * otra escrita debajo.
- *
- * Quien quiere el yoga nidra lo tiene en la portada, en «Lo que puedes
- * practicar», que es una lista mejor que esta: está explicada. Y el pie tiene
- * las tres columnas completas, agrupadas por lo que se viene a buscar.
+ * El panel está en `menu-movil-panel.tsx`, y el porqué de la separación, allí.
  */
+const Panel = dynamic(
+  () =>
+    import("./menu-movil-panel").then((modulo) => modulo.MenuMovilPanel),
+  { ssr: false },
+)
+
+function cargarPanel() {
+  void import("./menu-movil-panel")
+}
+
 export function MenuMovil({ className }: { className?: string }) {
   const [abierto, setAbierto] = useState(false)
-  const { alPulsar } = useEnlacePropio()
+  const disparador = useRef<HTMLButtonElement>(null)
+
+  /**
+   * Radix devuelve el foco al disparador cuando el diálogo se cierra, pero
+   * aquí el panel se desmonta en el mismo instante en que `abierto` pasa a
+   * `false`, así que esa devolución no llega a ocurrir. Sin esto, cerrar con
+   * Escape dejaba el foco en el `body` y quien navega con teclado tenía que
+   * empezar la página desde el principio. Se espera un fotograma para que el
+   * desmontaje termine antes de devolver el foco.
+   */
+  function cambiarEstado(nuevoEstado: boolean) {
+    setAbierto(nuevoEstado)
+
+    if (!nuevoEstado) {
+      requestAnimationFrame(() => disparador.current?.focus())
+    }
+  }
 
   return (
-    <Sheet open={abierto} onOpenChange={setAbierto}>
-      <SheetTrigger asChild>
-        <Button variant="outline" size="default" className={className}>
-          <Menu aria-hidden="true" />
-          Menú
-        </Button>
-      </SheetTrigger>
-
-      <SheetContent
-        side="right"
-        showCloseButton={false}
-        className="w-full gap-0 bg-ground p-0 sm:max-w-[26rem]"
+    <>
+      <Button
+        ref={disparador}
+        variant="outline"
+        size="default"
+        className={className}
+        aria-haspopup="dialog"
+        aria-expanded={abierto}
+        onClick={() => cambiarEstado(true)}
+        onPointerEnter={cargarPanel}
+        onFocus={cargarPanel}
       >
-        <SheetTitle className="sr-only">Menú de navegación</SheetTitle>
+        <Menu aria-hidden="true" />
+        Menú
+      </Button>
 
-        <div className="flex items-center justify-between border-b border-line px-5 py-4">
-          <span className="font-heading text-lg text-ink">{site.nombre}</span>
-          <SheetClose asChild>
-            <Button variant="ghost" size="icon">
-              <X aria-hidden="true" />
-              <span className="sr-only">Cerrar el menú</span>
-            </Button>
-          </SheetClose>
-        </div>
-
-        <nav
-          aria-label="Navegación principal"
-          className="flex-1 overflow-y-auto px-5 py-5"
-        >
-          <ul className="flex flex-col">
-            {navegacionPrincipal.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={(evento) => {
-                    setAbierto(false)
-                    /* Si el enlace es el de la página en la que ya estás, no
-                       hay a dónde ir: cierra el menú y sube arriba. */
-                    alPulsar(item.href, evento)
-                  }}
-                  className="flex min-h-12 items-center font-heading text-2xl text-ink"
-                >
-                  {item.etiqueta}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <div className="border-t border-line px-5 py-4">
-          <div className="flex items-center gap-2">
-            <BotonReserva
-              className="min-w-0 flex-1"
-              onClick={() => setAbierto(false)}
-            />
-
-            <Button asChild variant="outline" size="icon">
-              <a href={`tel:${site.contacto.telefono}`}>
-                <Phone aria-hidden="true" />
-                <span className="sr-only">
-                  Llamar al estudio, {site.contacto.telefonoVisible}
-                </span>
-              </a>
-            </Button>
-          </div>
-        </div>
-      </SheetContent>
-    </Sheet>
+      {abierto ? <Panel abierto={abierto} alCambiar={cambiarEstado} /> : null}
+    </>
   )
 }

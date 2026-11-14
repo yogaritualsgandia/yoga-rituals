@@ -10,6 +10,10 @@
  *   node scripts/logo-avif.mjs
  *
  * `sharp` viene con Next, así que no hay que instalar nada.
+ *
+ * Este script solo deja el AVIF de 400 px. Los de 128 y 256 px que usan
+ * `srcset` en la cabecera los saca `scripts/imagenes-responsive.mjs`; hay que
+ * ejecutar los dos cuando cambie el logo.
  */
 
 import { join } from "node:path"

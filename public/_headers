@@ -18,11 +18,13 @@
 # La foto de la portada es el elemento LCP. Se precarga desde la cabecera HTTP,
 # antes de que el navegador empiece a leer el HTML. La cabecera lleva el mismo
 # `imagesrcset` que el `<img>` para que cada pantalla se descargue su ancho (el
-# móvil, 800; el escritorio, 1600) y `fetchpriority=high` para que no compita
-# por detrás de las fuentes, que también se precargan. Si el navegador no
-# entiende AVIF ignora esta pista y carga la foto del `<img>`.
+# móvil de densidad 1, 400; el de densidad 1,75, 700; el de densidad alta,
+# 1200; el escritorio grande, 1600) y `fetchpriority=high` para que no compita
+# por detrás de las fuentes,
+# que también se precargan. Si el navegador no entiende AVIF ignora esta pista y
+# carga la foto del `<img>`.
 /
-  Link: </fotos/hero-practica-800.avif>; rel=preload; as=image; type=image/avif; imagesrcset="/fotos/hero-practica-800.avif 800w, /fotos/hero-practica-1600.avif 1600w"; imagesizes="(min-width: 1024px) 40vw, 92vw"; fetchpriority=high
+  Link: </fotos/hero-practica-400.avif>; rel=preload; as=image; type=image/avif; imagesrcset="/fotos/hero-practica-400.avif 400w, /fotos/hero-practica-700.avif 700w, /fotos/hero-practica-800.avif 800w, /fotos/hero-practica-1200.avif 1200w, /fotos/hero-practica-1600.avif 1600w"; imagesizes="(min-width: 1024px) 40vw, 92vw"; fetchpriority=high
 
 /*
   X-Frame-Options: DENY
@@ -44,14 +46,20 @@
 /fotos/*
   Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
 
-# La imagen para compartir cambia poco y pesa: una semana.
+# La imagen para compartir cambia poco y pesa: un mes. Antes era una semana,
+# pero Lighthouse lo marcaba como caché corta: se pide en cada visita que
+# comparte un enlace y no lleva hash en el nombre.
 /compartir.png
-  Cache-Control: public, max-age=604800
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
 
 # El logotipo y sus versiones de tema. Cambian cuando cambia la marca, no cada
-# día; una semana de caché evita volver a pedirlos en cada visita.
+# día; un mes de caché evita volver a pedirlos en cada visita. Antes eran siete
+# días, y Lighthouse lo marcaba: la foto y el logo no llevan hash en el nombre,
+# así que un mes es el equilibrio entre no pedirlos siempre y no servir una
+# marca vieja durante un año. Si se cambia el logo, se cambia el nombre del
+# archivo —ya lleva la medida— y la caché no se queda con el viejo.
 /marca/*
-  Cache-Control: public, max-age=604800
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
 
 # ── Archivos para asistentes y buscadores ─────────────────────────────────
 #

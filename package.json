@@ -17,7 +17,7 @@
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit",
     "test:e2e": "playwright test",
-    "postbuild": "node scripts/copiar-segmentos-rsc.mjs && node scripts/generar-archivos-ia.mjs"
+    "postbuild": "node scripts/vaciar-polyfills-export.mjs && node scripts/copiar-segmentos-rsc.mjs && node scripts/generar-archivos-ia.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

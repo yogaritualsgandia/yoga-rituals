@@ -23,9 +23,14 @@ const nextConfig: NextConfig = {
        `Object.hasOwn`, `String.prototype.trimStart/trimEnd` y `URL.canParse`.
        El suelo de navegadores de `package.json` (Chrome, Edge y Firefox 111,
        Safari 16.4) ya trae todos menos `URL.canParse`, que la web no usa. Se
-       sustituye el archivo por un módulo vacío para no enviar 13 KB que nadie
-       ejecuta. El alias no sirve porque Next lo importa con una ruta relativa;
-       el loader sí, porque actúa sobre el archivo ya resuelto. */
+       sustituye por un módulo vacío para no enviar código que nadie ejecuta.
+
+       Queda otro archivo, `polyfill-nomodule`, que Next copia tal cual al
+       export para el bloque `noModule` del HTML. Ese no pasa por Turbopack, así
+       que se vacía en el postbuild con
+       `scripts/vaciar-polyfills-export.mjs`. El alias no sirve porque Next lo
+       importa con una ruta relativa; el loader sí, porque actúa sobre el
+       archivo ya resuelto. */
     rules: {
       "**/polyfill-module.js": {
         loaders: ["./scripts/vaciar-polyfills.cjs"],
