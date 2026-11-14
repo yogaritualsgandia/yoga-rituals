@@ -104,8 +104,9 @@ lleva la biblioteca). Quedan dos cosas:
 
 ## 10. Legibilidad para asistentes y buscadores
 
-La web ya genera `llms.txt`, `llms-full.txt`, `robots.txt`, `sitemap.xml` y una
-versión `.md` de cada página en el build. Estas son las decisiones que quedan:
+La web ya genera `llms.txt`, `llms-full.txt`, `robots.txt`, `sitemap.xml`,
+`/.well-known/ai-catalog.json`, `/.well-known/ard.json` y una versión `.md` de
+cada página en el build. Estas son las decisiones que quedan:
 
 - **Textos de la web.** Se van a rehacer. Cuando estén, se regeneran desde ellos
   las preguntas frecuentes, los `.md`, `llms.txt` y `llms-full.txt`. No se

@@ -405,7 +405,7 @@ con cada uno.
 | --- | --- | --- |
 | C1 · contenido fuera del `<main>` | Resuelto. Se eliminó `app/loading.tsx`; el HTML deja el contenido en `<main>`, antes del `<footer>`, y ya no hay bloques `S:0`. | `app/loading.tsx` (eliminado) |
 | C2 · respuestas del acordeón | Resuelto. `AccordionContent` acepta `forceMount` y `/primera-vez` lo usa: las nueve respuestas están en el HTML inicial. | `components/ui/accordion.tsx`, `app/primera-vez/page.tsx` |
-| C3 · versiones para máquinas | Resuelto. El postbuild genera 15 `.md`, `llms.txt`, `llms-full.txt`, `robots.txt`, `sitemap.xml` y `_headers`. Cada página indexable lleva su `alternate` `text/markdown`. | `scripts/generar-archivos-ia.mjs`, `lib/metadatos.ts` |
+| C3 · versiones para máquinas | Resuelto. El postbuild genera 15 `.md`, `llms.txt`, `llms-full.txt`, `robots.txt`, `sitemap.xml`, `_headers` y el catálogo `/.well-known/ai-catalog.json` (con `ard.json`). Cada página indexable lleva su `alternate` `text/markdown`. | `scripts/generar-archivos-ia.mjs`, `lib/metadatos.ts` |
 | I1 · `SITE_URL` a mano | Resuelto. Un único valor, con `NEXT_PUBLIC_SITE_URL` como override. De ahí salen canonical, sitemap, robots, llms y `.md`. | `content/site.ts` |
 | I2 · robots sin política | Resuelto. Grupos explícitos, `Sitemap`, fecha de revisión y `Disallow` de entrenamiento comentados para poder cambiarlos sin reescribir el archivo. | `out/robots.txt` (generado) |
 | I3 · sitemap sin `lastmod` | Resuelto. 15 URLs indexables con `lastmod` real de la fuente de cada página; las legales no entran. | `content/rutas.ts`, `out/sitemap.xml` |
@@ -420,7 +420,8 @@ Comprobado con `npm run typecheck` y `npm run build`, y con una revisión del
 export que verifica: canonical y `alternate` en las 15 páginas, `.md` con
 frontmatter y H1, preguntas del `FAQPage` presentes en el texto del HTML,
 ausencia de `AggregateRating`/`Review`, enlaces internos sin 404, `sitemap.xml`
-válido con 15 `lastmod`, y `robots.txt` sin ningún `Disallow` activo.
+válido con 15 `lastmod`, `robots.txt` sin ningún `Disallow` activo y
+`/.well-known/ai-catalog.json` válido con 15 entradas `text/markdown`.
 
 Decisiones aplicadas el 13/11/2026: el taller de respiración era de 2026 y se
 retiró de la web; no hay ningún retiro convocado y la página lo dice; el dominio

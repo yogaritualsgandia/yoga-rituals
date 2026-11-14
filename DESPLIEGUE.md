@@ -157,6 +157,11 @@ curl -s https://www.yogarituals.es/robots.txt
 #   User-Agent: *
 #   Allow: /
 #   Sitemap: https://www.yogarituals.es/sitemap.xml
+
+# El catálogo para agentes existe y se sirve como JSON.
+curl -sI https://www.yogarituals.es/.well-known/ai-catalog.json | head -4
+#   HTTP/2 200
+#   content-type: application/ai-catalog+json; charset=utf-8
 ```
 
 Si alguna no sale, no sigas. Mira la configuración de dominios de Netlify y la

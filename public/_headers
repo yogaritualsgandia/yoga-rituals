@@ -69,3 +69,24 @@
 /*.md
   Content-Type: text/markdown; charset=utf-8
   Cache-Control: public, max-age=3600
+
+# El catálogo para agentes. `ai-catalog.json` es el nombre del estándar AI
+# Catalog; `ard.json` es el mismo manifiesto con el nombre actual (Agentic
+# Resource Discovery). Los dos se generan en el postbuild desde las páginas.
+/.well-known/ai-catalog.json
+  Content-Type: application/ai-catalog+json; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+/.well-known/ard.json
+  Content-Type: application/json; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+# Copia de la raíz que sirve `_redirects` cuando el directorio con punto no se
+# publica. Se mantiene el tipo correcto también en esa ruta.
+/ai-catalog.json
+  Content-Type: application/ai-catalog+json; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+/ard.json
+  Content-Type: application/json; charset=utf-8
+  Cache-Control: public, max-age=3600

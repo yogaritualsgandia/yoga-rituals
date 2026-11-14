@@ -28,6 +28,15 @@
 # duplicaría la regla y, el día que alguien cambiara el dominio principal,
 # formaría un bucle de redirecciones entre las dos versiones.
 
+# ── Catálogo para agentes ──────────────────────────────────────────────────
+#
+# La dirección que busca el estándar es `/.well-known/...`, pero Netlify no
+# siempre publica carpetas que empiezan por punto. El generador deja también
+# una copia en la raíz y estas reglas la sirven con un 200, sin cambiar la URL
+# que se anuncia.
+/.well-known/ai-catalog.json   /ai-catalog.json   200!
+/.well-known/ard.json          /ard.json          200!
+
 # ── Dominio provisional ───────────────────────────────────────────────────
 #
 # `yogaritualsweb.netlify.app` es la dirección de Netlify del proyecto. Cuando

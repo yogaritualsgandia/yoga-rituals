@@ -13,7 +13,7 @@
  * llevan la extensión explícita.
  */
 import { execFileSync } from "node:child_process"
-import { readFile, stat, writeFile } from "node:fs/promises"
+import { mkdir, readFile, stat, writeFile } from "node:fs/promises"
 import { join } from "node:path"
 
 import { practicas } from "../content/clases.ts"
@@ -635,10 +635,67 @@ function generarRobots() {
     ]),
     `Sitemap: ${SITE_URL}/sitemap.xml`,
     `# Resumen para modelos: ${SITE_URL}/llms.txt`,
+    `Agentmap: ${SITE_URL}/.well-known/ard.json`,
     "",
   ]
 
   return lineas.join("\n")
+}
+
+/**
+ * Catálogo para agentes (/.well-known/ai-catalog.json).
+ *
+ * Aquí no hay servidores MCP ni agentes que ofrecer. Lo que sí hay son páginas
+ * en Markdown pensadas para que un asistente las lea. El catálogo las declara
+ * como documentación (`text/markdown`), con su URL y su fecha. `ard.json` lleva
+ * las mismas entradas: es el nombre actual del mismo manifiesto.
+ */
+function generarCatalogoAgentes(paginas) {
+  const dominio = new URL(SITE_URL).hostname.replace(/^www\./, "")
+
+  const entradas = paginas.map((pagina) => {
+    const nombre = pagina.archivo.replace(/\.md$/, "")
+    return {
+      identifier: `urn:air:${dominio}:documentation:${nombre}`,
+      displayName: pagina.titulo,
+      type: "text/markdown",
+      url: urlMarkdown(pagina.ruta),
+      description: pagina.descripcion,
+      ...(pagina.fecha ? { updatedAt: `${pagina.fecha}T00:00:00.000Z` } : {}),
+    }
+  })
+
+  return {
+    catalogo: {
+      specVersion: "1.0",
+      host: {
+        displayName: site.nombre,
+        identifier: dominio,
+        documentationUrl: `${SITE_URL}/contacto`,
+        logoUrl: `${SITE_URL}/marca/logo-sin-fondo-400.png`,
+      },
+      entries: entradas,
+    },
+    ard: { entries: entradas },
+  }
+}
+
+async function generarWellKnown(paginas) {
+  const carpeta = join(RAIZ, ".well-known")
+  await mkdir(carpeta, { recursive: true })
+
+  const { catalogo, ard } = generarCatalogoAgentes(paginas)
+  const catalogoJson = `${JSON.stringify(catalogo, null, 2)}\n`
+  const ardJson = `${JSON.stringify(ard, null, 2)}\n`
+
+  await writeFile(join(carpeta, "ai-catalog.json"), catalogoJson, "utf8")
+  await writeFile(join(carpeta, "ard.json"), ardJson, "utf8")
+
+  /* Copia en la raíz para que `_redirects` pueda servirla con un 200 aunque
+     Netlify no publique carpetas que empiezan por punto. La URL que se anuncia
+     sigue siendo `/.well-known/...`. */
+  await writeFile(join(RAIZ, "ai-catalog.json"), catalogoJson, "utf8")
+  await writeFile(join(RAIZ, "ard.json"), ardJson, "utf8")
 }
 
 async function generarSitemap() {
@@ -693,6 +750,8 @@ async function generarHeaders() {
 
 const paginas = await generarMarkdown()
 
+await generarWellKnown(paginas)
+
 await writeFile(join(RAIZ, "llms.txt"), generarLlmsTxt(paginas), "utf8")
 await writeFile(join(RAIZ, "llms-full.txt"), await generarLlmsFull(paginas), "utf8")
 await writeFile(join(RAIZ, "robots.txt"), generarRobots(), "utf8")
@@ -700,5 +759,5 @@ await writeFile(join(RAIZ, "sitemap.xml"), await generarSitemap(), "utf8")
 await generarHeaders()
 
 console.log(
-  `Archivos para IA y buscadores: ${paginas.length} páginas .md, llms.txt, llms-full.txt, robots.txt, sitemap.xml y _headers.`,
+  `Archivos para IA y buscadores: ${paginas.length} páginas .md, llms.txt, llms-full.txt, robots.txt, sitemap.xml, .well-known y _headers.`,
 )
