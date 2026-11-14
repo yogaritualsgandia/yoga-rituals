@@ -7,26 +7,48 @@
     <meta name="theme-color" content="#f4efe6" />
     <title>Un momento · YOGA Rituals</title>
     <!--
-      Página de cortesía para el límite de peticiones de `netlify.toml`.
+      Pantalla de aviso del límite de peticiones (`netlify.toml`) y del control
+      de recargas que la acompaña.
 
       Se sirve cuando una misma dirección IP pasa de las peticiones permitidas
       por minuto. En ese momento Netlify reescribe *todo* el sitio a este
       archivo, incluidos `/_next/...` y las fotos, así que aquí no puede haber
-      ni una petición más: ni fuentes, ni imágenes, ni guiones, ni una hoja de
-      estilos aparte. Todo va escrito aquí dentro, y por eso el tipo de letra es
-      el del sistema y no Literata.
+      ni una petición más: ni fuentes, ni imágenes, ni guiones externos, ni una
+      hoja de estilos aparte. Todo va escrito aquí dentro, y por eso el tipo de
+      letra es el del sistema y no Literata.
 
-      Es lo que ve quien ha recargado veinte veces seguidas: una frase que dice
-      qué ha pasado y un botón para volver, en vez de una página en blanco.
+      EL CONTROL DE RECARGAS
+
+      Netlify corta con una ventana móvil de 60 s: en cuanto el contador baja
+      del límite, la siguiente petición entra. Es decir, su corte no es
+      pegajoso —das F5 y ya estás dentro—. Lo que falta se resuelve aquí, en el
+      navegador, y vive en `localStorage` bajo la clave `yr-recargas`:
+
+        · Al llegar por primera vez se abre un aviso de 60 s.
+        · Cada recarga de esta pantalla suma 5 s y no reinicia la cuenta.
+        · Si se hacen tantas recargas como el cupo disponible (20), el aviso
+          pasa a castigo de 5 min y el cupo se parte en dos (20, 10, 5, 2, 1).
+        · Cuando el cupo llega a cero, no se entra hasta el día siguiente.
+        · El cupo se recupera solo al cambiar el día.
+
+      El estado es de este navegador, no de la IP: el corte por IP es el de
+      Netlify, que sigue puesto. Un script diminuto en el <head> de todas las
+      páginas (`lib/control-recargas.ts`) devuelve aquí a quien intente entrar
+      mientras el castigo siga corriendo, para que no baste con escribir otra
+      dirección.
+
+      Sin JavaScript no hay aviso ni botón bloqueado: el enlace funciona y se
+      entra. Es lo mismo que pasaba antes de todo esto, y es preferible a
+      dejar a alguien encerrado por un fallo del guion.
     -->
     <style>
       :root {
         --crema: oklch(95.93% 0.0103 81.8);
-        --crema-honda: oklch(92.5% 0.0125 81.8);
         --tinta: oklch(32.11% 0 89.88);
         --tinta-suave: oklch(47.27% 0.0163 67.42);
         --turquesa: oklch(50.98% 0.0927 227.02);
         --turquesa-claro: oklch(61.52% 0.1129 228.31);
+        --gris-azul: oklch(61% 0.018 240);
         --linea: oklch(32.11% 0 89.88 / 14%);
       }
 
@@ -138,8 +160,38 @@
         outline-offset: 3px;
       }
 
+      /* El botón mientras la cuenta corre: azul grisáceo, sin respuesta al
+         ratón. No se usa `pointer-events: none` porque el enlace tiene que
+         seguir siendo enfocable y anunciarse como desactivado. */
+      .volver[aria-disabled="true"],
+      .volver[aria-disabled="true"]:hover,
+      .volver[aria-disabled="true"]:active {
+        background: var(--gris-azul);
+        color: oklch(98% 0.002 240);
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .cuenta {
+        margin: 1.25rem 0 0;
+        font-variant-numeric: tabular-nums;
+        font-feature-settings: "tnum";
+        font-size: 1.125rem;
+        letter-spacing: 0.01em;
+        color: var(--tinta);
+      }
+
+      .cuenta[hidden] {
+        display: none;
+      }
+
+      .cuenta strong {
+        font-weight: 600;
+      }
+
       .nota {
         margin: 1.25rem 0 0;
+        max-width: 46ch;
         font-size: 0.875rem;
         color: var(--tinta-suave);
       }
@@ -157,6 +209,7 @@
           --tinta-suave: oklch(78% 0.012 75);
           --turquesa: oklch(72.63% 0.091 224.14);
           --turquesa-claro: oklch(79% 0.08 224);
+          --gris-azul: oklch(52% 0.018 240);
           --linea: oklch(95.93% 0.0103 81.8 / 16%);
         }
 
@@ -170,24 +223,278 @@
     <main>
       <p class="marca">Yoga <span>Rituals</span></p>
 
-      <p class="etiqueta">Un momento</p>
+      <p class="etiqueta" id="etiqueta">Un momento</p>
 
-      <h1>Has pedido la página muchas veces seguidas.</h1>
+      <h1 id="titulo">Has pedido la página muchas veces seguidas.</h1>
 
-      <p class="texto">
+      <p class="texto" id="texto">
         El servidor ha cerrado el paso durante unos segundos para que la web no
-        se sature. No se ha roto nada y no hay nada que arreglar: espera un
-        minuto y vuelve a entrar con normalidad.
+        se sature. No se ha roto nada: espera un minuto y vuelve a entrar con
+        normalidad.
       </p>
 
       <hr />
 
-      <a class="volver" href="/">Volver a la web</a>
+      <a class="volver" id="volver" href="/">Volver a la web</a>
 
-      <p class="nota">
+      <p class="cuenta" id="cuenta" role="timer" aria-live="polite" hidden></p>
+
+      <p class="nota" id="nota">
         Si vuelve a pasar, cierra las otras pestañas de la web que tengas
         abiertas: cada una cuenta sus propias peticiones.
       </p>
     </main>
+
+    <script>
+      ;(function () {
+        "use strict"
+
+        // Tiene que coincidir con `lib/control-recargas.ts`.
+        var CLAVE = "yr-recargas"
+        var PAGINA = "/demasiadas-peticiones.html"
+
+        var AVISO = 60 * 1000
+        var RECARGA = 5 * 1000
+        var CASTIGO = 5 * 60 * 1000
+        var TOPE = 10 * 60 * 1000
+        var CUPO = 20
+
+        var elEtiqueta = document.getElementById("etiqueta")
+        var elTitulo = document.getElementById("titulo")
+        var elTexto = document.getElementById("texto")
+        var elBoton = document.getElementById("volver")
+        var elCuenta = document.getElementById("cuenta")
+        var elNota = document.getElementById("nota")
+
+        function hoy() {
+          var d = new Date()
+          return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate()
+        }
+
+        function medianoche() {
+          var d = new Date()
+          d.setHours(24, 0, 0, 0)
+          return d.getTime()
+        }
+
+        function estadoNuevo() {
+          return {
+            dia: hoy(),
+            cupo: CUPO,
+            hasta: 0,
+            refrescos: 0,
+            castigos: 0,
+            enPantalla: false,
+            hastaManana: 0,
+          }
+        }
+
+        function leer() {
+          try {
+            return JSON.parse(localStorage.getItem(CLAVE) || "null")
+          } catch (error) {
+            return null
+          }
+        }
+
+        function guardar(e) {
+          try {
+            localStorage.setItem(CLAVE, JSON.stringify(e))
+          } catch (error) {
+            /* Modo privado o almacenamiento lleno: se sigue sin memoria. */
+          }
+        }
+
+        function dosCifras(n) {
+          return (n < 10 ? "0" : "") + n
+        }
+
+        function minutos(ms) {
+          var s = Math.max(0, Math.ceil(ms / 1000))
+          return Math.floor(s / 60) + ":" + dosCifras(s % 60)
+        }
+
+        function reloj(ms) {
+          var s = Math.max(0, Math.ceil(ms / 1000))
+          var h = Math.floor(s / 3600)
+          var m = Math.floor((s % 3600) / 60)
+          return h + ":" + dosCifras(m) + ":" + dosCifras(s % 60)
+        }
+
+        var e = leer()
+        if (!e || typeof e !== "object") e = estadoNuevo()
+        if (e.dia !== hoy()) e = estadoNuevo()
+
+        // La cuenta atrás se lleva por fecha de fin, no por segundos restantes:
+        // así una recarga no reinicia nada, solo alarga el final.
+        var ahora = Date.now()
+        var modo
+
+        if (e.hastaManana > ahora) {
+          modo = "dia"
+        } else if (e.hasta > ahora) {
+          if (e.enPantalla) {
+            e.hasta = Math.min(e.hasta + RECARGA, ahora + TOPE)
+            e.refrescos = (e.refrescos || 0) + 1
+
+            if (e.refrescos >= e.cupo) {
+              e.refrescos = 0
+              e.castigos = (e.castigos || 0) + 1
+              e.cupo = Math.floor(e.cupo / 2)
+
+              if (e.cupo <= 0) {
+                e.cupo = 0
+                e.hasta = 0
+                e.hastaManana = medianoche()
+                modo = "dia"
+              } else {
+                e.hasta = ahora + CASTIGO
+                modo = "castigo"
+              }
+            } else {
+              modo = "aviso"
+            }
+          } else {
+            modo = "aviso"
+          }
+        } else if (e.enPantalla) {
+          // El aviso terminó mientras estaba fuera: no se vuelve a abrir.
+          e.hasta = 0
+          e.enPantalla = false
+          e.refrescos = 0
+          modo = "libre"
+        } else if (e.cupo <= 0) {
+          e.hastaManana = medianoche()
+          modo = "dia"
+        } else {
+          e.hasta = ahora + AVISO
+          e.enPantalla = true
+          e.refrescos = 0
+          modo = "aviso"
+        }
+
+        guardar(e)
+
+        // La página llega reescrita en la dirección que se pidió. Se deja en su
+        // propia dirección para que el siguiente F5 cargue esta pantalla y no la
+        // web, sin pedir nada al servidor.
+        try {
+          if (location.pathname !== PAGINA) {
+            history.replaceState(null, "", PAGINA)
+          }
+        } catch (error) {
+          /* Si el navegador no deja, el guardia del sitio hace el trabajo. */
+        }
+
+        var fin = modo === "dia" ? e.hastaManana : e.hasta
+        var intervalo = null
+
+        function bloquear() {
+          elBoton.setAttribute("aria-disabled", "true")
+          elBoton.setAttribute("tabindex", "-1")
+          elBoton.setAttribute("role", "link")
+        }
+
+        function liberar() {
+          elBoton.removeAttribute("aria-disabled")
+          elBoton.removeAttribute("tabindex")
+          elCuenta.hidden = true
+          elCuenta.textContent = ""
+        }
+
+        function pintar() {
+          if (modo === "aviso") {
+            elEtiqueta.textContent = "Un momento"
+            elTitulo.textContent = "Has pedido la página muchas veces seguidas."
+            elTexto.textContent =
+              "El servidor ha cerrado el paso un minuto. Cada recarga nueva suma cinco segundos, así que lo mejor es dejar la pestaña quieta."
+            elNota.textContent =
+              "Si vuelve a pasar, cierra las otras pestañas de la web que tengas abiertas: cada una cuenta sus propias peticiones."
+            bloquear()
+          } else if (modo === "castigo") {
+            elEtiqueta.textContent = "Cinco minutos"
+            elTitulo.textContent = "Has seguido recargando."
+            elTexto.textContent =
+              "El bloqueo sube a cinco minutos. Cuando vuelvas tendrás menos recargas antes del siguiente aviso."
+            elNota.textContent =
+              "Recargas disponibles: " + e.cupo + " de " + CUPO + "."
+            bloquear()
+          } else if (modo === "dia") {
+            elEtiqueta.textContent = "Hasta mañana"
+            elTitulo.textContent = "Por hoy, ya no."
+            elTexto.textContent =
+              "Se han agotado las recargas disponibles para este navegador. La web vuelve a abrirse mañana."
+            elNota.textContent =
+              "El cupo se recupera solo al cambiar el día. No hace falta hacer nada."
+            bloquear()
+          } else {
+            elEtiqueta.textContent = "Ya está"
+            elTitulo.textContent = "Puedes volver a entrar."
+            elTexto.textContent =
+              "La espera ha terminado. Perdón por el aviso: era la web protegiéndose de tantas recargas seguidas."
+            elNota.textContent = ""
+            liberar()
+            return
+          }
+
+          elCuenta.hidden = false
+          tick()
+        }
+
+        function tick() {
+          var restante = fin - Date.now()
+          if (restante <= 0) {
+            terminar()
+            return
+          }
+          elCuenta.innerHTML =
+            (modo === "dia" ? "Se abre en " : "Puedes volver en ") +
+            "<strong>" +
+            (modo === "dia" ? reloj(restante) : minutos(restante)) +
+            "</strong>"
+        }
+
+        function terminar() {
+          if (intervalo) clearInterval(intervalo)
+          intervalo = null
+
+          if (modo === "dia") {
+            // Cambio de día: se empieza de cero, con el cupo entero.
+            e = estadoNuevo()
+          } else {
+            e.hasta = 0
+            e.enPantalla = false
+            e.refrescos = 0
+          }
+
+          guardar(e)
+          modo = "libre"
+          pintar()
+        }
+
+        elBoton.addEventListener("click", function (evento) {
+          if (elBoton.getAttribute("aria-disabled") === "true") {
+            evento.preventDefault()
+            return
+          }
+          e.hasta = 0
+          e.enPantalla = false
+          e.refrescos = 0
+          guardar(e)
+        })
+
+        // Al salir de la pantalla con la cuenta terminada, se cierra el aviso:
+        // la próxima vez que se llegue aquí será por un bloqueo nuevo.
+        window.addEventListener("pagehide", function () {
+          if (modo === "libre") {
+            e.enPantalla = false
+            guardar(e)
+          }
+        })
+
+        pintar()
+        intervalo = setInterval(tick, 1000)
+      })()
+    </script>
   </body>
 </html>

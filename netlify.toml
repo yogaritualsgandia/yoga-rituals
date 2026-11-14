@@ -31,19 +31,25 @@
 # banda, y el ancho de banda es lo que se paga. Esto lo corta en el borde de
 # Netlify, antes de que la petición llegue al sitio.
 #
-# Novecientas peticiones por minuto y por dirección IP es holgado para una
-# persona y estrecho para un rastreador que va a mil. Antes eran trescientas, y
-# no bastaban: medido con el export real, una visita de escritorio gasta 43
-# peticiones en frío y 23 por recarga —las 22 de más son las precargas de Next,
-# una por cada enlace que hay en pantalla—, así que trece recargas seguidas ya
-# dejaban al visitante fuera. Con novecientas hacen falta unas cuarenta, que es
-# machacar la tecla, no leer la web.
+# Trescientas peticiones por minuto y por dirección IP es holgado para una
+# persona y estrecho para un rastreador que va a mil. Con el export real, una
+# visita de escritorio gasta 43 peticiones en frío y 23 por recarga —las 22 de
+# más son las precargas de Next, una por cada enlace que hay en pantalla—, así
+# que aguantan unas trece recargas seguidas: leer la web, holgado; machacar F5,
+# no. Se probó en 900 y el aviso no llegaba nunca en el caso que importa, que es
+# alguien recargando enfadado.
 #
 # Al pasarse, Netlify no devuelve un 429 en blanco: reescribe la petición a
 # `public/demasiadas-peticiones.html`, que es un archivo suelto, sin una sola
 # petición más, y explica qué ha pasado. Tiene que ser suelto: la regla corta el
 # sitio entero, así que si esa página cargara estilos, fuentes o fotos, esas
 # peticiones también acabarían reescritas a ella y el aviso saldría sin forma.
+#
+# Esa página, además, es la que mantiene el castigo: esta ventana es móvil y se
+# suelta sola, así que el minuto de espera, los cinco segundos por recarga y el
+# cupo que se parte en dos los lleva el navegador, con un estado que el resto
+# del sitio respeta (`lib/control-recargas.ts`). Aquí solo se decide cuándo
+# aparece por primera vez.
 #
 # No es una barrera contra un ataque distribuido: para eso está la protección
 # DDoS que Netlify ya trae puesta. Esto es para el caso barato y frecuente, que
@@ -61,6 +67,6 @@
   [redirects.rate_limit]
     action = "rewrite"
     to = "/demasiadas-peticiones.html"
-    window_limit = 900
+    window_limit = 300
     window_size = 60
     aggregate_by = ["ip", "domain"]

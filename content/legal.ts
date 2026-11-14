@@ -13,9 +13,9 @@
  *     cartel de cookies. Sin aceptar, no sale ni una petición hacia Google,
  *     Microsoft ni Meta.
  *
- *   · El modo claro u oscuro y la propia decisión sobre las cookies se guardan
- *     en el almacenamiento local del navegador. No son cookies, no viajan al
- *     servidor y no sirven para seguir a nadie.
+ *   · El modo claro u oscuro, la propia decisión sobre las cookies y un
+ *     contador de recargas se guardan en el almacenamiento local del navegador.
+ *     No son cookies, no viajan al servidor y no sirven para seguir a nadie.
  *
  *   · El alojamiento es Netlify (Netlify, Inc., Estados Unidos), que guarda
  *     los registros técnicos de las visitas para dar el servicio. El correo es
@@ -291,7 +291,7 @@ const cookies: DocumentoLegal = {
       titulo: "Qué se usa aquí",
       parrafos: [
         "Esta web no pone cookies de publicidad para enseñarte anuncios aquí dentro, ni de mapas o vídeos incrustados. El mapa y las reseñas de Google son enlaces: al pulsarlos vas a Google, pero no se carga nada suyo aquí dentro.",
-        "Solo hay dos cosas: un par de preferencias que se guardan en el almacenamiento local del navegador y no necesitan permiso, y tres herramientas de medición que sí lo necesitan y que no se encienden hasta que aceptas.",
+        "Solo hay dos clases de cosas: unas preferencias y un contador técnico que se guardan en el almacenamiento local del navegador y no necesitan permiso, y tres herramientas de medición que sí lo necesitan y que no se encienden hasta que aceptas.",
       ],
     },
     {
@@ -358,8 +358,9 @@ const cookies: DocumentoLegal = {
       titulo: "Lo que se guarda sin pedir permiso",
       parrafos: [
         "Cuando pulsas el botón del modo oscuro, tu navegador apunta esa elección para recordarla la próxima vez. Y cuando contestas al cartel, guarda tu respuesta para no preguntarte en cada página. Las dos cosas viven en el almacenamiento local del navegador, no son cookies, no viajan al servidor y no las lee nadie más.",
+        "Hay una tercera: un contador que frena las recargas en bucle. Si alguien pide la misma página muchas veces seguidas, la web le pide esperar un minuto antes de volver a entrar. No dice quién es, no viaja al servidor y se borra con lo demás.",
         "La Agencia Española de Protección de Datos considera esta clase de preferencias técnicas exentas de consentimiento: sirven solo para recordar lo que tú has elegido.",
-        "Se borran vaciando los datos del navegador, y no pasa nada: la web vuelve a salir clara y vuelve a preguntar por las cookies.",
+        "Se borran vaciando los datos del navegador, y no pasa nada: la web vuelve a salir clara, vuelve a preguntar por las cookies y deja de contar recargas.",
       ],
     },
     {

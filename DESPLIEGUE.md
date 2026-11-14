@@ -220,22 +220,50 @@ La web es estática: no hay servidor que tumbar ni base de datos que llenar. Lo
    mes siguiente: **no genera factura**. Si algún día se pasa a un plan de pago,
    deja la **recarga automática apagada** (viene apagada de fábrica): así los
    créditos se acaban en vez de comprarse solos.
-2. **El límite de peticiones.** `netlify.toml` lleva una regla que corta a 900
+2. **El límite de peticiones.** `netlify.toml` lleva una regla que corta a 300
    peticiones por minuto y por dirección IP. Una visita normal gasta 43
    peticiones en frío y 23 por recarga —de las cuales 22 son las precargas de
-   Next, una por cada enlace que hay en pantalla—, así que nadie que esté
-   leyendo la web la va a notar; un rastreador que va a mil, sí. Al pasarse,
-   Netlify reescribe la petición a `public/demasiadas-peticiones.html`, una
-   página de cortesía que dice qué ha pasado, en vez de un `429` en blanco.
-   También hay que saber dos cosas de cómo funciona: tarda hasta diez segundos
-   en empezar a cortar, y cuando corta, corta el sitio entero —por eso esa
-   página no puede pedir ni una fuente, ni una foto, ni una hoja de estilos—.
-   Si alguna vez se ve una página en blanco en vez de ese aviso, es que la
-   regla está apuntando a un archivo que no existe en el despliegue.
+   Next, una por cada enlace que hay en pantalla—, así que aguantan unas trece
+   recargas seguidas: nadie que esté leyendo la web la va a notar; un rastreador
+   que va a mil, sí. Al pasarse, Netlify reescribe la petición a
+   `public/demasiadas-peticiones.html`, una página de cortesía que dice qué ha
+   pasado, en vez de un `429` en blanco. También hay que saber dos cosas de cómo
+   funciona: tarda hasta diez segundos en empezar a cortar, y cuando corta,
+   corta el sitio entero —por eso esa página no puede pedir ni una fuente, ni
+   una foto, ni una hoja de estilos—. Si alguna vez se ve una página en blanco
+   en vez de ese aviso, es que la regla está apuntando a un archivo que no
+   existe en el despliegue.
 
-   Recargar veinte veces seguidas una misma página **sí** agota el límite. No
-   es un fallo de la web: es la regla haciendo su trabajo, y se pasa en cuanto
-   se deja de recargar.
+3. **El minuto de castigo.** La ventana de Netlify es móvil: se suelta sola en
+   cuanto el contador baja del límite, así que darle a F5 devolvía a la web. Por
+   eso el aviso no se queda en un texto: guarda su estado en el navegador
+   (`localStorage`, clave `yr-recargas`) y lo aplica el resto del sitio.
+
+   - Al llegar, abre una espera de **un minuto** con el botón en gris azulado y
+     la cuenta atrás debajo.
+   - **Cada recarga suma cinco segundos** y no reinicia la cuenta.
+   - Pasadas tantas recargas como el cupo (**20**), el aviso pasa a **castigo de
+     cinco minutos** y el cupo se parte en dos: 20, 10, 5, 2, 1.
+   - Cuando el cupo llega a cero, **no se entra hasta el día siguiente**. El
+     cupo se recupera solo al cambiar el día.
+   - Mientras el castigo corre, cualquier otra dirección del sitio devuelve a
+     esta pantalla (`lib/control-recargas.ts`), para que no baste con escribir
+     otra ruta.
+
+   Es un control **del navegador, no de la IP**: el corte por IP es el de
+   Netlify. Si alguien borra los datos del sitio o entra desde otro navegador,
+   el contador vuelve a empezar —pero el límite de peticiones sigue ahí—. Para
+   un castigo por IP de verdad haría falta una Edge Function con Netlify Blobs:
+   una lectura por visita, unos 50-150 ms más en cada página, y dejar de ser una
+   web estática. No está puesto a propósito.
+
+   Para deshacer un castigo (por ejemplo, si te bloqueas tú probando), borra los
+   datos del sitio en el navegador, o en la consola:
+   `localStorage.removeItem("yr-recargas")`.
+
+   Recargar muchas veces seguidas una misma página **sí** agota el límite. No
+   es un fallo de la web: es la regla haciendo su trabajo, y ahora el aviso
+   explica cuánto falta en vez de dejar la pantalla en blanco.
 
 Para comprobar que Netlify ha leído la regla, se mira el registro del
 despliegue, en la etapa **post-processing**: tiene que aparecer el límite. Si no

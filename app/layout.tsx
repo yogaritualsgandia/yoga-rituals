@@ -13,6 +13,7 @@ import { TransicionPagina } from "@/components/movimiento/transicion-pagina"
 import { ThemeProvider } from "@/components/theme-provider"
 import { site } from "@/content/site"
 import { GUION_CONSENTIMIENTO } from "@/lib/consentimiento"
+import { GUION_CONTROL_RECARGAS } from "@/lib/control-recargas"
 import { datosEstructuradosComoTexto } from "@/lib/datos-estructurados"
 import { GUION_MOVIMIENTO } from "@/lib/movimiento"
 import { cn } from "@/lib/utils"
@@ -130,7 +131,16 @@ export default function RootLayout({
           }}
         />
 
-        {/* El primero de todo, y a propósito.
+        {/* El primero de todo, y a propósito: si hay un castigo por recargas
+            corriendo, devuelve a la pantalla de aviso antes de que se pinte la
+            web. Sin esto, el minuto de espera solo valdría mientras se
+            estuviera en esa pantalla: bastaría con escribir otra dirección
+            para entrar. Lee el estado que guarda
+            `public/demasiadas-peticiones.html`; el porqué completo, en
+            `GUION_CONTROL_RECARGAS`. */}
+        <script dangerouslySetInnerHTML={{ __html: GUION_CONTROL_RECARGAS }} />
+
+        {/* El segundo, por el mismo motivo.
             Dice si el movimiento está permitido poniendo un atributo en el
             <html>, y tiene que hacerlo antes de que se pinte el primer
             elemento: las entradas de más abajo parten escondidas, y el CSS
