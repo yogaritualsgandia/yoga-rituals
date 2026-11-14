@@ -12,6 +12,7 @@ import { ProveedorMovimiento } from "@/components/movimiento/proveedor-movimient
 import { TransicionPagina } from "@/components/movimiento/transicion-pagina"
 import { ThemeProvider } from "@/components/theme-provider"
 import { site } from "@/content/site"
+import { GUION_CONSENTIMIENTO } from "@/lib/consentimiento"
 import { datosEstructuradosComoTexto } from "@/lib/datos-estructurados"
 import { GUION_MOVIMIENTO } from "@/lib/movimiento"
 import { cn } from "@/lib/utils"
@@ -138,6 +139,18 @@ export default function RootLayout({
             JavaScript no llegara, el atributo no estaría y no se escondería
             nada. El porqué completo, en `GUION_MOVIMIENTO`. */}
         <script dangerouslySetInnerHTML={{ __html: GUION_MOVIMIENTO }} />
+
+        {/* El segundo, por el mismo motivo y en el mismo sitio.
+
+            El HTML se construye sin saber qué contestó nadie, así que el cartel
+            de cookies nace dentro. Si ya se había contestado, React lo quita al
+            hidratar, pero entre el primer pintado y ese momento se veía: un
+            parpadeo en cada visita. Este guion lee la respuesta guardada antes
+            de que se pinte nada y deja el cartel escondido por CSS. Quien no ha
+            contestado nunca no tiene nada guardado: no se esconde nada y el
+            cartel sale al instante, sin esperar al JavaScript. El porqué
+            completo, en `GUION_CONSENTIMIENTO`. */}
+        <script dangerouslySetInnerHTML={{ __html: GUION_CONSENTIMIENTO }} />
 
         <ThemeProvider>
           <ProveedorConsentimiento>

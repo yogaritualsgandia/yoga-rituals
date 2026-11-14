@@ -25,7 +25,7 @@ export const avisoCookies = {
   /** El antetítulo del cartel. Corto: es una etiqueta, no un titular. */
   etiqueta: "Uso de cookies",
   texto:
-    "Utilizamos Google Analytics y Microsoft Clarity con el fin de conocer el número de visitantes, las páginas más consultadas y los puntos de la navegación que pueden mejorarse. Estas herramientas solo se activarán si aceptas su uso. En caso de rechazarlas, el sitio web funcionará con normalidad y no se recogerá ningún dato de medición.",
+    "Utilizamos Google Analytics, Microsoft Clarity y el píxel de Meta para conocer el número de visitantes, las páginas más consultadas y si las campañas de Facebook e Instagram traen contactos por WhatsApp. Estas herramientas solo se activarán si aceptas su uso. En caso de rechazarlas, el sitio web funcionará con normalidad y no se recogerá ningún dato de medición.",
   enlace: "Más información sobre las cookies",
   aceptar: "Aceptar todas",
   rechazar: "Rechazar todas",

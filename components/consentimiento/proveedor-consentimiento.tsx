@@ -14,9 +14,12 @@ import {
 import {
   hayAnalitica,
   hayClaridad,
+  hayMeta,
   idAnalitica,
   idClaridad,
 } from "@/lib/analitica"
+import { CADUCIDAD, CLAVE_CONSENTIMIENTO } from "@/lib/consentimiento"
+import { PixelMeta, SeguimientoWhatsApp } from "./medicion-meta"
 
 /**
  * El permiso para medir las visitas.
@@ -25,8 +28,9 @@ import {
  * cargar antes de que alguien lo acepte. Y no se puede de verdad, no vale con
  * cargarlo y decirle que no mida: mientras el guion de Google esté en el
  * navegador, hay una petición suya que sale de casa de quien entra, con su
- * dirección IP dentro. Así que aquí no se carga NADA hasta que hay un sí.
- * Quien rechaza navega por una web que, para Google, no existe.
+ * dirección IP dentro. Con el píxel de Meta y con Clarity pasa lo mismo. Así
+ * que aquí no se carga NADA hasta que hay un sí. Quien rechaza navega por una
+ * web que, para las tres, no existe.
  *
  * De ahí salen las cuatro decisiones que están escritas abajo:
  *
@@ -53,14 +57,12 @@ import {
 export type Decision = "si" | "no"
 export type Estado = Decision | "pendiente"
 
-/** La clave del almacenamiento del navegador. Solo la toca este archivo. */
-export const CLAVE_CONSENTIMIENTO = "consentimiento-analitica"
+/* La clave y la caducidad se comparten con el guion que decide, antes del
+   primer pintado, si el cartel llega a verse. Viven en `lib/consentimiento.ts`
+   para que no puedan separarse. */
 
 /** Marca de un solo uso: «al recargar, borra lo que quede de la medición». */
 const CLAVE_BORRAR = "medicion-por-borrar"
-
-/** Lo que dura un permiso antes de volver a preguntar. Dos años, en milisegundos. */
-const CADUCIDAD = 1000 * 60 * 60 * 24 * 365 * 2
 
 type Guardado = { estado: Decision; fecha: number }
 
@@ -121,8 +123,9 @@ const enElServidor = (): Estado => "pendiente"
  * falla, simplemente ignora la orden.
  *
  * De Google: `_ga` y `_ga_<contenedor>`. De Microsoft: `_clck`, `_clsk`,
- * `MUID`, `ANONCHK`, `SM` y `SRM_B`. Además se limpia el almacenamiento local
- * que usa Clarity, que no es una cookie pero cumple la misma función.
+ * `MUID`, `ANONCHK`, `SM` y `SRM_B`. De Meta: `_fbp` y `_fbc`. Además se
+ * limpia el almacenamiento local que usa Clarity, que no es una cookie pero
+ * cumple la misma función.
  */
 const NOMBRES_DE_MICROSOFT = /^(_cl|MUID$|ANONCHK$|SM$|SRM_B$)/
 
@@ -134,7 +137,12 @@ function borrarRastroDeMedicion() {
     for (const trozo of document.cookie.split(";")) {
       const nombre = trozo.split("=")[0]?.trim()
       if (!nombre) continue
-      if (!nombre.startsWith("_ga") && !NOMBRES_DE_MICROSOFT.test(nombre)) continue
+      if (
+        !nombre.startsWith("_ga") &&
+        !nombre.startsWith("_fb") &&
+        !NOMBRES_DE_MICROSOFT.test(nombre)
+      )
+        continue
 
       document.cookie = `${nombre}=; path=/; ${caducada}`
       document.cookie = `${nombre}=; path=/; domain=.${dominioDePrimerNivel}; ${caducada}`
@@ -282,6 +290,12 @@ export function ProveedorConsentimiento({ children }: { children: ReactNode }) {
           cargar, y el cartel no se pinta: se pregunta por cosas que existen. */}
       {estado === "si" && hayAnalitica ? <Analitica /> : null}
       {estado === "si" && hayClaridad ? <Claridad /> : null}
+      {estado === "si" && hayMeta ? (
+        <>
+          <PixelMeta />
+          <SeguimientoWhatsApp />
+        </>
+      ) : null}
     </Contexto.Provider>
   )
 }

@@ -23,6 +23,24 @@ body {
   padding-bottom: var(--alto-aviso-cookies, 0px);
 }
 
+/* --- El cartel no parpadea ------------------------------------------------
+   El HTML se genera sin saber si esta persona ya contestó, así que el cartel
+   viene dentro y React lo quita al hidratar. Esos milisegundos de cartel en
+   cada visita se veían como un parpadeo.
+
+   El guion de `GUION_CONSENTIMIENTO` corre antes del primer pintado y, si hay
+   una decisión guardada, pone `data-consentimiento="respondido"` en el <html>.
+   Con esta regla el cartel queda escondido desde el primer fotograma: no llega
+   a verse ni un instante. Después React lo desmonta y el atributo se queda sin
+   uso; no estorba.
+
+   Sin atributo —primera visita, decisión caducada o almacenamiento
+   prohibido— esta regla no hace nada y el cartel se ve de inmediato. Es el
+   lado seguro: si hay duda, se pregunta. */
+html[data-consentimiento="respondido"] [data-aviso-cookies] {
+  display: none;
+}
+
 /* --- La entrada ----------------------------------------------------------
    Sube desde fuera de la pantalla, sin desvanecido, y son tres cuartos de
    segundo: lo justo para que se entienda que acaba de llegar algo. Se anima

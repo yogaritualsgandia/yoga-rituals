@@ -8,9 +8,10 @@
  *     personales llegan solo porque alguien decide escribir por WhatsApp, por
  *     correo o por teléfono.
  *
- *   · Hay dos herramientas de medición: Google Analytics 4 y Microsoft
- *     Clarity. Ninguna se carga hasta que se acepta el cartel de cookies. Sin
- *     aceptar, no sale ni una petición hacia Google ni hacia Microsoft.
+ *   · Hay tres herramientas de medición: Google Analytics 4, Microsoft
+ *     Clarity y el píxel de Meta. Ninguna se carga hasta que se acepta el
+ *     cartel de cookies. Sin aceptar, no sale ni una petición hacia Google,
+ *     Microsoft ni Meta.
  *
  *   · El modo claro u oscuro y la propia decisión sobre las cookies se guardan
  *     en el almacenamiento local del navegador. No son cookies, no viajan al
@@ -18,9 +19,9 @@
  *
  *   · El alojamiento es Netlify (Netlify, Inc., Estados Unidos), que guarda
  *     los registros técnicos de las visitas para dar el servicio. El correo es
- *     una cuenta de Gmail y la medición es de Google y Microsoft; las tres
- *     están adheridas al marco de privacidad de datos entre la Unión Europea y
- *     Estados Unidos.
+ *     una cuenta de Gmail y la medición es de Google, Microsoft y Meta; las
+ *     cuatro están adheridas al marco de privacidad de datos entre la Unión
+ *     Europea y Estados Unidos.
  *
  * Los textos siguen la guía de cookies de la Agencia Española de Protección de
  * Datos: se informa antes de pedir, rechazar cuesta lo mismo que aceptar, no
@@ -67,7 +68,7 @@ export type DocumentoLegal = {
   bloques: BloqueLegal[]
 }
 
-const ACTUALIZADO = "19 de octubre de 2026"
+const ACTUALIZADO = "14 de noviembre de 2026"
 
 /** La ficha del titular, sin las filas que aún no tienen dato. */
 const identificacion = (
@@ -180,7 +181,7 @@ const privacidad: DocumentoLegal = {
         "Esta web no tiene formularios, ni cuentas de usuario, ni área privada. No recogemos nada por el simple hecho de que entres. Los datos llegan solo por donde tú decides escribir: WhatsApp, correo o teléfono.",
         "Cuando escribes nos llega tu nombre (o el que uses en WhatsApp), tu número y lo que nos cuentes. Si vienes a clase, además necesitamos saber si tienes alguna lesión o algo que haya que tener en cuenta.",
         "El servidor donde vive la web guarda un registro técnico de cada visita (dirección IP, fecha y navegador). Lo guarda el alojamiento para que el sitio funcione y esté protegido, y nosotros no lo usamos para nada más.",
-        "Si aceptas el cartel de cookies, Google Analytics y Microsoft Clarity recogen datos de navegación. Se explica abajo, y puedes rechazarlo sin que la web deje de funcionar.",
+        "Si aceptas el cartel de cookies, Google Analytics, Microsoft Clarity y el píxel de Meta recogen datos de navegación. Se explica abajo, y puedes rechazarlo sin que la web deje de funcionar.",
       ],
     },
     {
@@ -189,16 +190,16 @@ const privacidad: DocumentoLegal = {
         "Para contestarte y organizar la clase: es lo que hace falta para atenderte antes de que haya un contrato (artículo 6.1.b del RGPD).",
         "Para llevar las cuentas y cumplir con Hacienda: obligación legal (artículo 6.1.c).",
         "Para que la web funcione y esté protegida, con los registros del servidor: interés legítimo en que el sitio esté en pie (artículo 6.1.f).",
-        "Para medir las visitas con Google Analytics y Microsoft Clarity: tu consentimiento (artículo 6.1.a), que das al aceptar el cartel y puedes retirar cuando quieras.",
+        "Para medir las visitas y las campañas con Google Analytics, Microsoft Clarity y el píxel de Meta: tu consentimiento (artículo 6.1.a), que das al aceptar el cartel y puedes retirar cuando quieras.",
         "Si nos cuentas algo de tu salud, para adaptar la práctica: tu consentimiento explícito (artículo 9.2.a).",
       ],
     },
     {
       titulo: "La medición de las visitas",
       parrafos: [
-        "Google Analytics 4 cuenta cuántas personas entran, qué páginas se leen y de dónde se llega. Microsoft Clarity añade mapas de calor y grabaciones de sesión anónimas para ver dónde se atasca la navegación. Sirven para mejorar la web, nada más.",
-        "No hay publicidad, ni perfilado comercial, ni se venden datos a nadie. Tampoco se usan para tomar decisiones automáticas sobre ti.",
-        "Las dos herramientas se cargan solo después de que aceptes. Si rechazas, no se ejecuta su código y no sale ninguna petición hacia Google ni hacia Microsoft. Puedes cambiar la decisión en cualquier momento desde la página de cookies.",
+        "Google Analytics 4 cuenta cuántas personas entran, qué páginas se leen y de dónde se llega. Microsoft Clarity añade mapas de calor y grabaciones de sesión anónimas para ver dónde se atasca la navegación. El píxel de Meta mide si una visita llega desde una campaña de Facebook o Instagram y si acaba en un contacto por WhatsApp. Sirven para mejorar la web y para saber qué campañas funcionan, nada más.",
+        "No hay publicidad dentro de la web. El píxel de Meta no enseña anuncios aquí: solo cuenta la visita y el clic en WhatsApp para poder medir las campañas que se hacen fuera. No se venden datos a nadie y no se toman decisiones automáticas sobre ti.",
+        "Las tres herramientas se cargan solo después de que aceptes. Si rechazas, no se ejecuta su código y no sale ninguna petición hacia Google, Microsoft ni Meta. Puedes cambiar la decisión en cualquier momento desde la página de cookies.",
       ],
     },
     {
@@ -215,7 +216,7 @@ const privacidad: DocumentoLegal = {
         "Las facturas y justificantes: cuatro años, lo que marca la ley fiscal.",
         "Los datos de salud: mientras practiques con nosotros. Cuando dejes de venir, o antes si lo pides, se borran.",
         "Tu decisión sobre las cookies: dos años en el almacenamiento de tu navegador. Después se vuelve a preguntar.",
-        "La medición: el tiempo que cada herramienta tiene configurado y, como máximo, el de sus cookies (13 meses Google Analytics y 13 meses Clarity).",
+        "La medición: el tiempo que cada herramienta tiene configurado y, como máximo, el de sus cookies (13 meses Google Analytics, 13 meses Clarity y 90 días Meta).",
       ],
     },
     {
@@ -223,14 +224,14 @@ const privacidad: DocumentoLegal = {
       parrafos: [
         "El alojamiento de la web, Netlify, que guarda los registros técnicos de las visitas por el tiempo que necesita para dar el servicio.",
         "El correo del estudio es una cuenta de Gmail, así que los mensajes que mandes al correo los aloja Google. Los de WhatsApp viajan por WhatsApp, que trata esos datos por su cuenta como responsable: nosotros solo vemos lo que nos escribes.",
-        "Si aceptas la medición, Google recibe los datos de navegación para Analytics y Microsoft para Clarity. Son encargados del tratamiento y solo los usan para prestar el servicio.",
-        "Y nadie más. Tus datos no se venden, no se ceden y no se usan para publicidad.",
+        "Si aceptas la medición, Google recibe los datos de navegación para Analytics, Microsoft para Clarity y Meta Platforms Ireland recibe la visita y el aviso de que has pulsado un enlace de WhatsApp. Las tres los tratan para prestar el servicio de medición; sus políticas están enlazadas en la página de cookies.",
+        "Y nadie más. Tus datos no se venden ni se ceden a nadie ajeno a la medición.",
       ],
     },
     {
       titulo: "Fuera de España",
       parrafos: [
-        "Netlify, Google y Microsoft están en Estados Unidos. Las tres están adheridas al marco de privacidad de datos entre la Unión Europea y Estados Unidos, y con las tres hay contrato de encargado del tratamiento. Es lo que cubre que tus datos puedan pasar por ahí con garantías.",
+        "Netlify, Google, Microsoft y Meta están en Estados Unidos. Las cuatro están adheridas al marco de privacidad de datos entre la Unión Europea y Estados Unidos, y con las cuatro hay contrato de encargado del tratamiento. Es lo que cubre que tus datos puedan pasar por ahí con garantías.",
       ],
     },
     {
@@ -289,8 +290,8 @@ const cookies: DocumentoLegal = {
     {
       titulo: "Qué se usa aquí",
       parrafos: [
-        "Esta web no pone cookies de publicidad, ni de redes sociales, ni de mapas o vídeos incrustados. El mapa y las reseñas de Google son enlaces: al pulsarlos vas a Google, pero no se carga nada suyo aquí dentro.",
-        "Solo hay dos cosas: un par de preferencias que se guardan en el almacenamiento local del navegador y no necesitan permiso, y dos herramientas de medición que sí lo necesitan y que no se encienden hasta que aceptas.",
+        "Esta web no pone cookies de publicidad para enseñarte anuncios aquí dentro, ni de mapas o vídeos incrustados. El mapa y las reseñas de Google son enlaces: al pulsarlos vas a Google, pero no se carga nada suyo aquí dentro.",
+        "Solo hay dos cosas: un par de preferencias que se guardan en el almacenamiento local del navegador y no necesitan permiso, y tres herramientas de medición que sí lo necesitan y que no se encienden hasta que aceptas.",
       ],
     },
     {
@@ -334,10 +335,22 @@ const cookies: DocumentoLegal = {
             "Microsoft Corporation",
             "Sesión",
           ],
+          [
+            "_fbp",
+            "Distinguir a quien visita la web y relacionar la visita con una campaña de Facebook o Instagram.",
+            "Meta Platforms Ireland (Facebook)",
+            "90 días",
+          ],
+          [
+            "_fbc",
+            "Recordar el clic que llegó desde un anuncio de Meta, para atribuir el contacto a esa campaña.",
+            "Meta Platforms Ireland (Facebook)",
+            "90 días",
+          ],
         ],
       },
       parrafos: [
-        "La duración de las cookies de Google se ha recortado a trece meses; por defecto Google las deja dos años.",
+        "La duración de las cookies de Google se ha recortado a trece meses; por defecto Google las deja dos años. Las de Meta duran 90 días.",
         "Estas cookies no se ponen si rechazas. Tampoco se ponen si no tocas el cartel: mientras no haya un «sí», las herramientas no se cargan.",
       ],
     },
@@ -354,7 +367,7 @@ const cookies: DocumentoLegal = {
       parrafos: [
         "La primera vez que entras sale un cartel abajo, con dos botones del mismo tamaño: aceptar todas y rechazar todas. No hay casillas premarcadas, ni opciones escondidas, ni nada que se encienda antes de que contestes.",
         "Rechazar no limita la web: se puede leer entera y usar igual. Aceptar solo enciende la medición. La decisión se guarda dos años; pasado ese tiempo se vuelve a preguntar.",
-        "Puedes cambiar de idea tantas veces como quieras desde el botón que hay al final de esta página. Al pulsarlo se borra lo elegido, se borran las cookies de Google y de Microsoft si estaban puestas y se vuelve a preguntar.",
+        "Puedes cambiar de idea tantas veces como quieras desde el botón que hay al final de esta página. Al pulsarlo se borra lo elegido, se borran las cookies de Google, Microsoft y Meta si estaban puestas y se vuelve a preguntar.",
       ],
     },
     {
@@ -365,9 +378,9 @@ const cookies: DocumentoLegal = {
       ],
     },
     {
-      titulo: "Las políticas de Google y Microsoft",
+      titulo: "Las políticas de Google, Microsoft y Meta",
       parrafos: [
-        "La medición la prestan Google y Microsoft, con sus propias políticas. Se pueden leer en policies.google.com/privacy y privacy.microsoft.com. Ahí se explica cómo tratan los datos que reciben.",
+        "La medición la prestan Google, Microsoft y Meta, con sus propias políticas. Se pueden leer en policies.google.com/privacy, privacy.microsoft.com y facebook.com/privacy/policy. Ahí se explica cómo tratan los datos que reciben.",
       ],
     },
     {

@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#f4efe6" />
+    <title>Un momento · YOGA Rituals</title>
+    <!--
+      Página de cortesía para el límite de peticiones de `netlify.toml`.
+
+      Se sirve cuando una misma dirección IP pasa de las peticiones permitidas
+      por minuto. En ese momento Netlify reescribe *todo* el sitio a este
+      archivo, incluidos `/_next/...` y las fotos, así que aquí no puede haber
+      ni una petición más: ni fuentes, ni imágenes, ni guiones, ni una hoja de
+      estilos aparte. Todo va escrito aquí dentro, y por eso el tipo de letra es
+      el del sistema y no Literata.
+
+      Es lo que ve quien ha recargado veinte veces seguidas: una frase que dice
+      qué ha pasado y un botón para volver, en vez de una página en blanco.
+    -->
+    <style>
+      :root {
+        --crema: oklch(95.93% 0.0103 81.8);
+        --crema-honda: oklch(92.5% 0.0125 81.8);
+        --tinta: oklch(32.11% 0 89.88);
+        --tinta-suave: oklch(47.27% 0.0163 67.42);
+        --turquesa: oklch(50.98% 0.0927 227.02);
+        --turquesa-claro: oklch(61.52% 0.1129 228.31);
+        --linea: oklch(32.11% 0 89.88 / 14%);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: 2rem 1.5rem;
+        background: var(--crema);
+        color: var(--tinta);
+        font-family:
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          "Helvetica Neue",
+          Arial,
+          sans-serif;
+        font-size: 1rem;
+        line-height: 1.6;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      main {
+        width: 100%;
+        max-width: 34rem;
+      }
+
+      .marca {
+        margin: 0 0 3rem;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 0.9375rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--tinta);
+      }
+
+      .marca span {
+        color: var(--turquesa);
+      }
+
+      .etiqueta {
+        margin: 0 0 1rem;
+        font-size: 0.75rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--tinta-suave);
+      }
+
+      h1 {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(1.75rem, 6vw, 2.5rem);
+        font-weight: 400;
+        line-height: 1.15;
+        letter-spacing: -0.01em;
+        text-wrap: balance;
+      }
+
+      p.texto {
+        margin: 1.5rem 0 0;
+        max-width: 46ch;
+        color: var(--tinta-suave);
+        text-wrap: pretty;
+      }
+
+      hr {
+        margin: 2.5rem 0;
+        border: 0;
+        border-top: 1px solid var(--linea);
+      }
+
+      .volver {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.625rem;
+        padding: 0.9rem 1.6rem;
+        border-radius: 999px;
+        background: var(--turquesa);
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition:
+          background-color 0.2s ease,
+          transform 0.2s ease;
+      }
+
+      .volver:hover {
+        background: var(--turquesa-claro);
+      }
+
+      .volver:active {
+        transform: translateY(1px);
+      }
+
+      .volver:focus-visible {
+        outline: 3px solid var(--turquesa);
+        outline-offset: 3px;
+      }
+
+      .nota {
+        margin: 1.25rem 0 0;
+        font-size: 0.875rem;
+        color: var(--tinta-suave);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .volver {
+          transition: none;
+        }
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --crema: oklch(22% 0.01 75);
+          --tinta: oklch(95.93% 0.0103 81.8);
+          --tinta-suave: oklch(78% 0.012 75);
+          --turquesa: oklch(72.63% 0.091 224.14);
+          --turquesa-claro: oklch(79% 0.08 224);
+          --linea: oklch(95.93% 0.0103 81.8 / 16%);
+        }
+
+        .volver {
+          color: oklch(22% 0.01 75);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="marca">Yoga <span>Rituals</span></p>
+
+      <p class="etiqueta">Un momento</p>
+
+      <h1>Has pedido la página muchas veces seguidas.</h1>
+
+      <p class="texto">
+        El servidor ha cerrado el paso durante unos segundos para que la web no
+        se sature. No se ha roto nada y no hay nada que arreglar: espera un
+        minuto y vuelve a entrar con normalidad.
+      </p>
+
+      <hr />
+
+      <a class="volver" href="/">Volver a la web</a>
+
+      <p class="nota">
+        Si vuelve a pasar, cierra las otras pestañas de la web que tengas
+        abiertas: cada una cuenta sus propias peticiones.
+      </p>
+    </main>
+  </body>
+</html>

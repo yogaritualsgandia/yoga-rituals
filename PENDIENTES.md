@@ -52,10 +52,16 @@ borra en Google, su enlace deja de funcionar: se sustituye por otra y listo.
 ## 4. Textos legales
 
 Escritos: `/aviso-legal`, `/privacidad` y `/cookies` describen lo que hace la
-web de verdad, incluidos Google Analytics y Microsoft Clarity y el
-consentimiento previo. Solo falta un dato: el **NIF**. En `content/legal.ts`
+web de verdad, incluidos Google Analytics, Microsoft Clarity y el píxel de Meta,
+y el consentimiento previo. Solo falta un dato: el **NIF**. En `content/legal.ts`
 aparece entre corchetes como `[NIF de Susana Estruch Espinós]`; cuando llegue,
 se sustituye esa línea y no hay que tocar nada más.
+
+Falta también el **ID del píxel de Meta**. Va en `NEXT_PUBLIC_META_PIXEL_ID`
+(Netlify → Environment variables, o `netlify.toml`). Mientras no esté, no se
+carga nada de Meta: ni píxel, ni evento de WhatsApp. El cartel y la página de
+cookies ya lo mencionan, así que en cuanto se ponga el identificador todo queda
+exacto sin tocar código.
 
 ## 5. Horario y clases
 

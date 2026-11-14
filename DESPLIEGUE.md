@@ -36,6 +36,10 @@ lo recomienda solo como redirección.
 5. En **Site configuration → Environment variables**, comprueba que
    `NEXT_PUBLIC_SITE_URL` no existe o vale `https://www.yogarituals.es`. Si
    vale otra cosa, el canonical y el mapa del sitio apuntarán ahí.
+   Y añade `NEXT_PUBLIC_META_PIXEL_ID` con el identificador del píxel de Meta.
+   Es un dato público, como los de Google y Clarity, así que también puede ir
+   en `netlify.toml`; mientras falte, no se carga nada de Meta y la web
+   funciona igual.
 6. **Noindex provisional.** `netlify.toml` lleva `NOINDEX = "1"` mientras la web
    solo viva en `*.netlify.app`. Eso añade `X-Robots-Tag: noindex` a todo el
    sitio. El día que el dominio definitivo esté activo, **quita esa línea** y
@@ -216,10 +220,22 @@ La web es estática: no hay servidor que tumbar ni base de datos que llenar. Lo
    mes siguiente: **no genera factura**. Si algún día se pasa a un plan de pago,
    deja la **recarga automática apagada** (viene apagada de fábrica): así los
    créditos se acaban en vez de comprarse solos.
-2. **El límite de peticiones.** `netlify.toml` lleva una regla que corta a 300
-   peticiones por minuto y por dirección IP, y devuelve un `429` durante un
-   minuto. Una visita normal gasta entre treinta y sesenta peticiones, así que
-   nadie que esté leyendo la web la va a notar; un rastreador que va a mil, sí.
+2. **El límite de peticiones.** `netlify.toml` lleva una regla que corta a 900
+   peticiones por minuto y por dirección IP. Una visita normal gasta 43
+   peticiones en frío y 23 por recarga —de las cuales 22 son las precargas de
+   Next, una por cada enlace que hay en pantalla—, así que nadie que esté
+   leyendo la web la va a notar; un rastreador que va a mil, sí. Al pasarse,
+   Netlify reescribe la petición a `public/demasiadas-peticiones.html`, una
+   página de cortesía que dice qué ha pasado, en vez de un `429` en blanco.
+   También hay que saber dos cosas de cómo funciona: tarda hasta diez segundos
+   en empezar a cortar, y cuando corta, corta el sitio entero —por eso esa
+   página no puede pedir ni una fuente, ni una foto, ni una hoja de estilos—.
+   Si alguna vez se ve una página en blanco en vez de ese aviso, es que la
+   regla está apuntando a un archivo que no existe en el despliegue.
+
+   Recargar veinte veces seguidas una misma página **sí** agota el límite. No
+   es un fallo de la web: es la regla haciendo su trabajo, y se pasa en cuanto
+   se deja de recargar.
 
 Para comprobar que Netlify ha leído la regla, se mira el registro del
 despliegue, en la etapa **post-processing**: tiene que aparecer el límite. Si no
